@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="/private/css/navbar.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<section class="navbar">
+    <div class="static-left">
+        <a href="/library"><img src="/private/images/logo.png" alt="Home"></a>
+        <span id="time" class="fs30"><div class="time-loading"></div></span>
+    </div> 
+    <ul id="links">
+        <div id="auth">
+            <li><a href="/search/people"><i class="fa fa-search"></i></a></li>
+            <li><a href="/leaderboard">Leaderboard</a></li>
+            <li><a href="https://github.com/danlovett/AirTraffic-City#readme" target="_blank">How to play</a></li>
+            <li><a href="/profile/my-account"><img id="pfp"></a></li>
+        </div>
+    </ul>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+<script>
+    $.get('../db/currentUser.json', data => {
+        $('#pfp').attr('src', `${data}`)
+    })
+
+    function refreshTime() {
+        $('#time').text(new Date().toLocaleTimeString())
+
+    } setInterval(refreshTime, 300)== time;
+</script>
+
+
+

@@ -1,0 +1,121 @@
+* {
+    margin: auto;
+    padding: auto;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+section {
+    margin: 10% 5%;
+    display: grid;
+    padding: 40px;
+    border-radius: 15px;
+}
+
+#eog {
+    background-color: black;
+    border: none;
+    color: white;
+    padding: 10px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition: cubic-bezier(.68,-0.55,.27,1.55);
+    transition-duration: 1s;
+    width: 50%;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#eog:hover {
+    background-color: rgb(216, 216, 216); /* Green */
+    color: black;
+    transition: cubic-bezier(.68,-0.55,.27,1.55);
+    transition-duration: 1s;
+    border-radius: 90px;
+    width: 80%;
+}
+
+#eog-small {
+    background-color: rgba(30, 30, 30, 0.631);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: cubic-bezier(.68,-0.55,.27,1.55);
+    transition-duration: 1s;
+    width: 65%;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#eog-small:hover {
+    background-color: rgba(216, 216, 216, 0.67); /* Green */
+    color: rgb(0, 0, 0);
+    transition: cubic-bezier(.68,-0.55,.27,1.55);
+    transition-duration: 1s;
+    border-radius: 90px;
+    width: 70%;
+}
+
+
+
+.flex {
+    display: flex;
+    width: 100%;
+}
+
+.pdetail {
+    font-size: 13px;
+}
+
+.input {
+    display: flex;
+}
+
+.input p {
+    margin-right: 20px;
+    margin-left: 0px;
+}
+
+.input input {
+    width: 50%;
+    margin: 0px;
+}
+
+.point {
+    padding: 5px 0px;
+}
+
+.container {
+    padding: 20px;
+    background-color: rgba(20, 20, 20, 0.8);
+    border-radius: 20px;
+    display: grid;
+    width: 70%;
+}
+
+.details {
+    padding-top: 30px;
+}
+
+#endgame {
+    background-size: cover;
+}
+
+.container a{
+    text-decoration: none;
+    transition: ease-in-out;
+    transition-duration: 1s;
+    pointer-events: all;
+}
+
+.container a:hover {
+    color: blue;
+    transition: ease-in-out;
+    transition-duration: 1s;
+}

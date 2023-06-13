@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/private/css/framework.css">
+    <link rel="stylesheet" href="/private/css/boards.css">
+    <link rel="shortcut icon" href="/private/images/logo.png" type="image/x-icon">
+    <title>Leaderboard | ATC</title>
+</head>
+<body>
+    <%- include('navbar.ejs') -%>
+    <section class="container w85" id="leaderboard">
+        <h1 class="fs30" id="header">Leaderboard</h1>
+        <div class="sep">
+            <%_ if(message == 'name_constrain') { %>
+                <h2 class="fs15 color-red text-center">You're already on the leaderboard</h2>
+                <p class="fs15 color-black text-center">Your entry is stored temporarily, so you can still add it later once this entry has been removed.</p>
+            <%_ } %>
+            <%_ if(message == 'score_constrain') { %>
+                <h2 class="fs15 color-red text-center" id="error">Not added to leaderboard</h2>
+                <p class="fs15 color-black text-center" id="reason">Reason: you didn't score high enough for minimum criteria</p>
+            <%_ } %>
+            <%_ if(message == 'oor') { %>
+                <h2 class="fs15 color-red text-center" id="error">Not added to leaderboard (you may already be in the leaderboard)</h2>
+                <p class="fs15 color-black text-center" id="reason">Reason: there are already max entries in the database. Stored to profile.</p>
+            <%_ } %>
+            <%_ if(message == 'success') { %>
+                <h2 class="fs15 color-green text-center" id="error">Added to leaderboard!</h2>
+            <%_ } %>
+        </div>
+        <%_ if(top_entries.length > 0) { %>
+            <table>
+                <tr class="fs20 m20">
+                    <%_ for(let index in id_types) { %>
+                        <th class="fs20 m20"><%= id_types[index] %></th>
+                    <%_ } %>
+                </tr>
+                <%_ for(let entry = 0; entry < top_entries.length; entry++) { %>
+                    <tr id="entry<%= `${entry + 1}` %>">
+                        <%_ for(let x in top_entries[entry]) { %>
+                            <%_ if(x != 'personID') { %>
+                                <td class="fs20 m20 text-center">
+                                    <%_ if(x == 'level') { %>
+                                        <a href="/level?name=<%= top_entries[entry][x] %>&type=detailed"><%= top_entries[entry][x] %></a>
+                                    <%_ } else if (x == 'name') { %>
+                                        <a href="/profile/<%=top_entries[entry].personID %>"><%= top_entries[entry][x] %></a>
+                                    <%_ } else { %>
+                                        <%= top_entries[entry][x] %>
+                                    <%_ } %>
+                                </td>
+                            <%_ } %>
+                            <%_ } %>
+                        </tr>
+                        <%_ } %>
+                    </table>
+                    <%_ } else { %>
+            <p class="text-center fs20 m20">Nothing to see here :(</p>
+        <%_ } %>
+
+    </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/private/css/framework.css">
+    <link rel="stylesheet" href="/private/css/boards.css">
+    <title>ATC | Page not found</title>
+</head>
+<body>
+    <div class="nav"></div>
+    <section id="section" class="container m20 text-center" style="display: flex; justify-content: center;">
+        <img src="/private/images/error-pages/<%= Math.floor(Math.random() * 33) %>.png" alt="" style="height: 500px; position: relative;">
+        <div class="inner-container" style="position: absolute; margin-top: 20%; background-color: rgba(20,20,20,0.8);">
+            <h1 class="fs30 text-center m20"> <%= message %> couldn't be found.</h1>
+            <p class="fs15 text-center m20"><a onclick="javascript:window.history.back(-3);return false;"> < Go back</a></p>
+        </div>
+    </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <script>
+        $(() => {
+            $('.nav').load('/views/navbar.ejs')
+        })
+    </script>
+</body>
+</html>

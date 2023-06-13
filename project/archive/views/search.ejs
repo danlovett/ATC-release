@@ -1,0 +1,101 @@
+<link rel="stylesheet" href="/private/css/framework.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/private/css/search.css">
+<link rel="shortcut icon" href="/private/images/logo.png" type="image/x-icon">
+<title>Search <%= group %> <%_ if(query != undefined) { %>
+    | <%= query %>
+<%_ } %>
+</title>
+<%- include('navbar.ejs') -%>
+
+<div class="quick-actions" style="margin-top: 20px;">
+    <a href="/search/people">Find People</a>
+    <a href="/search/levels">Find Levels</a>
+</div>
+
+<%_ if(group == 'people') { %>
+    <h1 class="fs30 m20 text-center">Find People.</h1>
+<%_ } %>
+<%_ if(group == 'levels') { %>
+    <h1 class="fs30 m20 text-center">Find Levels.</h1>
+<%_ } %>
+
+<section id="search" class="container p20 w85">
+    <div class="inner-container">
+        <form method="POST" class="form-search">
+            <input type="text" class="fs20 text-center m20" name="query" value="<%= query %>"  placeholder="search for <%= group %> here..." >
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <div class="inner-container" style="margin-top: 20px">
+        <%_ if(group == 'people') { %>
+            <%_ if(foundUsers.length == 0) { %>
+                <div class="flex">
+                    <img src="/private/images/logo.png" alt="" style="height: 50px;">
+                    <h1 class="fs20 m20 text-center">Results for users will show here.</h1>
+                </div>
+                <p class="text-center fs15 color-grey m10">Type <span class="fs15">all</span> to see all users</p>
+            <%_ } else { %>
+                <div class="form-search">
+                    <h1 class="text-center fs20 m20">User<%= foundUsers.length > 1 ? 's' : '' %></h1>
+                    <h1 class="text-center fs20 m20">Add Friend</h1>
+                </div>
+                <%_ for(let i in foundUsers) { %>
+                    <%_ if(foundUsers[i].id != user_id) { %>
+                        <form class="form-search" action="/add_friend?id=<%= foundUsers[i].id %>" method="POST">
+                            <a href="/profile/<%= foundUsers[i]["id"] %>" style="width: 100%;">
+                                <div class="user-search-container" style="background-image: url('<%= foundUsers[i]["pfp"] %>'); background-size: cover;">
+                                    <div class="background-fade">
+                                        <h1 class="fs20 text-center"><%= foundUsers[i]["name"] %></h1>
+                                        <p class="fs15 text-center"><%= foundUsers[i]["username"] %></p>
+                                    </div>
+                                </div>
+                            </a>
+                            <div>
+                                <p class="fs20 color-white text-center">Feature</p>
+                                <p class="fs15 color-grey text-center">Coming soon</p>
+                            </div>
+                            <!-- <button type="submit" id='<%= i %>' class="fs20 color-white">
+                                 <%_ if(foundUsers[i].status != null && (foundUsers[i].passive_user == user_id || foundUsers[i].lead_user == user_id)) { %>
+                                    <p class="fs20"><%= foundUsers[i].status %></p>
+                                    <%_ if(foundUsers[i].creation_date) { %>
+                                        <p class="color-grey fs15"><%= foundUsers[i].creation_date%></p>
+                                    <%_ } %>
+                                <%_ } else { %>
+                                    Add Friend
+                                <%_ } %>
+                            </button> -->
+                        </form>
+                    <%_ } %>
+                <%_ } %>
+            <%_ } %>
+        <%_ } %>
+
+        <%_ if(group == 'levels') { %>
+            <%_ if(foundLevels.length == 0) { %>
+                <div class="flex">
+                    <img src="/private/images/logo.png" alt="" style="height: 50px;">
+                    <h1 class="fs20 m20 text-center">Results for levels will show here.</h1>
+                </div>
+                <p class="text-center color-grey fs15 m10">Type <span class="fs15">all</span> to see all levels</p>
+            <%_ } else { %>
+                <div class="form-search">
+                    <h1 class="text-center fs20 m20">Level</h1>
+                    <h1 class="text-center fs20 m20">Play Level</h1>
+                </div>
+                <%_ for(let i in foundLevels) { %>
+                    <div class="form-search">
+                        <a href="/level?name=<%= foundLevels[i]["airport_name"] %>&type=detailed" style="width: 100%;">
+                            <div class="user-search-container" style="background-image: url('<%= foundLevels[i]["image_reference"] %>'); background-size: cover;">
+                                <div class="background-fade">
+                                    <h1 class="fs20 text-center"><%= foundLevels[i]["airport_name"] %></h1>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/level?name=<%= foundLevels[i]["airport_name"] %>&type=quickplay"><img src="/private/images/logo.png" alt="" style="height: 50px;"></a>
+                    </div>
+                <%_ } %>
+            <%_ } %>
+        <%_ } %>
+    </div>
+</section>

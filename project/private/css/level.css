@@ -1,0 +1,52 @@
+.level-detail {
+    position: absolute;
+    height: 70%;
+    top: 15%;
+    margin: 0px 3%;
+    border-radius: 35px;
+}
+
+.container {
+    padding: 20px;
+    text-align: center;
+    background-color: rgba(25, 25, 25, 0.8);
+    margin-bottom: 20px;
+    border-radius: 35px;
+}
+
+.splitter {
+    display: flex;
+    background-color: rgba(39, 39, 39, 0.8);
+    padding: 20px;
+    border-radius: 35px;
+}
+
+.level-play {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background-color: rgba(25, 25, 25, 0.8);
+    color: white;
+    border-radius: 0px 0px 35px 35px;
+}
+.level-play:hover {
+    padding: 30px 0px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+    border-radius: 35px;
+}
+
+#level-detail {
+    transition: cubic-bezier(.68,-0.55,.27,1.55);
+    transition-duration: 1s;
+    width: 90%;
+}
+
+
+#level-detail:hover {
+    scale: 1.01;
+    transition: cubic-bezier(.68,-0.55,.27,1.55);
+    transition-duration: 0.5s;
+}

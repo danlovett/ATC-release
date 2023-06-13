@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ended | AT city</title>
+    <link rel="shortcut icon" href="/private/images/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/private/css/framework.css">
+    <link rel="stylesheet" href="/game/style.css">
+</head>
+<body>
+    <%- include('navbar.ejs') -%>
+    <%_ if(reason == 'level_finished') reason = 'You finished the game!' %>
+    <%_ if(reason == 'collision') reason = 'Ended because two aircraft collided!' %>
+    <%_ if(reason == 'max_aircraft_deleted') reason = 'Ended because too many aicraft missed their departure time!' %>
+    <section id="endgame" style="background-image: url('<%= level["image_reference"] %>'); background-size: cover;">
+        <div class="container">
+            <h1 id="level" class="text-center fs30">Game ended at <%= level["airport_name"] %></h1>
+            <h1 class="text-center fs20 m10 <%_ if(reason != 'You finished the game!') { %> color-red <%_ } else { %> color-green <%_ } %>"><%= reason %></h1>
+            <p class="pdetail p20">Details on your performance:</p>
+            <table>
+                <tr>
+                    <th class="text-center fs20">Name: </th>
+                    <th class="text-center fs20"><%= username %></th>
+                </tr>
+                <tr>
+                    <th class="text-center fs20">Time: </th>
+                    <th id="timetaken" class="point fs20"><%= Math.floor(time/60) %> minute<%_ time/60 >= 1 ? 's' : '' %></th>
+                </tr>
+                <!-- <tr>
+                    <th class="text-center fs20">Best Performing Aircraft: </th>
+                    <th id="bestaircraft" class="point fs20"></th>
+                </tr> -->
+                <tr>
+                    <th class="text-center fs20">Score: </th>
+                    <th id="score" class="point fs20"><%= score %> point<%_ score == 1 ? '' : 's' %></th>
+                </tr>
+            </table>
+            <button id="eog" class="fs15"><a href="/profile?id=current" class="fs15">Back to home</a></button>
+            <button class="fs15" id="eog-small"> <a href="/usr_leaderboard_submit?score=<%= score %>&level=<%= level["airport_name"] %>" class="fs15">or add to leaderboard</a></button>
+
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+/* main section */
+
+/* Quick Access */
+
+.quick-actions {
+    display: flex;
+    justify-content: center;
+}
+
+#quick-play-desc {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;  
+}
+
+.quick-actions a:first-child {
+    background-color: white;
+    color: black;
+}
+
+.quick-actions a {
+    background-color: rgb(20, 20, 20, 0.8);
+    padding: 5px 20px;
+    border-radius: 35px;
+    margin: 0px 10px;
+}
+
+.quick-play h2 {
+    transition-duration: 0.2s;
+}
+
+.quick-play:hover h2 {
+    font-size: 25px;
+    transition: ease-in-out;
+    transition-duration: 0.2s;
+}
+
+.quick-play img {
+    height: 100px;
+    justify-content: center;
+}
+
+.background-filter {
+    overflow: auto;
+    background-color: rgba(37, 37, 37, 0.8);
+    border-radius: 30px;
+}
+
+/* Levels */
+
+#library .container {
+    padding: 20px;
+}
+
+.container {
+    margin: 20px 50px;
+}
+
+.levels {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    background-color: rgba(30, 30, 30, 0.2);
+    padding: 0px;
+    overflow-x: auto;
+}
+
+.quick-play-child {
+    margin: 5px 5px;
+    height: 50vh;
+    padding: 20px 10px;
+    background-size: cover;
+}
+
+.quick-play-child h2, .child h2 {
+    background-color: rgba(16, 16, 16, 0.796);
+    border: none;
+    color: white;
+    padding: 10px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition: cubic-bezier(.68,-0.55,.27,1.55);
+    transition-duration: 1s;
+    width: 50%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.quick-play-child:hover h2, .child:hover h2 {
+    background-color: rgb(216, 216, 216); /* Green */
+    color: black;
+    transition: cubic-bezier(.68,-0.55,.27,1.55);
+    transition-duration: 1s;
+    border-radius: 90px;
+    width: 80%;
+}
+
+.level-wrapper {
+    margin: 5px 5px;
+    padding: 20px 10px;
+    background-size: cover;
+    height: 20vh;
+}

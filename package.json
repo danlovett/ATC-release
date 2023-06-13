@@ -1,0 +1,43 @@
+{
+  "name": "airtraffic-city",
+  "version": "1.0.1",
+  "description": "",
+  "main": "app/index.html",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danlovett/AirTraffic-City.git"
+  },
+  "author": "Daniel Lovett",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danlovett/AirTraffic-City/issues"
+  },
+  "homepage": "https://github.com/danlovett/AirTraffic-City#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "blueimp-file-upload": "^9.34.0",
+    "cloudinary-core": "^2.13.0",
+    "cloudinary-jquery-file-upload": "^2.13.0",
+    "cookie-parser": "^1.4.6",
+    "crypto-js": "^4.1.1",
+    "document": "^0.0.0",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
+    "node": "^19.0.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "sqlite3": "^5.1.2",
+    "toastify-js": "^1.12.0",
+    "typescript": "^4.9.3"
+  }
+}

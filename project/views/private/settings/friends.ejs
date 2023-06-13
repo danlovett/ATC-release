@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends</title>
+</head>
+<body class="bg-blue">
+    <%- include('../navbar.ejs') -%>
+    <div class="sections">
+        <div>
+            <h1 class="page-title">Friends</h1>
+            <p style="padding: 10px; text-align: center;">See all friend details here</p>
+        </div>
+        <section class="profile">
+            <%- include('sidebar.ejs') -%>
+            <%_ if(JSON.stringify(following) == '[]' && JSON.stringify(follower_requests) == '[]' && JSON.stringify(requested_followers) == '[]') { %>
+                <p style="text-align: center; margin-top: auto;">Nothing here. Either wait for requests or <a href="/search">search</a> for people.</p>
+            <%_ } else { %>
+                <section class="friends">
+                    <%_ if(JSON.stringify(follower_requests) != '[]') { %>
+                        <section class="followers transform-105">
+                            <h1 class="title transform-105">Incoming requests</h1>
+                            <table class="transform-105">
+                                <thead>
+                                    <tr>
+                                        <th>Person</th>
+                                        <th>Accept</th>                                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%_ for(i in follower_requests) { %>
+                                        <tr>
+                                            <td id="person">
+                                                <img src="<%= follower_requests[i].pfp %>" alt="">
+                                                <a class="sidebar" href="/profile/29">
+                                                    <p><%= follower_requests[i].name %></p>
+                                                    <p><%= follower_requests[i].username %></p>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="/backend/accept_request/<%= follower_requests[i].id %>" class="transform-120">Accept</a>
+                                                <a href="/backend/reject_request/<%= follower_requests[i].id %>" class="transform-120">Reject</a>
+                                            </td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(following) != '[]') { %>
+                        <section class="followers transform-105">
+                            <h1 class="title transform-105">Following</h1>
+                            <table class="transform-105">
+                                <thead>
+                                    <tr>
+                                        <th>Person</th>
+                                        <th>Since</th>                                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%_ for(i in following) { %>
+                                        <tr>
+                                            <td id="person">
+                                                <img src="<%= following[i].pfp %>" alt="">
+                                                <a class="sidebar" href="/profile/29">
+                                                    <p><%= following[i].name %></p>
+                                                    <p><%= following[i].username %></p>
+                                                </a>
+                                            </td>
+                                            <td><%= following[i].creation_date.substr(0, 10) %></td>
+                                            <td><a href="/backend/remove_friend/<%= following[i].id %>" class="transform-120">X</a></td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(requested_followers) != '[]') { %>
+                        <section class="followers transform-105">
+                            <h1 class="title transform-105">Sent Requests</h1>
+                            <table class="transform-105">
+                                <thead>
+                                    <tr>
+                                        <th>Person</th>
+                                        <th>Remove?</th>                                    
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%_ for(i in requested_followers) { %>
+                                        <tr>
+                                            <td id="person">
+                                                <img src="<%= requested_followers[i].pfp %>" alt="">
+                                                <a class="sidebar" href="/profile/29">
+                                                    <p><%= requested_followers[i].name %></p>
+                                                    <p><%= requested_followers[i].username %></p>
+                                                </a>
+                                            </td>
+                                            <td><a href="/backend/remove_request/<%= requested_followers[i].id %>" class="transform-120">X</a></td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } %>
+                </section>
+            <%_ } %>
+        </section>
+    </div>
+</body>
+</html>

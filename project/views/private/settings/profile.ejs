@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body class="bg-blue">
+    <%- include('../navbar.ejs') -%>
+    <div class="sections">
+        <div>
+            <h1 class="page-title">Your Profile</h1>
+            <p style="padding: 10px; text-align: center;">You can delete history in the general tab</p>
+        </div>
+        <section class="profile">
+            <%- include('sidebar.ejs') -%>
+            <section class="profile-inner" style="width: 90%; margin-top: 10px;">
+                <div style="display: flex;">
+                    <img src="<%= user.pfp %>" alt="" style="height: 120px; margin: 10px; border-radius: 10px;">
+                    <div class="sidebar" style="height: 100%; margin-right: 0; margin-top: auto;">
+                        <p><%= user.name %></p>
+                        <p><%= user.username %></p>
+                    </div>
+                </div>
+                <div class="details" style="width: 100%;">
+                    <%_ if(JSON.stringify(leaderboard) != '[]') { %>
+                        <section class="transform-105">
+                            <p>Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px;">You have no leadboard entry, <a href="/levels">play now</a>.</p>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(history) != '[]') { %>
+                        <section class="transform-105" style="width: 100%;">
+                            <h1 class="title" style="margin-bottom: 10px;">History</h1>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Level</th>
+                                        <th>Date</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%_ for(i in history) { %>
+                                        <tr>
+                                            <td><%= history[i].level %></td>
+                                            <td><%= history[i].date %></td>
+                                            <td><%= history[i].score %></td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px;">You have no history, <a href="/levels">play now</a>.</p>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(followers) != '[]') { %>
+                        <section class="ransform-105">
+                            <h1 class="title" style="margin-bottom: 10px;">Friends</h1>
+                            <table>
+                                <tbody>
+                                    <%_ for(i in followers) { %>
+                                        <tr>
+                                            <td style="width: 100%; display: flex;">
+                                                <img src="<%= followers[i].pfp %>" alt="pic" style="height: auto; width: 30%; border-radius: 10px;">
+                                            </td>
+                                            <td style="width: 50%;">
+                                                <p class="name"><%= followers[i].name %></p>
+                                            </td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px;">You have no friends, <a href="/search">add them here</a>.</p>
+                    <%_ } %>
+                </div>
+            </section>
+        </section>
+    </div>
+</body>
+</html>
