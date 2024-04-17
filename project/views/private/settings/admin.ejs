@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body class="bg-blue">
+    <%- include('../navbar.ejs') -%>
+    <div class="sections">
+        <div>
+            <h1 class="page-title">Admin Settings</h1>
+            <p style="padding: 10px; text-align: center;">Hello admin! here are your utilities:</p>
+        </div>
+        <section class="profile settings">
+            <%- include('sidebar.ejs') -%>
+            <section>
+                <%_ if(JSON.stringify(all_users) != '[]') { %>
+                    <section id="users">
+                        <h1 class="title">All signed up users</h1>
+                        <table>
+                            <thead>
+                                <td>ID</td>
+                                <td>Name</td>
+                                <td>Creation Date</td>
+                                <td>Manage user</td>
+                            </thead>
+                            <tbody>
+                                <%_ for(i in all_users) { %>
+                                    <tr>
+                                        <td><%= all_users[i].id %></td>
+                                        <td><%= all_users[i].name %></td>
+                                        <td><%= all_users[i].creation_date %></td>
+                                        <td><a href="/settings/admin/p/<%= all_users[i].id %>">Click</a></td>
+                                    </tr>
+                                <%_ } %>
+                            </tbody>
+                        </table>
+                    </section>
+                <%_ } else { %>
+                    <p style="padding: 10px; text-align: center;">There are no access errors for users.</p>
+                <%_ } %>
+                <%_ if(JSON.stringify(user_access_logs) != '[]') { %>
+                    <section id="access">
+                        <h1 class="title">User Access errors</h1>
+                        <table>
+                            <thead>
+                                <td>Date</td>
+                                <td>Description</td>
+                            </thead>
+                            <tbody>
+                                <%_ for(i in user_access_logs) { %>
+                                    <tr>
+                                        <td><%= user_access_logs[i].date %></td>
+                                        <td><%= user_access_logs[i].description %></td>
+                                    </tr>
+                                <%_ } %>
+                            </tbody>
+                        </table>
+                    </section>
+                <%_ } else { %>
+                    <p style="padding: 10px; text-align: center;">There are no access errors for users.</p>
+                <%_ } %>
+                <%_ if(JSON.stringify(user_auth_logs) != '[]') { %>
+                    <section id="auth">
+                        <h1 class="title">Login Information</h1>
+                        <table>
+                            <thead>
+                                <td>Type</td>
+                                <td>Date</td>
+                                <td>ID</td>
+                            </thead>
+                            <tbody>
+                                <%_ for(i in user_auth_logs) { %>
+                                    <tr>
+                                        <td><%= user_auth_logs[i].type %></td>
+                                        <td><%= user_auth_logs[i].date %></td>
+                                        <td><%= user_auth_logs[i].description %></td>
+                                    </tr>
+                                <%_ } %>
+                            </tbody>
+                        </table>
+                    </section>
+                <%_ } else { %>
+                    <p style="padding: 10px; text-align: center;">There are no authentication logs for users.</p>
+                <%_ } %>
+            </section>
+        </section>
+    </div>
+</body>
+</html>

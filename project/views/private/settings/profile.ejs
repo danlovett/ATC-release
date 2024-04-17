@@ -12,11 +12,11 @@
             <h1 class="page-title">Your Profile</h1>
             <p style="padding: 10px; text-align: center;">You can delete history in the general tab</p>
         </div>
-        <section class="profile">
+        <section class="profile settings">
             <%- include('sidebar.ejs') -%>
             <section class="profile-inner" style="width: 90%; margin-top: 10px;">
                 <div style="display: flex;">
-                    <img src="<%= user.pfp %>" alt="" style="height: 120px; margin: 10px; border-radius: 10px;">
+                    <img src="<%= user.pfp %>" alt="">
                     <div class="sidebar" style="height: 100%; margin-right: 0; margin-top: auto;">
                         <p><%= user.name %></p>
                         <p><%= user.username %></p>
@@ -25,10 +25,10 @@
                 <div class="details" style="width: 100%;">
                     <%_ if(JSON.stringify(leaderboard) != '[]') { %>
                         <section class="transform-105">
-                            <p>Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
+                            <p style="text-align: center;">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
                         </section>
                     <%_ } else { %>
-                        <p style="text-align: center; padding: 20px;">You have no leadboard entry, <a href="/levels">play now</a>.</p>
+                        <p style="text-align: center; padding: 20px; cursor: pointer;">You have no leadboard entry, <a href="/levels">play now</a>.</p>
                     <%_ } %>
                     <%_ if(JSON.stringify(history) != '[]') { %>
                         <section class="transform-105" style="width: 100%;">
@@ -53,7 +53,7 @@
                             </table>
                         </section>
                     <%_ } else { %>
-                        <p style="text-align: center; padding: 20px;">You have no history, <a href="/levels">play now</a>.</p>
+                        <p style="text-align: center; padding: 20px; cursor: pointer;">You have no history, <a href="/levels">play now</a>.</p>
                     <%_ } %>
                     <%_ if(JSON.stringify(followers) != '[]') { %>
                         <section class="ransform-105">
@@ -66,7 +66,7 @@
                                                 <img src="<%= followers[i].pfp %>" alt="pic" style="height: auto; width: 30%; border-radius: 10px;">
                                             </td>
                                             <td style="width: 50%;">
-                                                <p class="name"><%= followers[i].name %></p>
+                                                <a href="/profile/<%= followers[i].id %>" style="cursor: pointer;"><%= followers[i].name %></a>
                                             </td>
                                         </tr>
                                     <%_ } %>
@@ -74,7 +74,7 @@
                             </table>
                         </section>
                     <%_ } else { %>
-                        <p style="text-align: center; padding: 20px;">You have no friends, <a href="/search">add them here</a>.</p>
+                        <p style="text-align: center; padding: 20px; cursor: pointer;">You have not added any friends, <a href="/search">add friends</a>!</p>
                     <%_ } %>
                 </div>
             </section>

@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const favicon = require('serve-favicon')
 
 const sqlite3 = require('sqlite3');
 const clientDB = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, err => { if(err) throw err })
@@ -18,6 +19,8 @@ const session = require('express-session')
 
 const initPassport = require('./passport-config');
 initPassport(passport, LocalStrategy, clientDB, bcrypt, fs)
+
+app.use(favicon('./images/icon.png'));
 
 app.use(express.static(__dirname))
 app.use(express.urlencoded({ extended: false }))
@@ -45,7 +48,7 @@ app.get('/login', checkNotAuthenticated, (req, res, next) => {
 });
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
-        successRedirect: '/home',
+        successRedirect: '/login-success/log',
         failureRedirect: `/login`,
         failureFlash: true
 }));
@@ -74,10 +77,13 @@ app.post('/signup', checkNotAuthenticated, async (req,res) => {
 })
 
 //PRIVATE
-app.get('/home', (req, res) => { // to add checkAuthenticated
+app.get('/home', checkAuthenticated, (req, res) => { // to add checkAuthenticated
     gameDB.all('SELECT image_reference, airport_name, airport_icao FROM levels', [], (err, levels) => {
+        if(err) add_user_log('ACCESS', err)
         clientDB.all(`SELECT name, date, score, level, personID FROM leaderboard ORDER BY score DESC LIMIT 3;`, [], (err, leaderboard) => {
+            if(err) add_user_log('ACCESS', err)
             clientDB.all(`SELECT users.name, users.username, users.pfp, users.last_played FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => { // change 30 to current user
+                if(err) add_user_log('ACCESS', err)
                 res.render('private/home.ejs', { levels: levels, leaderboard: leaderboard, following: following });
             })
         })
@@ -86,36 +92,70 @@ app.get('/home', (req, res) => { // to add checkAuthenticated
 
 app.get('/leaderboard', checkAuthenticated, (req, res) => { // to add checkAuthenticated
     clientDB.all(`SELECT name, date, score, level, personID FROM leaderboard ORDER BY score DESC;`, [], (err, leaderboard) => {
+        if(err) add_user_log('ACCESS', err)
         res.render('private/leaderboard.ejs', { leaderboard: leaderboard });
     })
 })
 
 app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAuthenticated
     if(req.params.page == 'home') {
-        res.render('private/settings/settings.ejs')
+        res.render('private/settings/settings.ejs', { is_admin: req.user.is_admin } )
     } else if(req.params.page == 'profile') {
         clientDB.get(`SELECT id, name, username, pfp FROM users WHERE id = ${req.user.id}`,(err, user) => {
+            if(err) add_user_log('ACCESS', err)
             clientDB.all(`SELECT score, level, date FROM leaderboard WHERE personID = ${req.user.id}`, [], (err, leaderboard) => {
-                clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.username, users.name, users.pfp FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, followers) => {
+                if(err) add_user_log('ACCESS', err)
+                clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.id, users.username, users.name, users.pfp FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, followers) => {
+                    if(err) add_user_log('ACCESS', err)
                     clientDB.all(`SELECT history.level, history.date, history.score FROM history LEFT JOIN users ON history.personID = users.id WHERE users.id = ${req.user.id} ORDER BY history.date DESC`, [], (err, history) => {
-                        res.render('private/settings/profile', { user: user, history: history, leaderboard: leaderboard, followers: followers, current_user: req.user.id })
+                        if(err) add_user_log('ACCESS', err)
+                        res.render('private/settings/profile', { user: user, history: history, leaderboard: leaderboard, followers: followers, current_user: req.user.id, is_admin: req.user.is_admin })
                     })
                 })
             })
         })
     } else if(req.params.page == 'friends') {
         clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Requested"], (err, requested_followers) => {
-            clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Requested"], (err, follower_requests) => {
+            if(err) add_user_log('ACCESS', err)
+            clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Requested"], (err, follower_requests) => {
+                if(err) add_user_log('ACCESS', err)
                 clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => {
-                    res.render('private/settings/friends.ejs', { requested_followers: requested_followers, follower_requests: follower_requests, following: following })
+                    if(err) add_user_log('ACCESS', err)
+                    clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, followers) => {
+                        if(err) add_user_log('ACCESS', err)
+                        res.render('private/settings/friends.ejs', { requested_followers: requested_followers, follower_requests: follower_requests, following: following, followers: followers, is_admin: req.user.is_admin })
+                    })
                 })
             })
         })
     } else if(req.params.page == 'general') {
-        res.render('private/settings/general.ejs')
+        res.render('private/settings/general.ejs', { is_admin: req.user.is_admin })
+    } else if(req.params.page == 'admin') {
+        clientDB.all('SELECT * FROM logs WHERE type == "ACCESS"', [], (err, user_access_logs) => {
+            clientDB.all('SELECT * FROM logs WHERE type == "LOGIN" OR type == "LOGOUT"', [], (err, user_auth_logs) => {
+                gameDB.all('SELECT * FROM logs', [], (err, game_logs) => {
+                    clientDB.all('SELECT * FROM users', [], (err, users) => {
+                        res.render('private/settings/admin.ejs', { user_auth_logs: user_auth_logs, user_access_logs: user_access_logs, game_logs: game_logs, all_users: users, is_admin: req.user.is_admin })
+                    })
+                })
+            })
+        })
     } else {
         res.redirect('/error/settings')
     }
+})
+
+app.get('/settings/admin/p/:id', check_admin, (req, res) => {
+    clientDB.all('SELECT * FROM leaderboard WHERE personID = ?', req.params.id, (err, leaderboard) => {
+        if(err) user_access_logs('ACCESS', err)
+        clientDB.all('SELECT id, pfp, name, username, last_played, best_played, points, creation_date, is_admin FROM users WHERE id = ?', req.params.id, (err, user) => {
+            if(err) user_access_logs('ACCESS', err)
+            clientDB.all('SELECT * FROM history WHERE personID = ?', req.params.id, (err, history) => {
+                if(err) user_access_logs('ACCESS', err)
+                res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: true })
+            })
+        })
+    })
 })
 
 app.post('/search', checkAuthenticated, (req, res) => {
@@ -136,7 +176,9 @@ app.post('/search', checkAuthenticated, (req, res) => {
 app.get('/search', checkAuthenticated, (req, res) => {
     if(req.query.query != undefined) {
         gameDB.all(`SELECT airport_name, airport_icao, image_reference FROM levels WHERE airport_name LIKE '%${req.query.query}%'`, [], (err, levels) => {
+            if(err) add_game_log('ACCESS', err)
             clientDB.all(`SELECT users.id, users.pfp, users.name, users.username, friends.passive_user, friends.lead_user, friends.creation_date, friends.status FROM users LEFT JOIN friends ON friends.passive_user = users.id WHERE name LIKE '%${req.query.query}%'`, [], (err, users) => {
+                if(err) add_user_log('ACCESS', err)
                 // ERROR -FIX
                 // multiple entries will show when user has multiple friend requests
                 res.render('private/search.ejs', { query: req.query.query, levels: levels, users: users, current_user: req.user.id })
@@ -148,7 +190,8 @@ app.get('/search', checkAuthenticated, (req, res) => {
 })
 
 app.get('/friends', checkAuthenticated, (req, res) => {
-    clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => { // change 30 to current user
+    clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => {
+        if(err) add_user_log('ACCESS', err)
         res.render('private/friends.ejs', { following: following });
     })
 })
@@ -156,9 +199,13 @@ app.get('/friends', checkAuthenticated, (req, res) => {
 app.get('/profile/:id', checkAuthenticated, (req, res) => {
     if(req.params.id == "current") res.redirect('/settings/profile')
     clientDB.get(`SELECT id, name, username, pfp FROM users WHERE id = ${req.params.id}`,(err, user) => {
+        if(err) add_user_log('ACCESS', err)
         clientDB.all(`SELECT score, level, date FROM leaderboard WHERE personID = ${req.params.id}`, [], (err, leaderboard) => {
+            if(err) add_user_log('ACCESS', err)
             clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.username, users.name, users.pfp FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.params.id, "Active"], (err, followers) => {
+                if(err) add_user_log('ACCESS', err)
                 clientDB.all(`SELECT history.level, history.date, history.score FROM history LEFT JOIN users ON history.personID = users.id WHERE users.id = ${req.params.id} ORDER BY history.date DESC`, [], (err, history) => {
+                    if(err) add_user_log('ACCESS', err)
                     res.render('private/profile', { user: user, history: history, leaderboard: leaderboard, followers: followers, current_user: req.user.id })
                 })
             })
@@ -168,7 +215,9 @@ app.get('/profile/:id', checkAuthenticated, (req, res) => {
 
 app.get('/play/:id', checkAuthenticated, (req, res) => { // to add checkAuthenticated
     gameDB.get(`SELECT * from levels WHERE airport_icao = "${req.params.id}";`, [], (err, level) => {
+        if(err) add_game_log('ACCESS', err)
         gameDB.all('SELECT * from airlines LEFT JOIN airframes ON airlines.airframe = airframes.id;', [], (err, plane_data) => {
+            if(err) add_game_log('ACCESS', err)
             res.render('private/play.ejs', { data: level, plane_data: plane_data });
         })
     })
@@ -176,58 +225,81 @@ app.get('/play/:id', checkAuthenticated, (req, res) => { // to add checkAuthenti
 
 app.get('/levels', checkAuthenticated, (req, res) => { // to add checkAuthenticated
     gameDB.all('SELECT airport_name, airport_icao, text_waffle, text_instructions, image_reference, author FROM levels', [], (err, levels) => {
+        if(err) add_game_log('ACCESS', err)
         res.render('private/levels.ejs', { levels: levels })
     })
 })
 
 app.get('/play-ended', checkAuthenticated, (req,res) => {
     clientDB.get('SELECT points FROM users WHERE id = ?', req.user.id, (err, row) => {
-        clientDB.all('UPDATE users SET points = ? WHERE id = ?', parseInt(row.points) + parseInt(req.query.score), req.user.id, err => { if(err) throw err }) 
+        if(err) add_user_log('ACCESS', err)
+        clientDB.all('UPDATE users SET points = ? WHERE id = ?', parseInt(row.points) + parseInt(req.query.score), req.user.id, err => { if(err) add_user_log('ACCESS', err) }) 
     })
+
     clientDB.get(`SELECT * FROM history WHERE personID = ${req.user.id} ORDER BY score DESC;`, [], (err, row) => {
-        clientDB.all(`UPDATE users SET best_played = '${row.level}' WHERE id = ${req.user.id}`, [], (err) => { if(err) throw err }) // undefined FIX THIS
+        if(err) add_user_log('ACCESS', err)
+        clientDB.all(`UPDATE users SET best_played = '${row.level}' WHERE id = ${req.user.id}`, [], (err) => { if(err) add_user_log('ACCESS', err) }) // undefined FIX THIS
     })
-    clientDB.get(`SELECT * FROM history WHERE personID = ${req.user.id} ORDER BY date DESC;`, [], (err, row) => {
-        clientDB.all(`UPDATE users SET last_played = '${row.level}' WHERE id = ${req.user.id}`, [], (err) => { if(err) throw err }) // undefined FIX THIS
-    })
-    clientDB.all(`INSERT INTO history (date, score, level, personID) VALUES('${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => {if(err) throw err})
-    
-    if(req.query.score >= 0) {
-        clientDB.all('SELECT * FROM leaderboard WHERE personID = ?;', req.user.id, (err, rows) => {
-            if(rows) clientDB.all('DELETE leaderboard WHERE personID = ?', rows.personID, (err, row) => { if(err) throw err })
-            clientDB.all(`INSERT INTO leaderboard(name, date, score, level, personID) VALUES('${req.user.name}', '${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => { 
-                if(!err) res.redirect(308, '/leaderboard')
-            })
-        })
-    } else {
-        res.redirect(308, '/leaderboard')
-    }
+
+    clientDB.all(`UPDATE users SET last_played = '${req.query.level}' WHERE id = ${req.user.id}`, [], (err) => { if(err) add_user_log('ACCESS', err) }) // undefined FIX THIS
+    clientDB.all(`INSERT INTO history (date, score, level, personID) VALUES('${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => { if(err) add_user_log('ACCESS', err) })
+    clientDB.all('DELETE FROM leaderboard WHERE personID = ?', req.user.id, err => { if(err) add_user_log('ACCESS', err) })
+    clientDB.all(`INSERT INTO leaderboard(name, date, score, level, personID) VALUES('${req.user.name}', '${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => { if(err) add_user_log('ACCESS', err)})
 
     gameDB.all('SELECT image_reference FROM levels WHERE airport_name=?', req.query.level, (err, image) => {
+        if(err) add_game_log('ACCESS', err)
         res.render('private/terminate_play.ejs', { level: req.query.level, image: image, score: req.query.score, time: req.query.time, reason: req.query.reason })
     })
 })
 
-app.get('/backend/:action/:id', checkAuthenticated, (req, res) => {
-    if(req.params.action == 'add_friend') {
-        clientDB.all('INSERT INTO friends(lead_user, passive_user, creation_date, status) VALUES(?, ?, DATETIME("now"), "Requested")', [req.user.id, req.params.id], err => { if(err) res.redirect('/error/add-friend') })
-    }
-    if(req.params.action == 'remove_friend' || req.params.action == 'reject_request') {
-        clientDB.all('DELETE FROM friends WHERE lead_user = ? AND passive_user = ?', [req.user.id, req.params.id], err => { if(err) res.redirect('/error/add-friend') })
-    }
-
-    if(req.params.action == 'accept_request') {
-        clientDB.all('UPDATE friends SET status = "Active" AND creation_date = DATETIME("now") WHERE lead_user = ? AND passive_user = ?', [req.user.id, req.params.id], err => { if(err) res.redirect('/error/add-friend') })
-    }
+// friend stuff
+app.get('/add_friend/:id', checkAuthenticated, (req, res) => {
+    clientDB.all('INSERT INTO friends(lead_user, passive_user, creation_date, status) VALUES(?, ?, DATETIME("now"), "Requested")', [req.user.id, req.params.id], err => { 
+        if(err) add_user_log('ACCESS', err)
+        res.redirect('/settings/friends')
+    })
 })
 
-// FROM HERE
+app.get('/accept_request/:id', checkAuthenticated, (req, res) => {
+    clientDB.all('UPDATE friends SET status = ? WHERE passive_user = ? AND lead_user = ?', ['Active', req.user.id, req.params.id], (err) => {
+        if(err) add_user_log('ACCESS', err)
+        res.redirect('/settings/friends')
+    })
+})
+
+app.get('/remove_request/:id', checkAuthenticated, (req, res) => {
+    clientDB.all('DELETE FROM friends WHERE lead_user = ? AND passive_user = ?', [req.user.id, req.params.id], err => { 
+        if(err) add_user_log('ACCESS', err)
+        res.redirect('/settings/friends')
+     })
+})
+
+app.get('/remove_friend/:id', checkAuthenticated, (req, res) => {
+    clientDB.all('DELETE FROM friends WHERE lead_user = ? AND passive_user = ?', [req.user.id, req.params.id], err => { 
+        if(err) add_user_log('ACCESS', err)
+        res.redirect('/settings/friends')
+    })
+})
+
+app.get('/reject_friend/:id', checkAuthenticated, (req, res) => {
+    clientDB.all('DELETE FROM friends WHERE lead_user = ? AND passive_user = ?', [req.params.id, req.user.id], err => {
+        if(err) add_user_log('ACCESS', err)
+        res.redirect('/settings/friends')
+    })
+})
 
 app.get('/logout', (req, res, next) => {
+    let id = req.user.id
     req.logout((err) => {
         if (err) { return next(err) }
+        add_user_log('LOGOUT', `${id}`)
         res.redirect('/login');
     });
+})
+
+app.get('/login-success/log', checkAuthenticated, (req, res) => {
+    add_user_log('LOGIN', `${req.user.id}`)
+    res.redirect('/home')
 })
 
 app.get('/error/:message', (req, res) => {
@@ -246,13 +318,28 @@ function formatTime() {
 // checking if current session is active
 function checkAuthenticated(req, res, next) {
     if(req.isAuthenticated()) { return next() }
-    res.redirect(`/login?message=repeat`)
+    res.redirect(`/login`)
 }
 
 // checking if theres a session
 function checkNotAuthenticated(req, res, next) {
     if(req.isAuthenticated()) { return res.redirect('/library') }
     next()
+}
+
+function check_admin(req, res, next) {
+    if(checkAuthenticated) {
+        if(req.user.is_admin) { return next() }
+        res.redirect('/error/access-denied')
+    }
+}
+
+function add_game_log(type, log) {
+    gameDB.all('INSERT INTO logs(date, type, description) VALUES(DATETIME("now"), ?, ?)', [type, log], err => { if(err) throw err })
+}
+
+function add_user_log(type, log) {
+    clientDB.all('INSERT INTO logs(date, type, description) VALUES(DATETIME("now"), ?, ?)', [type, log], err => { if(err) throw err })
 }
 
 app.listen(4000);

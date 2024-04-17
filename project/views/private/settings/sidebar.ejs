@@ -2,11 +2,13 @@
     <h1 class="title transform-120">Options</h1>
     <div class="items">
         <div class="">
-            <p class="transform-105"><a href="/settings/profile">Profile</a></p>
-            <p class="transform-105"><a href="/settings/friends">Friends</a></p>
+            <p class="transform-105" style="cursor: pointer;"><a href="/settings/profile">Profile</a></p>
+            <p class="transform-105" style="cursor: pointer;"><a href="/settings/friends">Friends</a></p>
         </div>
         <p class="transform-105" style="cursor: pointer;"><a href="/settings/general">General</a></p>
-        <p class="transform-105"><a href="#" style="cursor: not-allowed;">Change UI</a></p>
-        <p class="transform-105"><a href="/logout" >Log out</a></p>
+        <%_ if(is_admin == "true") { %>
+            <p class="transform-105" style="cursor: pointer;"><a href="/settings/admin">Admin</a></p>
+        <%_ } %>
+        <p class="transform-105" style="cursor: pointer;"><a href="/logout" >Log out</a></p>
     </div>
 </section>

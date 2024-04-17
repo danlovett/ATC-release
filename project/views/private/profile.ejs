@@ -10,6 +10,7 @@
     <div class="sections">
         <%_ if(current_user == user.id) { %>
             <h1 class="page-title">Your Profile</h1>
+            <p><a href="/settings/profile">See more about your profile</a></p>
         <%_ } else { %>
             <h1 class="page-title"><%= user.name %>'s Profile</h1>
         <%_ } %>

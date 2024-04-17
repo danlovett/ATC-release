@@ -225,6 +225,10 @@ button{
     box-shadow: 0 0 30px rgba(57, 57, 57, 0.8);
 }
 
+.profile-inner {
+    overflow: hidden;
+}
+
 .profile-inner section {
     width: 100%;
 }
@@ -484,8 +488,10 @@ input{
 }
 
 .profile img {
-    margin-top: 0;
-    margin-bottom: 0;
+    width: 5rem;
+    height: 5rem;
+    margin: 10px;
+    border-radius: 10px;
 }
 
 .profile .container {
@@ -531,7 +537,7 @@ input{
 
 .friends table {
     margin-top: 10px;
-    /* font-size: 1.2vh; */
+    overflow: hidden;
 }
 
 .friends img {

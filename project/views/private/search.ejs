@@ -38,7 +38,7 @@
                                             <%_ } else if(users[i].status == 'Active' && users[i].lead_user == current_user) { %>
                                                 <button class="transform-120">Active</button>
                                             <%_ } else { %>
-                                                <button class="transform-120"><a href="/backend/add-friend/<%= users[i].id %>">Add friend</a></button>
+                                                <button class="transform-120"><a href="/add_friend/<%= users[i].id %>">Add friend</a></button>
                                             <%_ } %>
                                         </div>
                                     </div>

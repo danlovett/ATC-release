@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Account</title>
+</head>
+<body class="bg-green">
+    <%- include('../navbar.ejs') -%>
+    <div class="sections">
+        <h1 class="page-title">Admin > Manage user</h1>
+        <section class="profile">
+            <%- include('sidebar.ejs') -%>
+            <section>
+                <p style="margin: 10px; text-align: center;">This section may have missing features/bugs</p>
+                <section>
+                    <h1 class="title" style="margin-bottom: 20px;">User Details</h1>
+                    <section>
+                        <p>Name: <%= user[0].name %></p>
+                        <p>Username: <%= user[0].username %></p>
+                        <p>Last Played: <%= user[0].last_played %></p>
+                        <p>Best Played: <%= user[0].best_played %></p>
+                        <p>Total points: <%= user[0].points %></p>
+                        <p>Account created: <%= user[0].creation_date %></p>
+                    </section>
+                    <%_ if(user[0].is_admin == true) { %>
+                        <button class="transform-120" style="margin-top: 10px; color: red;"><a href="#">Remove as admin</a></button>
+                    <%_ } else { %>
+                        <button class="transform-120" style="margin-top: 10px; color: red;"><a href="#">Make admin</a></button>
+                    <%_ } %>
+                    <button class="transform-120" style="margin-top: 10px;"><a href="/delete_user/<%= user[0].id %>" style="color: red;">Delete user</a></button>
+                </section>
+                <%_ if(JSON.stringify(leaderboard) != '[]') { %>
+                    <section>
+                        <h1 class="title">Leaderboard</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Score</th>
+                                    <th>Level</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><%= leaderboard[0].name %></td>
+                                    <td><%= leaderboard[0].date %></td>
+                                    <td><%= leaderboard[0].score %></td>
+                                    <td><%= leaderboard[0].level %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                <%_ } else { %>
+                    <p style="text-align: center; padding-top: 10px;">No Leaderboard</p>
+                <%_ } %>
+                <%_ if(JSON.stringify(history) != '[]') { %>
+                    <section class="transform-105" style="width: 100%;">
+                        <h1 class="title" style="margin-bottom: 10px;">History</h1>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Date</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <%_ for(i in history) { %>
+                                    <tr>
+                                        <td><%= history[i].level %></td>
+                                        <td><%= history[i].date %></td>
+                                        <td><%= history[i].score %></td>
+                                    </tr>
+                                <%_ } %>
+                            </tbody>
+                        </table>
+                    </section>
+                <%_ } else { %>
+                    <p style="text-align: center; padding-top: 10px;">No history</p>
+                <%_ } %>
+            </section>
+        </section>
+    </div>
+</body>
+</html>
