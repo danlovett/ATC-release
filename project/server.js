@@ -129,13 +129,17 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAu
             })
         })
     } else if(req.params.page == 'general') {
-        res.render('private/settings/general.ejs', { is_admin: req.user.is_admin })
+        clientDB.get(`SELECT id, name, username, pfp FROM users WHERE id = ${req.user.id}`,(err, user) => {
+            if(err) add_user_log('PFP', err)
+            res.render('private/settings/general.ejs', { is_admin: req.user.is_admin, user: user, success: req.params.bool })
+        })
     } else if(req.params.page == 'admin') {
         clientDB.all('SELECT * FROM logs WHERE type == "ACCESS"', [], (err, user_access_logs) => {
             clientDB.all('SELECT * FROM logs WHERE type == "LOGIN" OR type == "LOGOUT"', [], (err, user_auth_logs) => {
-                gameDB.all('SELECT * FROM logs', [], (err, game_logs) => {
+                gameDB.all('SELECT id, airport_icao FROM levels', [], (err, levels) => {
                     clientDB.all('SELECT * FROM users', [], (err, users) => {
-                        res.render('private/settings/admin.ejs', { user_auth_logs: user_auth_logs, user_access_logs: user_access_logs, game_logs: game_logs, all_users: users, is_admin: req.user.is_admin })
+                        console.log(levels)
+                        res.render('private/settings/admin.ejs', { user_auth_logs: user_auth_logs, user_access_logs: user_access_logs, levels: levels, all_users: users, is_admin: req.user.is_admin })
                     })
                 })
             })
@@ -155,6 +159,52 @@ app.get('/settings/admin/p/:id', check_admin, (req, res) => {
                 res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: true })
             })
         })
+    })
+})
+
+app.post('/edit_picture', checkAuthenticated, (req, res) => {
+    if(isImage(req.body.url)) {
+        clientDB.run(`UPDATE users SET pfp = '${req.body.url}' WHERE id = ${req.user.id}`, [], err => {
+            if(!err) res.redirect('/settings/general')
+        })
+    } else {
+        res.redirect('/settings/general')
+    }
+})
+
+app.post('/edit_level_image/:id', checkAuthenticated, (req, res) => {
+    if(isImage(req.body.url)) {
+        gameDB.run(`UPDATE levels SET image_reference = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {
+            if(!err) res.redirect(`/admin/edit/${req.params.id}/details`)
+        })
+    } else {
+        console.log(err)
+        res.redirect('/home')
+    }
+})
+
+app.post('/edit_level_icao/:id', checkAuthenticated, (req, res) => {
+    gameDB.run(`UPDATE levels SET airport_icao = '${req.body.airport_icao}' WHERE id = ${req.params.id}`, [], err => {
+        if(!err) res.redirect(`/admin/edit/${req.params.id}/details`)
+    })
+})
+
+app.post('/edit_level_name/:id', checkAuthenticated, (req, res) => {
+    gameDB.run(`UPDATE levels SET airport_name = '${req.body.airport_name}' WHERE id = ${req.params.id}`, [], err => {
+        console.log(req.body.airport_name, req.params.id)
+        if(!err) res.redirect(`/admin/edit/${req.params.id}/details`)
+    })
+})
+
+app.post('/edit_level_waffle/:id', checkAuthenticated, (req, res) => {
+    gameDB.run(`UPDATE levels SET airport_name = '${req.body.waffle}' WHERE id = ${req.params.id}`, [], err => {
+        if(!err) res.redirect(`/admin/edit/${req.params.id}/details`)
+    })
+})
+
+app.post('/edit_level_mission/:id', checkAuthenticated, (req, res) => {
+    gameDB.run(`UPDATE levels SET airport_name = '${req.body.mission}' WHERE id = ${req.params.id}`, [], err => {
+        if(!err) res.redirect(`/admin/edit/${req.params.id}/details`)
     })
 })
 
@@ -187,13 +237,6 @@ app.get('/search', checkAuthenticated, (req, res) => {
     } else {
         res.render('private/search.ejs', { query: 'none', levels: undefined, users: undefined })
     }
-})
-
-app.get('/friends', checkAuthenticated, (req, res) => {
-    clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => {
-        if(err) add_user_log('ACCESS', err)
-        res.render('private/friends.ejs', { following: following });
-    })
 })
 
 app.get('/profile/:id', checkAuthenticated, (req, res) => {
@@ -306,6 +349,19 @@ app.get('/error/:message', (req, res) => {
     res.render('private/error.ejs', { message: req.params.message})
 })
 
+
+
+
+app.get('/admin/edit/:id/:page', checkAuthenticated, (req, res) => {
+    if(req.params.page == "details") {
+        gameDB.all('SELECT * FROM levels WHERE id = ?', [req.params.id], (err, level) => {
+            res.render('private/admin/edit.ejs', {level: level})
+        })
+    }
+})
+
+
+
 // Get date now and format it to custom
 function formatTime() {
     const date = new Date();
@@ -323,7 +379,7 @@ function checkAuthenticated(req, res, next) {
 
 // checking if theres a session
 function checkNotAuthenticated(req, res, next) {
-    if(req.isAuthenticated()) { return res.redirect('/library') }
+    if(req.isAuthenticated()) { return res.redirect('/home') }
     next()
 }
 
@@ -340,6 +396,10 @@ function add_game_log(type, log) {
 
 function add_user_log(type, log) {
     clientDB.all('INSERT INTO logs(date, type, description) VALUES(DATETIME("now"), ?, ?)', [type, log], err => { if(err) throw err })
+}
+
+function isImage(url) {
+    return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
 }
 
 app.listen(4000);

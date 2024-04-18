@@ -17,11 +17,11 @@
             <%_ if(JSON.stringify(followers) == '[]' && JSON.stringify(following) == '[]' && JSON.stringify(follower_requests) == '[]' && JSON.stringify(requested_followers) == '[]') { %>
                 <p style="text-align: center; margin-top: auto;">Nothing here. Either wait for requests or <a href="/search">search</a> for people.</p>
             <%_ } else { %>
-                <section class="friends">
+                <div class="content">
                     <%_ if(JSON.stringify(follower_requests) != '[]') { %>
-                        <section class="followers transform-105">
-                            <h1 class="title transform-105">Incoming requests</h1>
-                            <table class="transform-105">
+                        <section>
+                            <h1 class="title">Incoming requests</h1>
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>Person</th>
@@ -49,9 +49,9 @@
                         </section>
                     <%_ } %>
                     <%_ if(JSON.stringify(following) != '[]') { %>
-                        <section class="followers transform-105">
-                            <h1 class="title transform-105">Following</h1>
-                            <table class="transform-105">
+                        <section class="followers">
+                            <h1 class="title">Following</h1>
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>Person</th>
@@ -77,9 +77,9 @@
                         </section>
                     <%_ } %>
                     <%_ if(JSON.stringify(followers) != '[]') { %>
-                        <section class="followers transform-105">
-                            <h1 class="title transform-105">Followers</h1>
-                            <table class="transform-105">
+                        <section class="followers">
+                            <h1 class="title">Followers</h1>
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>Person</th>
@@ -105,9 +105,9 @@
                         </section>
                     <%_ } %>
                     <%_ if(JSON.stringify(requested_followers) != '[]') { %>
-                        <section class="followers transform-105">
-                            <h1 class="title transform-105">Sent Requests</h1>
-                            <table class="transform-105">
+                        <section class="followers">
+                            <h1 class="title">Sent Requests</h1>
+                            <table>
                                 <thead>
                                     <tr>
                                         <th>Person</th>
@@ -124,14 +124,14 @@
                                                     <p><%= requested_followers[i].username %></p>
                                                 </a>
                                             </td>
-                                            <td><a href="/remove_request/<%= requested_followers[i].id %>" class="transform-120">X</a></td>
+                                            <td><a href="/remove_request/<%= requested_followers[i].id %>" id="remove-request" class="transform-120">X</a></td>
                                         </tr>
                                     <%_ } %>
                                 </tbody>
                             </table>
                         </section>
                     <%_ } %>
-                </section>
+                    </div>
             <%_ } %>
         </section>
     </div>

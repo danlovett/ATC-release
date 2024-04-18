@@ -14,15 +14,15 @@
         <%_ } else { %>
             <h1 class="page-title"><%= user.name %>'s Profile</h1>
         <%_ } %>
-        <section class="profile">
+        <section class="settings">
             <div class="container">
-                <img src="<%= user.pfp %>" alt="" style="height: 140px; border-radius: 10px;">
+                <img src="<%= user.pfp %>" alt="" style="border-radius: 10px; width: 100px; height: 100px; object-fit: cover;">
                 <div class="sidebar">
                     <p><%= user.name %></p>
                     <p><%= user.username %></p>
                 </div>
             </div>
-            <div class="details">
+            <div class="details" id="friend-details">
                 <%_ if(JSON.stringify(leaderboard) != '[]') { %>
                     <section class="profile-section transform-105">
                         <p>Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>

@@ -14,35 +14,10 @@
         </div>
         <section class="profile settings">
             <%- include('sidebar.ejs') -%>
-            <section>
-                <%_ if(JSON.stringify(all_users) != '[]') { %>
-                    <section id="users">
-                        <h1 class="title">All signed up users</h1>
-                        <table>
-                            <thead>
-                                <td>ID</td>
-                                <td>Name</td>
-                                <td>Creation Date</td>
-                                <td>Manage user</td>
-                            </thead>
-                            <tbody>
-                                <%_ for(i in all_users) { %>
-                                    <tr>
-                                        <td><%= all_users[i].id %></td>
-                                        <td><%= all_users[i].name %></td>
-                                        <td><%= all_users[i].creation_date %></td>
-                                        <td><a href="/settings/admin/p/<%= all_users[i].id %>">Click</a></td>
-                                    </tr>
-                                <%_ } %>
-                            </tbody>
-                        </table>
-                    </section>
-                <%_ } else { %>
-                    <p style="padding: 10px; text-align: center;">There are no access errors for users.</p>
-                <%_ } %>
-                <%_ if(JSON.stringify(user_access_logs) != '[]') { %>
-                    <section id="access">
-                        <h1 class="title">User Access errors</h1>
+            <div class="content">
+                <section id="access">
+                    <h1 class="title">User Access errors</h1>
+                    <%_ if(JSON.stringify(user_access_logs) != '[]') { %>
                         <table>
                             <thead>
                                 <td>Date</td>
@@ -57,25 +32,48 @@
                                 <%_ } %>
                             </tbody>
                         </table>
+                    <%_ } else { %>
+                        <p style="padding: 30px; text-align: center;">None</p>
+                </section>
+                <%_ } %>
+                <%_ if(JSON.stringify(all_users) != '[]') { %>
+                    <section id="users">
+                        <h1 class="title">Manage Users</h1>
+                        <table>
+                            <thead>
+                                <td>ID</td>
+                                <td>Manage</td>
+                                <td>Creation Date</td>
+                            </thead>
+                            <tbody>
+                                <%_ for(i in all_users) { %>
+                                    <tr>
+                                        <td><%= all_users[i].id %></td>
+                                        <td><a href="/settings/admin/p/<%= all_users[i].id %>"><%= all_users[i].name %></a></td>
+                                        <td><%= all_users[i].creation_date %></td>
+                                    </tr>
+                                <%_ } %>
+                            </tbody>
+                        </table>
                     </section>
                 <%_ } else { %>
                     <p style="padding: 10px; text-align: center;">There are no access errors for users.</p>
                 <%_ } %>
-                <%_ if(JSON.stringify(user_auth_logs) != '[]') { %>
-                    <section id="auth">
-                        <h1 class="title">Login Information</h1>
+                <%_ if(JSON.stringify(levels) != '[]') { %>
+                    <section id="levels">
+                        <h1 class="title">Level Information</h1>
                         <table>
                             <thead>
-                                <td>Type</td>
-                                <td>Date</td>
                                 <td>ID</td>
+                                <td>Location</td>
+                                <td>Modify?</td>
                             </thead>
                             <tbody>
-                                <%_ for(i in user_auth_logs) { %>
+                                <%_ for(i in levels) { %>
                                     <tr>
-                                        <td><%= user_auth_logs[i].type %></td>
-                                        <td><%= user_auth_logs[i].date %></td>
-                                        <td><%= user_auth_logs[i].description %></td>
+                                        <td><%= levels[i].id %></td>
+                                        <td><%= levels[i].airport_icao %></td>
+                                        <td><a href="/admin/edit/<%= levels[i].id %>/details">Modify</a></td>
                                     </tr>
                                 <%_ } %>
                             </tbody>
@@ -84,7 +82,7 @@
                 <%_ } else { %>
                     <p style="padding: 10px; text-align: center;">There are no authentication logs for users.</p>
                 <%_ } %>
-            </section>
+                </div>
         </section>
     </div>
 </body>

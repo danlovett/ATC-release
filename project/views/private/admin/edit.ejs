@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Level <%= level[0].airport_icao %></title>
+</head>
+<body class="bg-blue">
+    <%- include('../navbar.ejs') -%>
+    <div class="sections">
+        <div>
+            <h1 class="page-title">Edit Level</h1>
+        </div>
+        <section class="settings">
+            <%- include('sidebar.ejs') -%>
+            <section>
+                <p class="tcenter fs15 m10">This level is <%_ if(level[0].is_original != "1") { %> not <%_ } %> an orginial publication</p>
+                <section class="w100">
+                    <h1 class="title">Change level image</h1>
+                    <div class="edit">
+                        <img src="<%= level[0].image_reference %>" alt="unbale to get image">
+                        <form action="/edit_level_image/<%= level[0].id %>" method="POST" id="form-change-pfp">
+                            <input type="url" name="url" placeholder="Link" value="<%= level[0].image_reference %>" class="fs15 text-center color-black" required>
+                            <button type="submit" style="width: 20%;">✔</button>
+                        </form>
+                    </div>
+                </section>
+                <section class="grid-middle" style="background-color: rgba(0,0,0,0);">
+                    <section class="w100">
+                        <h1 class="title">Change ICAO name</h1>
+                        <div class="edit">
+                            <form action="/edit_level_icao/<%= level[0].id %>" method="POST" id="form-change-icao">
+                                <input name="airport_icao" type="text" placeholder="ICAO" value="<%= level[0].airport_icao %>" class="fs15 text-center color-black" required>
+                                <button type="submit" style="width: 20%;">✔</button>
+                            </form>
+                        </div>
+                    </section>
+                    <section class="w100" style="margin-top: 0; margin-left: 10px;">
+                        <h1 class="title">Change airport name</h1>
+                        <div class="edit">
+                            <form action="/edit_level_name/<%= level[0].id %>" method="POST" id="form-change-name">
+                                <input name="airport_name" type="text" placeholder="Airport Name" value="<%= level[0].airport_name %>" class="fs15 text-center color-black" required>
+                                <button type="submit" style="width: 20%;">✔</button>
+                            </form>
+                        </div>
+                    </section>
+                </section>
+                <section class="w100">
+                    <h1 class="title">Edit Description</h1>
+                    <div class="edit">
+                        <form action="/edit_level_waffle/<%= level[0].id %>" method="POST" id="form-change-waffle">
+                            <textarea name="waffle" class="fs15 text-center color-black textarea"><%= level[0].text_waffle %></textarea>
+                            <button type="submit" style="width: 20%;">✔</button>
+                        </form>
+                    </div>
+                </section>
+                <section class="w100">
+                    <h1 class="title">Mission details</h1>
+                    <div class="edit">
+                        <form action="/edit_level_mission/<%= level[0].id %>" method="POST" id="form-change-mission">
+                            <textarea name="mission" class="fs15 text-center color-black textarea"><%= level[0].text_instructions %></textarea>
+                            <button type="submit" style="width: 20%;">✔</button>
+                        </form>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </div>
+</body>
+</html>

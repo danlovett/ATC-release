@@ -10,15 +10,27 @@
     <div class="sections">
         <div>
             <h1 class="page-title">Your Profile</h1>
-            <p style="padding: 10px; text-align: center;">You can delete history in the general tab</p>
+            <h1 style="text-align: center;"><%_ if(success == "true") { %> Updated <span style="color: green;">✔</span> <%_ } %></h1>
+            <p style="padding:10px; text-align: center;">Managing profile settings</p>
         </div>
         <section class="profile settings">
             <%- include('sidebar.ejs') -%>
             <div class="content">
-                <section class="profile-inner" style="width: 90%; margin-top: 10px;">
-                    <p style="text-align: center;">New features will go here</p>
+                <section class="profile-inner">
+                    <h1 class="title">
+                        Change profile picture
+                    </h1>
+                    <p class="tcenter m10">Note that the image may not be in full scale. Right click and open image in new tab to see full image</p>
+                    <%_ if(success == "false") { %> <p style="padding: 10px; color: red; font-weight: 500; font-size: 18px;">Not an image. Try again.</p> <%_ } %>
+                    <div class="edit">
+                        <img src="<%= user.pfp %>" alt="">
+                        <form action="/edit_picture" method="POST" id="form-change-pfp">
+                            <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" required>
+                            <button type="submit" style="width: 20%;">✔</button>
+                        </form>
+                    </div>
                 </section>
-                <section style="width: 90%; margin-top: 10px;">
+                <section>
                     <p style="margin-bottom: 10px; text-align: center; font-weight: 900;">The following action cannot be undone!</p>
                     <button class="transform-120"><a href="#" style="color: red;">Reset histroy and leaderboard</a></button>
                     <p style="margin-top: 10px; text-align: center; ">Not yet implemented</p>

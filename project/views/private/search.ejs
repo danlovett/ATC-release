@@ -10,7 +10,7 @@
     <div class="sections">
         <h1 class="page-title"><img src="../../images/private/search.png" alt="" style="height: 25px;"> Search</h1>
         <section class="search">
-            <form action="search" method="POST" class="transform-105">
+            <form action="search" method="POST">
                 <input type="text" name="query" placeholder="Start typing...">
                 <button type="submit"><img src="../../images/private/search.png" alt="" style="height: 25px;"></button>
             </form>
@@ -18,10 +18,10 @@
             <!-- PEOPLE -->
             <%_ if(users || levels) { %>
                 <%_ if(JSON.stringify(users) != '[]') { %>
-                    <section class="people">
-                        <h1 class="title">Found people:</h1>
+                    <section class="w100">
+                        <h1 class="title">Results</h1>
                         <p style="text-align: center; padding: 10px 0px;">You can manage friends and requests from settings > friends.</p>
-                        <section class="results transform-101" style="width: 100%; margin-left: 0;">
+                        <section class="results people transform-101" style="width: 100%; margin-left: 0;">
                             <%_ for(i in users) { %>
                                 <%_ if(users[i].id != current_user) { %>
                                     <div class="result" id="<%= i %>">
@@ -34,11 +34,11 @@
                                         </div>
                                         <div class="action">
                                             <%_ if(users[i].status == 'Requested' && users[i].lead_user == current_user) { %>
-                                                <p class="transform-120">Requested on <%= users[i].creation_date.substr(0,10) %></p>
+                                                <p>Requested <%= users[i].creation_date.substr(0,10) %></p>
                                             <%_ } else if(users[i].status == 'Active' && users[i].lead_user == current_user) { %>
-                                                <button class="transform-120">Active</button>
+                                                <button>Active</button>
                                             <%_ } else { %>
-                                                <button class="transform-120"><a href="/add_friend/<%= users[i].id %>">Add friend</a></button>
+                                                <button><a href="/add_friend/<%= users[i].id %>">Request</a></button>
                                             <%_ } %>
                                         </div>
                                     </div>
@@ -49,9 +49,9 @@
                 <%_ } %>
                 <%_ if(JSON.stringify(levels) != '[]') { %>
                     <!-- LEVELS -->
-                    <section class="levels">
+                    <section class="w100">
                         <h1 class="title">Found levels:</h1>
-                        <section class="results" style="width: 100%; margin-left: 0;">
+                        <section class="results levels" style="width: 100%; margin-left: 0;">
                             <%_ for(i in levels) { %>
                                 <div class="result" id="<%= i %>">
                                     <div class="info">
@@ -66,7 +66,7 @@
                         </section>
                     </section>
                 <%_ } %>
-            <%_ } else { %>
+            <%_ } if(JSON.stringify(users) == '[]' && JSON.stringify(levels) == '[]') { %>
                 <h1 style="text-align: center; padding: 20px;">No Results</h1>
                 <p style="text-align: center; padding: 20px;">Use the search button</p>
             <%_ } %>

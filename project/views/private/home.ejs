@@ -7,15 +7,15 @@
 </head>
 <body class="bg-main">
     <%- include('navbar.ejs') -%>
-    <div class="sections">
+    <div class="pt15vh">
         <h1 class="page-title">Homepage</h1>
         <section class="landing">
-            <h1 class="title transform-105"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Landing</h1>
+            <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Landing</h1>
             <p style="text-align: center; padding-top: 10px;">Levels will play as soon as you press on them</p>
             <div class="content">
                 <div class="cards">
                     <%_ for(i in levels) { if(i <= 1) { %>
-                        <a href="/play/<%= levels[i].airport_icao %>" class="transform-105">
+                        <a href="/play/<%= levels[i].airport_icao %>">
                             <div class="container">
                                 <img src="<%=levels[i].image_reference%>" alt="">
                                 <p><%= levels[i].airport_name %></p>
@@ -23,12 +23,12 @@
                         </a>
                     <%_ } }%>
                 </div>
-                <button class="transform-120"><a href="/levels">See more</a></button>
+                <button><a href="/levels">Show all levels</a></button>
             </div>
         </section>
         <%_ if(JSON.stringify(leaderboard) != '[]') { %>
             <section class="leaderboard">
-                <h1 class="title transform-105"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Leaderboard</h1>
+                <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Leaderboard</h1>
                 <div class="content">
                     <a href="/leaderboard">
                         <table>
@@ -52,7 +52,7 @@
                             </tbody>
                         </table>
                     </a>
-                    <button class="transform-120"><a href="/leaderboard">See more</a></button>
+                    <button><a href="/leaderboard">See more</a></button>
                 </div>
             </section>
         <%_ } %>

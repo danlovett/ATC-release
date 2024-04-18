@@ -87,9 +87,7 @@ td {
 }
 
 section {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    width: 90%;
+    width: 96%;
     border: 2px solid rgba(103, 103, 103, 0.1);
     box-shadow: 0 0 20px rgba(8,7,16,0.8);
     border-radius: 10px;
@@ -103,6 +101,14 @@ section .detail {
 
 section:nth-child(even) {
     background-color: rgba(67, 67, 67, 0.507);
+}
+
+/* .profile-inner {
+    background-color: rgba(67, 67, 67, 0.507);
+} */
+
+section:not(:first-child) {
+    margin-top: 20px;
 }
 
 section:nth-child(even) h1, section:nth-child(even) thead, section:nth-child(even) tbody {
@@ -141,9 +147,8 @@ section:nth-child(odd) {
 }
 
 button{
-    width: 80%;
-    margin-left: 10%;
-    background-color: #ffffff;
+    width: 100%;
+    background-color: #d3d3d3;
     color: #080710;
     padding: 15px 0;
     font-size: 18px;
@@ -151,6 +156,10 @@ button{
     border-radius: 5px;
     cursor: pointer;
     transition: 0.5s;
+}
+
+button:hover {
+    background-color: #ffffff;
 }
 
 
@@ -167,7 +176,7 @@ button{
     transition: 0.5s;
     opacity: 0.8;
     width: 80%;
-    height: 100%;
+    height: 300px;
     object-fit: cover;
 }
 
@@ -191,7 +200,7 @@ button{
 }
 
 .content {
-    margin: 20px;
+    margin: 10px;
 }
 
 .content a {
@@ -204,7 +213,7 @@ button{
     grid-template-columns: 30% 70%;
 }
 
-.settings a {
+.sections p a {
     all: unset;
     transition: 0.5s;
     background-color: rgba(238, 238, 238, 0.296);
@@ -213,10 +222,16 @@ button{
     padding: 5px;
     margin: 30px 0px;
     width: 100%;
+    cursor: pointer;
 }
+
+#remove-request {
+    color: red;
+    font-weight: 800;
+}
+
 .sidebar {
-    margin-top: 10px;
-    margin-left: 0;
+    margin: 10px 0;
     width: 100%;
     padding: 20px;
     background-color: rgba(9, 9, 9, 0.3);
@@ -330,15 +345,17 @@ button{
 .container-level {
     display: grid;
     grid-template-columns: 40% 60%;
+    margin: 20px 0;
 }
 
 .container-level img {
     width: 100%;
-    height: auto;
+    height: 300px;
     border: 2px solid white;
     border-radius: 10px;
     opacity: 0.8;
     transition: 0.5s;
+    object-fit: cover;
 }
 
 .container-level img:hover {
@@ -359,15 +376,15 @@ button{
 
 .search form {
     display: grid;
-    grid-template-columns: 80% 20%;
+    grid-template-columns: 90% 10%;
     width: 100%;
     padding: 20px;
     transition: 0.5s;
 }
 
 .search form button {
-    height: 45px;
-    padding: 0;
+    width: 100%;
+    margin-left: 0;
 }
 
 form{
@@ -390,12 +407,11 @@ form *{
 
 input{
     display: block;
-    height: 50px;
+    height: 100%;
     width: 100%;
     background-color: rgba(255,255,255,0.07);
     border-radius: 3px;
     padding: 0 10px;
-    margin-top: 8px;
     font-size: 14px;
     font-weight: 300;
 }
@@ -420,6 +436,22 @@ input{
     border: 2px solid black;
 }
 
+.people .info img {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    margin: 0 10px;
+    border-radius: 10px;
+}
+
+.levels .info img {
+    height: 100px;
+    width: 250px;
+    object-fit: cover;
+    margin: 0 10px;
+    border-radius: 10px;
+}
+
 .result {
     background-color: grey;
     border-radius: 10px;
@@ -427,13 +459,6 @@ input{
     display: grid;
     grid-template-columns: 60% 40%;
     margin: 10px 0px;
-}
-
-.result img {
-    height: 50px;
-    width: auto;
-    margin-right: 0;
-    border-radius: 10px;
 }
 
 .result button {
@@ -447,9 +472,12 @@ input{
 }
 
 .info {
-    display: grid;
-    grid-template-columns: 30% 70%;
+    display: flex;
     margin: 20px;
+}
+
+.inner {
+    margin-left: 10px;
 }
 
 .people .inner {
@@ -488,7 +516,6 @@ input{
 }
 
 .profile img {
-    width: 5rem;
     height: 5rem;
     margin: 10px;
     border-radius: 10px;
@@ -502,8 +529,13 @@ input{
     max-height: 500px;
 }
 
+.profile .container img {
+    height: auto;
+    width: 100%;
+}
+
 .profile .sidebar {
-    margin-top: 10px;
+    margin: 10px;
 }
 
 .profile .profile-section {
@@ -515,6 +547,29 @@ input{
     transition: 0.5s;
 }
 
+.edit {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.edit img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+.edit form {
+    display: flex;
+    width: 100%;
+    border: none;
+}
+
+.edit form button {
+    margin: 0px;
+}
+
 .details {
     margin-top: 0;
     width: 90%;
@@ -523,11 +578,6 @@ input{
 .details section {
     margin-bottom: 10px;
     margin-top: 0;
-}
-
-
-.friends {
-    width: 90%;
 }
 
 .friends section {
@@ -549,12 +599,17 @@ input{
 }
 
 .friends #person {
-    display: flex;
+    display: grid;
+    grid-template-columns: 30% 60%;
 }
 
 .friends .sidebar {
     padding: 10px 5px;
     text-align: left;
+}
+
+#friend-details {
+    margin-top: auto;
 }
 
 
@@ -601,8 +656,6 @@ input{
 }
 
 .transform-101:hover {
-    -webkit-transform: scale3d(1.01, 1.01, 1.01);
-    transform: scale3d(1.01);
     transition: 0.5s;
 }
 
@@ -624,4 +677,36 @@ input{
 
 .cursor-pointer:hover {
     cursor: pointer;
+}
+
+.tcenter {
+    text-align: center;
+}
+
+.fs15 {
+    font-size: 15px;
+}
+
+.m10 {
+    margin: 10px;
+}
+
+.pt15vh {
+    padding-top: 15vh;
+}
+
+.w100 {
+    width: 100%;
+}
+
+.grid-middle {
+    display: flex;
+    width: 100%;
+}
+
+textarea {
+    height: auto;
+    width: 100%;
+    overflow-y: scroll;
+    resize: none;
 }
