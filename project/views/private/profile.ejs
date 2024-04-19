@@ -15,11 +15,11 @@
             <h1 class="page-title"><%= user.name %>'s Profile</h1>
         <%_ } %>
         <section class="settings">
-            <div class="container">
-                <img src="<%= user.pfp %>" alt="" style="border-radius: 10px; width: 100px; height: 100px; object-fit: cover;">
+            <div id="profile-details">
+                <img src="<%= user.pfp %>" alt="">
                 <div class="sidebar">
-                    <p><%= user.name %></p>
-                    <p><%= user.username %></p>
+                    <p class="tcenter"><%= user.name %></p>
+                    <p class="tcenter"><%= user.username %></p>
                 </div>
             </div>
             <div class="details" id="friend-details">

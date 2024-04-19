@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm your choice</title>
+</head>
+<body class="bg-blue">
+    <%- include('../navbar.ejs') -%>
+    <div class="sections">
+        <section class="profile settings">
+            <%- include('sidebar.ejs') -%>
+            <div class="content">
+                <section class="profile-inner" style="margin-top: auto;">
+                    <%_ if(message == "logout") { %>
+                        <p class="tcenter fs15">Are you sure you want to logout?</p>
+                        <button style="margin-top: 20px;"><a href="/logout">Log out</a></button>
+                    <%_ } else if(message == "delete_user") { %>
+                        <h1 class="title tcenter">Are you sure you want to delete this user?</h1>
+                        <button style="margin-top: 20px;"><a href="/delete_user/<%= user_to_delete %>">Delete User</a></button>
+                    <%_ } else if(message == "make_admin") { %>
+                        <h1 class="title tcenter">Are you sure you want to make this user an admin?</h1>
+                        <button style="margin-top: 20px;"><a href="/make_admin/<%= make_admin_user %>">Make Admin</a></button>
+                    <%_ } %>
+                </section>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

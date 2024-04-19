@@ -39,6 +39,10 @@ app.engine('html', require('ejs').renderFile);
 
 app.set('view engine', 'ejs');
 
+app.get('/test', checkAuthenticated, (req, res) => {
+    res.render('private/admin/test.ejs')
+})
+
 app.get('/', checkNotAuthenticated, (req, res) => {
     res.render('public/home.ejs')
 })
@@ -149,14 +153,14 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAu
     }
 })
 
-app.get('/settings/admin/p/:id', check_admin, (req, res) => {
+app.get('/settings/admin/p/:id', checkAuthenticated, (req, res) => {
     clientDB.all('SELECT * FROM leaderboard WHERE personID = ?', req.params.id, (err, leaderboard) => {
         if(err) user_access_logs('ACCESS', err)
         clientDB.all('SELECT id, pfp, name, username, last_played, best_played, points, creation_date, is_admin FROM users WHERE id = ?', req.params.id, (err, user) => {
             if(err) user_access_logs('ACCESS', err)
             clientDB.all('SELECT * FROM history WHERE personID = ?', req.params.id, (err, history) => {
                 if(err) user_access_logs('ACCESS', err)
-                res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: true })
+                res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: req.user.is_admin })
             })
         })
     })
@@ -240,7 +244,7 @@ app.get('/search', checkAuthenticated, (req, res) => {
 })
 
 app.get('/profile/:id', checkAuthenticated, (req, res) => {
-    if(req.params.id == "current") res.redirect('/settings/profile')
+    if(req.params.id == req.user.id) res.redirect('/settings/profile')
     clientDB.get(`SELECT id, name, username, pfp FROM users WHERE id = ${req.params.id}`,(err, user) => {
         if(err) add_user_log('ACCESS', err)
         clientDB.all(`SELECT score, level, date FROM leaderboard WHERE personID = ${req.params.id}`, [], (err, leaderboard) => {
@@ -358,6 +362,59 @@ app.get('/admin/edit/:id/:page', checkAuthenticated, (req, res) => {
             res.render('private/admin/edit.ejs', {level: level})
         })
     }
+    if(req.params.page == "layout") {
+        gameDB.all('SELECT * FROM levels WHERE id = ?', [req.params.id], (err, level) => {
+            res.render('private/admin/layout.ejs', {level: level})
+        })
+    }
+})
+
+app.get('/create_layout', checkAuthenticated, (req, res) => {
+    res.render('private/admin/createLayout.ejs')
+})
+
+app.post('/finish_creation', checkAuthenticated, (req, res) => {
+    console.log(req.body.data)
+    res.render('private/admin/finished', {data: req.body.data})
+})
+
+app.get('/:option/confirm/:id', checkAuthenticated, (req, res) => {
+    if(req.params.option == "logout") res.render('private/settings/confirm.ejs', {message: "logout", is_admin: undefined})
+    if(req.params.option == "delete_user") res.render('private/settings/confirm.ejs', {message: "delete_user", is_admin: req.user.is_admin, user_to_delete: req.params.id})
+    if(req.params.option == "make_admin") res.render('private/settings/confirm.ejs', {message: "make_admin", is_admin: req.user.is_admin, make_admin_user: req.params.id})
+})
+
+app.get('/make_admin/:id', checkAuthenticated, (req, res) => {
+    clientDB.run(`UPDATE users SET is_admin = "true" WHERE id = ${req.params.id}`, [], err => {
+        if(!err) res.redirect(`/settings/admin/p/${req.params.id}`)
+    })
+})
+
+app.get('/remove_admin/:id', checkAuthenticated, (req, res) => {
+    clientDB.run(`UPDATE users SET is_admin = "false" WHERE id = ${req.params.id}`, [], err => {
+        if(!err) res.redirect(`/settings/admin/p/${req.params.id}`)
+    })
+})
+
+app.get('/delete_user/:id', checkAuthenticated, (req, res) => {
+    clientDB.run(`DELETE FROM users WHERE id = ${req.params.id}`, [], err => {
+        if(!err) res.redirect(`/settings/admin`)
+        if(err) console.log(err)
+    })
+})
+
+app.get('/remove/history/:id/:returnId', checkAuthenticated, (req, res) => {
+    clientDB.all('DELETE FROM history WHERE id = ?', [req.params.id], err => {
+        if(err) add_user_log('REMOVE_HISTORY', err)
+        res.redirect(`/settings/admin/p/${req.params.returnId}`)
+    })
+})
+
+app.get('/remove_history/:id', checkAuthenticated, (req, res) => {
+    clientDB.run(`DELETE FROM history WHERE personId = ${req.params.id}`, [], err => {
+        if(!err) res.redirect(`/settings/admin`)
+        if(err) console.log(err)
+    })
 })
 
 
@@ -381,13 +438,6 @@ function checkAuthenticated(req, res, next) {
 function checkNotAuthenticated(req, res, next) {
     if(req.isAuthenticated()) { return res.redirect('/home') }
     next()
-}
-
-function check_admin(req, res, next) {
-    if(checkAuthenticated) {
-        if(req.user.is_admin) { return next() }
-        res.redirect('/error/access-denied')
-    }
 }
 
 function add_game_log(type, log) {

@@ -3,36 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Account</title>
+    <title>Manage User</title>
 </head>
-<body class="bg-green">
+<body class="bg-blue">
     <%- include('../navbar.ejs') -%>
     <div class="sections">
-        <h1 class="page-title">Admin > Manage user</h1>
+        <div>
+            <h1 class="page-title">Manage user</h1>
+            <p style="padding: 10px; text-align: center;">Manage <%= user[0].name %></p>
+        </div>
         <section class="profile">
             <%- include('sidebar.ejs') -%>
-            <section>
+            <section style="margin-left: 20px;">
                 <p style="margin: 10px; text-align: center;">This section may have missing features/bugs</p>
                 <section>
                     <h1 class="title" style="margin-bottom: 20px;">User Details</h1>
-                    <section>
+                    <section style="width: 100%;">
                         <p>Name: <%= user[0].name %></p>
                         <p>Username: <%= user[0].username %></p>
                         <p>Last Played: <%= user[0].last_played %></p>
                         <p>Best Played: <%= user[0].best_played %></p>
                         <p>Total points: <%= user[0].points %></p>
                         <p>Account created: <%= user[0].creation_date %></p>
+                        <p>Admin? <%= user[0].is_admin %></p>
                     </section>
-                    <%_ if(user[0].is_admin == true) { %>
-                        <button class="transform-120" style="margin-top: 10px; color: red;"><a href="#">Remove as admin</a></button>
+                    <%_ if(user[0].is_admin == "true") { %>
+                        <button style="margin-top: 10px; color: red;"><a href="/remove_admin/<%= user[0].id %>">Remove as admin</a></button>
                     <%_ } else { %>
-                        <button class="transform-120" style="margin-top: 10px; color: red;"><a href="#">Make admin</a></button>
+                        <button style="margin-top: 10px; color: rgb(43, 92, 43);"><a href="/make_admin/confirm/<%= user[0].id %>">Make admin</a></button>
                     <%_ } %>
-                    <button class="transform-120" style="margin-top: 10px;"><a href="/delete_user/<%= user[0].id %>" style="color: red;">Delete user</a></button>
+                    <button style="margin-top: 10px;"><a href="/delete_user/confirm/<%= user[0].id %>" style="color: red;">Delete user</a></button>
                 </section>
                 <%_ if(JSON.stringify(leaderboard) != '[]') { %>
-                    <section>
-                        <h1 class="title">Leaderboard</h1>
+                    <section style="width: 100%;">
+                        <h1 class="title" style="margin-bottom: 10px;">Leaderboard</h1>
                         <table>
                             <thead>
                                 <tr>
@@ -53,17 +57,21 @@
                         </table>
                     </section>
                 <%_ } else { %>
-                    <p style="text-align: center; padding-top: 10px;">No Leaderboard</p>
+                    <section style="width: 100%;">
+                        <p class="tcenter">No Leaderboard</p>
+                    </section>
                 <%_ } %>
                 <%_ if(JSON.stringify(history) != '[]') { %>
-                    <section class="transform-105" style="width: 100%;">
+                    <section style="width: 100%;">
                         <h1 class="title" style="margin-bottom: 10px;">History</h1>
+                        <p class="tcenter m10"><a href="/remove_history/<%= user[0].id %>">Remove all user history</a></p>
                         <table>
                             <thead>
                                 <tr>
                                     <th>Level</th>
                                     <th>Date</th>
                                     <th>Score</th>
+                                    
                                 </tr>
                             </thead>
                             <tbody>
@@ -72,13 +80,16 @@
                                         <td><%= history[i].level %></td>
                                         <td><%= history[i].date %></td>
                                         <td><%= history[i].score %></td>
+                                        <td><a style="color: red;" href="/remove/history/<%= history[i].id %>/<%= user[0].id %>">X</a></td>
                                     </tr>
                                 <%_ } %>
                             </tbody>
                         </table>
                     </section>
                 <%_ } else { %>
-                    <p style="text-align: center; padding-top: 10px;">No history</p>
+                    <section style="width: 100%;">
+                        <p class="tcenter">No History</p>
+                    </section>
                 <%_ } %>
             </section>
         </section>
