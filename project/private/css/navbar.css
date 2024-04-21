@@ -68,6 +68,10 @@ a {
     font-size: 20px;
 }
 
+ul a p:hover {
+    color: black;
+}
+
 /* User-based */
 
 img {

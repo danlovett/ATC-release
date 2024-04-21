@@ -40,6 +40,20 @@ td {
     white-space: nowrap;
 }
 
+p {
+    color: white;
+}
+
+ul a:hover p {
+    color: black;
+    transition-duration: 0.5s;
+    transition: ease-out;
+}
+
+h4 {
+    color: white;
+}
+
 .navbar {
     overflow: hidden;
     background-color: rgba(195, 195, 195, 0.807);
@@ -75,6 +89,11 @@ td {
     color: black;
 }
 
+.navbar a p {
+    transition-duration: 0.5s;
+    transition: ease-out;
+}
+
 .navbar ul {
     display: flex;
     list-style-type: none;
@@ -100,7 +119,7 @@ section .detail {
 }
 
 section:nth-child(even) {
-    background-color: rgba(67, 67, 67, 0.507);
+    background-color: rgba(31, 31, 31, 0.507);
 }
 
 /* .profile-inner {
@@ -111,7 +130,7 @@ section:not(:first-child) {
     margin-top: 20px;
 }
 
-section:nth-child(even) h1, section:nth-child(even) thead, section:nth-child(even) tbody {
+h1, thead, tbody {
     color: white;
 }
 
@@ -120,13 +139,12 @@ section:nth-child(even) p {
 }
 
 section:nth-child(odd) {
-    background-color: rgba(232, 232, 232, 0.599)
+    background-color: rgba(56, 56, 56, 0.599)
 }
 
 .page-title {
     text-align: center;
     margin-bottom: 40px;
-
 }
 
 .title {
@@ -138,6 +156,7 @@ section:nth-child(odd) {
     transition: 0.5s;
     margin-left: 0px;
     padding-left: 10px;
+    color: white;
 }
 
 .title:hover {
@@ -322,6 +341,21 @@ button:hover {
     padding: 5px;
 }
 
+#edit_details_form {
+    padding: 20px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+#edit_details_form .field {
+    margin: 20px 5px;
+}
+
+#edit_details_form .field input {
+    height: 50px;
+    color: white;
+}
+
 /* LEVELS PAGE CSS */
 
 .container-levels {
@@ -424,6 +458,7 @@ input{
     height: 100%;
     width: 100%;
     background-color: rgba(255,255,255,0.07);
+    color: white;
     border-radius: 3px;
     padding: 0 10px;
     font-size: 14px;

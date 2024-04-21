@@ -25,7 +25,7 @@
             <div class="details" id="friend-details">
                 <%_ if(JSON.stringify(leaderboard) != '[]') { %>
                     <section class="profile-section transform-105">
-                        <p>Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
+                        <p class="tcenter">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
                     </section>
                 <%_ } else { %>
                     <p style="text-align: center; padding: 20px;">No leaderboard entry for <%= user.name.split(' ')[0] %></p>

@@ -5,8 +5,6 @@ const favicon = require('serve-favicon')
 const sqlite3 = require('sqlite3');
 const clientDB = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, err => { if(err) throw err })
 const gameDB = new sqlite3.Database('./db/game.db', sqlite3.OPEN_READWRITE, err => { if(err) throw err })
-
-const CryptoJS = require('crypto-js');
 const bcrypt = require('bcrypt')
 
 const fs = require('fs'); 
@@ -39,12 +37,8 @@ app.engine('html', require('ejs').renderFile);
 
 app.set('view engine', 'ejs');
 
-app.get('/test', checkAuthenticated, (req, res) => {
-    res.render('private/admin/test.ejs')
-})
-
 app.get('/', checkNotAuthenticated, (req, res) => {
-    res.render('public/home.ejs')
+    res.render('public/home')
 })
 
 app.get('/login', checkNotAuthenticated, (req, res, next) => {
@@ -58,23 +52,15 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
 }));
 
 app.get('/signup', checkNotAuthenticated, (req, res) => {
-    res.render('public/signup', { message: req.query.message });
+    res.render('public/signup', { error: null });
 });
 
 app.post('/signup', checkNotAuthenticated, async (req,res) => {
-    if(req.body.password.length < 8) {
-        res.redirect('/signup')
-        return
-    } 
-    if(!req.body.name.includes(' ')) {
-        res.redirect('/signup?message=full_name')
-        return
-    }
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    const sql = `INSERT INTO users(name, username, password) VALUES ("${req.body.name}", "${req.body.email}", "${hashedPassword}")`
+    const sql = `INSERT INTO users(name, username, password, creation_date) VALUES ("${req.body.name}", "${req.body.email}", "${hashedPassword}", "${formatTime()}")`
     clientDB.all(sql, [], err => { 
         if(err) {
-            if(err.errno == 19) res.redirect('/login?message=aid') 
+            if(err.errno == 19) res.render('public/signup', { error: 'exists' })
         }
         if(req.body.password.length >= 8 && req.body.name.includes(' ') && !err) res.redirect('/login')
     })
@@ -86,7 +72,7 @@ app.get('/home', checkAuthenticated, (req, res) => { // to add checkAuthenticate
         if(err) add_user_log('ACCESS', err)
         clientDB.all(`SELECT name, date, score, level, personID FROM leaderboard ORDER BY score DESC LIMIT 3;`, [], (err, leaderboard) => {
             if(err) add_user_log('ACCESS', err)
-            clientDB.all(`SELECT users.name, users.username, users.pfp, users.last_played FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => { // change 30 to current user
+            clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => { // change 30 to current user
                 if(err) add_user_log('ACCESS', err)
                 res.render('private/home.ejs', { levels: levels, leaderboard: leaderboard, following: following });
             })
@@ -142,7 +128,6 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAu
             clientDB.all('SELECT * FROM logs WHERE type == "LOGIN" OR type == "LOGOUT"', [], (err, user_auth_logs) => {
                 gameDB.all('SELECT id, airport_icao FROM levels', [], (err, levels) => {
                     clientDB.all('SELECT * FROM users', [], (err, users) => {
-                        console.log(levels)
                         res.render('private/settings/admin.ejs', { user_auth_logs: user_auth_logs, user_access_logs: user_access_logs, levels: levels, all_users: users, is_admin: req.user.is_admin })
                     })
                 })
@@ -160,7 +145,7 @@ app.get('/settings/admin/p/:id', checkAuthenticated, (req, res) => {
             if(err) user_access_logs('ACCESS', err)
             clientDB.all('SELECT * FROM history WHERE personID = ?', req.params.id, (err, history) => {
                 if(err) user_access_logs('ACCESS', err)
-                res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: req.user.is_admin })
+                res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: req.user.is_admin, userID: req.user.id })
             })
         })
     })
@@ -176,13 +161,31 @@ app.post('/edit_picture', checkAuthenticated, (req, res) => {
     }
 })
 
+app.post('/update_details/:id', checkAuthenticated, (req, res) => {
+    if(req.body.name_before != req.body.name) {
+        clientDB.all(`UPDATE users SET name = "${req.body.name}" WHERE id = ${req.params.id};`, [], err => {
+            if(err) console.error(err);
+        })
+    }
+    if(req.body.email_before != req.body.email) {
+        clientDB.all(`UPDATE users SET username = "${req.body.email}" WHERE id = ${req.params.id};`, [], err => {
+            if(!err) res.redirect(`/settings/admin/p/${req.params.id}`)
+        })
+    }
+})
+
+app.post('/reset_points/:id', checkAuthenticated, (req, res) => {
+    clientDB.all(`UPDATE users SET points = 0 WHERE id = ${req.params.id};`, [], err => {
+        if(!err) res.redirect(`/settings/admin/p/${req.params.id}`)
+    })
+})
+
 app.post('/edit_level_image/:id', checkAuthenticated, (req, res) => {
     if(isImage(req.body.url)) {
         gameDB.run(`UPDATE levels SET image_reference = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {
             if(!err) res.redirect(`/admin/edit/${req.params.id}/details`)
         })
     } else {
-        console.log(err)
         res.redirect('/home')
     }
 })
@@ -195,7 +198,6 @@ app.post('/edit_level_icao/:id', checkAuthenticated, (req, res) => {
 
 app.post('/edit_level_name/:id', checkAuthenticated, (req, res) => {
     gameDB.run(`UPDATE levels SET airport_name = '${req.body.airport_name}' WHERE id = ${req.params.id}`, [], err => {
-        console.log(req.body.airport_name, req.params.id)
         if(!err) res.redirect(`/admin/edit/${req.params.id}/details`)
     })
 })
@@ -277,25 +279,23 @@ app.get('/levels', checkAuthenticated, (req, res) => { // to add checkAuthentica
     })
 })
 
-app.get('/play-ended', checkAuthenticated, (req,res) => {
+app.get('/play-ended', checkAuthenticated, (req, res) => {
+    clientDB.all(`INSERT INTO history (date, score, level, personID) VALUES('${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => {})
     clientDB.get('SELECT points FROM users WHERE id = ?', req.user.id, (err, row) => {
         if(err) add_user_log('ACCESS', err)
-        clientDB.all('UPDATE users SET points = ? WHERE id = ?', parseInt(row.points) + parseInt(req.query.score), req.user.id, err => { if(err) add_user_log('ACCESS', err) }) 
+        clientDB.all('UPDATE users SET points = ? WHERE id = ?', parseInt(row.points) + parseInt(req.query.score), req.user.id, err => { }) 
     })
 
     clientDB.get(`SELECT * FROM history WHERE personID = ${req.user.id} ORDER BY score DESC;`, [], (err, row) => {
-        if(err) add_user_log('ACCESS', err)
-        clientDB.all(`UPDATE users SET best_played = '${row.level}' WHERE id = ${req.user.id}`, [], (err) => { if(err) add_user_log('ACCESS', err) }) // undefined FIX THIS
+        clientDB.all(`UPDATE users SET best_played = '${row.level}' WHERE id = ${req.user.id}`, [], (err) => { }) // undefined FIX THIS
     })
 
-    clientDB.all(`UPDATE users SET last_played = '${req.query.level}' WHERE id = ${req.user.id}`, [], (err) => { if(err) add_user_log('ACCESS', err) }) // undefined FIX THIS
-    clientDB.all(`INSERT INTO history (date, score, level, personID) VALUES('${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => { if(err) add_user_log('ACCESS', err) })
-    clientDB.all('DELETE FROM leaderboard WHERE personID = ?', req.user.id, err => { if(err) add_user_log('ACCESS', err) })
-    clientDB.all(`INSERT INTO leaderboard(name, date, score, level, personID) VALUES('${req.user.name}', '${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => { if(err) add_user_log('ACCESS', err)})
+    clientDB.all(`UPDATE users SET last_played = '${req.query.level}' WHERE id = ${req.user.id}`, [], (err) => {  }) // undefined FIX THIS
+    clientDB.all('DELETE FROM leaderboard WHERE personID = ?', req.user.id, err => {  })
+    clientDB.all(`INSERT INTO leaderboard (name, date, score, level, personID) VALUES('${req.user.name}', '${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => { })
 
     gameDB.all('SELECT image_reference FROM levels WHERE airport_name=?', req.query.level, (err, image) => {
-        if(err) add_game_log('ACCESS', err)
-        res.render('private/terminate_play.ejs', { level: req.query.level, image: image, score: req.query.score, time: req.query.time, reason: req.query.reason })
+        res.render('private/terminate_play.ejs', { level: req.query.level, image: image[0].image_reference, score: req.query.score, time: req.query.time, reason: req.query.reason })
     })
 })
 
@@ -374,7 +374,6 @@ app.get('/create_layout', checkAuthenticated, (req, res) => {
 })
 
 app.post('/finish_creation', checkAuthenticated, (req, res) => {
-    console.log(req.body.data)
     res.render('private/admin/finished', {data: req.body.data})
 })
 
@@ -399,7 +398,6 @@ app.get('/remove_admin/:id', checkAuthenticated, (req, res) => {
 app.get('/delete_user/:id', checkAuthenticated, (req, res) => {
     clientDB.run(`DELETE FROM users WHERE id = ${req.params.id}`, [], err => {
         if(!err) res.redirect(`/settings/admin`)
-        if(err) console.log(err)
     })
 })
 
@@ -413,11 +411,15 @@ app.get('/remove/history/:id/:returnId', checkAuthenticated, (req, res) => {
 app.get('/remove_history/:id', checkAuthenticated, (req, res) => {
     clientDB.run(`DELETE FROM history WHERE personId = ${req.params.id}`, [], err => {
         if(!err) res.redirect(`/settings/admin`)
-        if(err) console.log(err)
     })
 })
 
 
+
+app.get('/*', (req, res) => {
+    res.status(404)
+    res.render('public/error')
+})
 
 // Get date now and format it to custom
 function formatTime() {

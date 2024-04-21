@@ -41,7 +41,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <%_ for(i in leaderboard) { %>
+                                <%_ for(i in leaderboard) { if(i == 3) { break } %>
                                     <tr>
                                         <td><a href="#"><%= leaderboard[i].name %></a></td>
                                         <td><%= leaderboard[i].date %></td>
@@ -61,38 +61,43 @@
                 <h1 class="title transform-105"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Friend Activity</h1>
                 <p style="text-align: center; padding-top: 10px;">See what your friends are doing</p>
                 <div class="content">
-                    <a href="/friends">
-                        <table>
-                            <thead>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Friend</th>
+                                <th>Last Activty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <%_ for(i in following) { if(i == 2) break %>
                                 <tr>
-                                    <th>Friend</th>
-                                    <th>Last Activty</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <%_ for(i in following) { if(i == 2) break %>
-                                    <tr>
-                                        <td style="width: 100%; display: flex;">
+                                    <td style="width: 100%; display: flex;">
+                                        <a href="/profile/<%= following[i].id %>">
                                             <img src="<%= following[i].pfp %>" alt="pic" style="height: auto; width: 30%; border-radius: 10px;">
                                             <div>
                                                 <p class="name"><%= following[i].name %></p>
                                                 <p class="username"><%= following[i].username %></p>       
                                             </div>
-                                        </td>
-                                        <td style="width: 50%;">
-                                            <p class="played-last"><%= following[i].last_played %> <%_ if(!following[i].last_played) { %> No activity <%_ } %></p>
-                                        </td>
-                                    </tr>
-                                <%_ } %>
-                            </tbody>
-                        </table>
-                    </a>
+                                        </a>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <p class="played-last"><%= following[i].last_played %> <%_ if(!following[i].last_played) { %> No activity <%_ } %></p>
+                                    </td>
+                                </tr>
+                            <%_ } %>
+                        </tbody>
+                    </table>
                 </div>
                 <%_ if(following.length > 3) { %>
                     <button class="transform-120"><a href="/friends">See more</a></button>
                 <%_ } %>
             </section>
         <%_ } %>
+        <section>
+            <h1 class="title">GitHub Devlogs</h1>
+            <p class="tcenter m10">Check out the development of this project!</p>
+            <button><a href="https://github.com/danlovett/ATC-release/commit/main">Click here</a></button>
+        </section>
     </div>
 </body>
 </html>

@@ -15,6 +15,17 @@ body {
     padding-bottom: 2vh;
 }
 
+.requirements {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    margin: 20px;
+    height: 100px;
+}
+
+.requirements p {
+    padding: 10px;
+}
+
 form{
     width: 500px;
     height: 50%;
@@ -54,20 +65,47 @@ input{
     width: 100%;
     background-color: rgba(255,255,255,0.07);
     border-radius: 3px;
+    border: 1px solid rgba(7, 7, 7, 0);
     padding: 0 10px;
     margin-top: 8px;
     font-size: 14px;
     font-weight: 300;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition-duration: 0.3s;
 }
+
+input:focus {
+    border: 1px solid white;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+    transition-duration: 0.3s;
+}
+
 ::placeholder{
     color: #000000;
 }
-button{
+
+.spacer {
+    height: 5vh;
+}
+
+.form-submit{
     margin-top: 50px;
     width: 100%;
     background-color: #ffffff;
     color: #080710;
     padding: 15px 0;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-reset{
+    margin-left: 10px;
+    width: 20%;
+    background-color: #6060603c;
+    color: #080710;
+    padding: 5px 0;
     font-size: 18px;
     font-weight: 600;
     border-radius: 5px;
@@ -294,6 +332,10 @@ h3 {
 
 .bg-vibrant {
     background: linear-gradient(90deg, rgb(188, 52, 212) 0%, rgb(255, 68, 137) 38%, rgb(141, 0, 241) 100%);
+}
+
+.tcenter {
+    text-align: center;
 }
 
 .transform-105:hover {
