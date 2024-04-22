@@ -12,18 +12,18 @@
     <%_ if(reason == 'max_aircraft_deleted') reason = 'too many aicraft missed their departure time!' %>
     <div class="sections">
         <section class="play-ended">
-            <h1 class="title transform-105">Game finished at <%= level %></h1>
-            <p style="text-align: center; padding-top: 10px;">Let's see how you did</p>
-            <section class="inner transform-105" style="transition: 0.5s;">
+            <h1 class="title">Game finished at <%= level %></h1>
+            <section class="inner" style="transition: 0.5s;">
+                <p style="text-align: center; padding-top: 10px;">Let's see how you did</p>
                 <div class="container-level">
-                    <img src="<%= image %>" alt="" class="transform-105">
+                    <img src="<%= image %>" alt="">
                     <div class="details">
                         <p>Your score: <%= score %></p>
                         <p>Time taken: <%= time %></p>
                         <p>The game ended because <%= reason %></p>
                     </div>
                 </div>
-                <button class="transform-120"><a href="/home" style="cursor: pointer; all: unset;">Go to homepage</a></button>
+                <button><a href="/home" style="cursor: pointer; all: unset;">Go to homepage</a></button>
                 <p style="text-align: center; padding-top: 5px; font-size: 15px;">Your history and leaderboard entries are updated automatically</p>
             </section>
         </section>

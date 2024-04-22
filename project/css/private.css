@@ -22,6 +22,7 @@ table {
     border-radius: 15px;
     transition: 0.5s ease-in-out;
     margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 table:hover {
@@ -140,6 +141,11 @@ section:nth-child(even) p {
 
 section:nth-child(odd) {
     background-color: rgba(56, 56, 56, 0.599)
+}
+
+.main-section {
+    max-width: 100em;
+    min-width: 50em;
 }
 
 .page-title {
@@ -341,6 +347,43 @@ button:hover {
     padding: 5px;
 }
 
+#form-change-pfp {
+    display: grid;
+    padding-bottom: 10px;
+}
+
+#form-change-pfp img {
+    height: 95%;
+    object-fit: cover;
+}
+
+#form-change-pfp .container {
+    width: 95%;
+}
+
+
+
+#form-change-pfp .container button {
+    border-radius: 0 10px 10px 0;
+}
+
+.changed {
+    animation: changed 0.5s ease infinite;
+}
+
+@keyframes changed {
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+#form-change-pfp .container input {
+    border-radius: 10px 0 0 10px;
+}
+
+#form-change-pfp .container {
+    display: flex;
+}
+
 #edit_details_form {
     padding: 20px;
     margin-top: 20px;
@@ -354,6 +397,18 @@ button:hover {
 #edit_details_form .field input {
     height: 50px;
     color: white;
+    background-color: rgba(127, 127, 127, 0.266);
+    transition-duration: 1.2s;
+}
+
+.container #pfp-entry {
+    color: white;
+    background-color: rgba(127, 127, 127, 0.266);
+    transition-duration: 1.2s;
+}
+
+#reset-img {
+    transition-duration: 1s;
 }
 
 /* LEVELS PAGE CSS */
@@ -436,7 +491,6 @@ button:hover {
 }
 
 form{
-    width: 400px;
     background-color: rgba(169, 169, 169, 0.13);
     border-radius: 10px;
     backdrop-filter: blur(10px);

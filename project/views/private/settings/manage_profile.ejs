@@ -12,30 +12,37 @@
             <h1 class="page-title">Manage user</h1>
             <p style="padding: 10px; text-align: center;">Manage <%= user[0].name %></p>
         </div>
-        <section class="profile">
+        <section class="profile main-section">
             <%- include('sidebar.ejs') -%>
             <section style="margin-left: 20px;">
                 <p style="margin: 10px; text-align: center;">This section may have missing features/bugs</p>
                 <section class="w100">
-                    <h1 class="title" style="margin-bottom: 20px;">User Details<br><span style="font-size: 13px; color: rgb(184, 184, 184);">ID: <%= user[0].id %></span></h1>
-                    <section style="width: 100%;">
-                        <p>Last Played: <%= user[0].last_played %></p>
-                        <p>Best Played: <%= user[0].best_played %></p>
-                        <p>Total points: <%= user[0].points %></p>
-                        <p>Account created: <%= user[0].creation_date %></p>
-                    </section>
+                    <h1 class="title" style="margin-bottom: 20px;">User Details
+                        <br>
+                        <span style="font-size: 13px; color: rgb(184, 184, 184);">ID: <%= user[0].id %></span>
+                        <br>
+                        <span style="font-size: 13px; color: rgb(184, 184, 184);">Created: <%= user[0].creation_date %></span>
+                    </h1>
+                    <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/reset/user/image/<%= user[0].id %>">
+                        <div class="container">
+                            <img src="<%= user[0].pfp %>" alt="">
+                        </div>
+                        <div class="main-section">
+                            <button type="submit">Reset</button>
+                        </div>
+                    </form>
                     <section class="w100">
-                        <form action="/update_details/<%= user[0].id %>" method="POST" id="edit_details_form">
-                            <h4 class="title">Edit details</h4>
+                        <h4 class="title">Edit details</h4>
+                        <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/details/<%= user[0].id %>">
                             <div class="field">
                                 <p class="fs15">Name</p>
                                 <input name="name_before" value="<%= user[0].name %>" style="display: none;">
-                                <input type="text" name="name" value="<%= user[0].name %>" required>
+                                <input type="text" name="name" value="<%= user[0].name %>" class="field-entry" required>
                             </div>
                             <div class="field">
                                 <p class="fs15">Email</p>
                                 <input name="email_before" value="<%= user[0].username %>" style="display: none;">
-                                <input type="email" name="email" value="<%= user[0].username %>" required>
+                                <input type="email" name="email" value="<%= user[0].username %>" class="field-entry" required>
                             </div>
                             <button type="submit">Apply changes</button>
                         </form>

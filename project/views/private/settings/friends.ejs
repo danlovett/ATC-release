@@ -12,7 +12,7 @@
             <h1 class="page-title">Friends</h1>
             <p style="padding: 10px; text-align: center;">See all friend details here</p>
         </div>
-        <section class="profile settings">
+        <section class="profile settings main-section">
             <%- include('sidebar.ejs') -%>
             <%_ if(JSON.stringify(followers) == '[]' && JSON.stringify(following) == '[]' && JSON.stringify(follower_requests) == '[]' && JSON.stringify(requested_followers) == '[]') { %>
                 <p style="text-align: center; margin-top: auto;">Nothing here. Either wait for requests or <a href="/search">search</a> for people.</p>

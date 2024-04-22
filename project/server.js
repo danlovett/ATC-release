@@ -279,30 +279,7 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAu
     }
 })
 
-app.get('/settings/admin/p/:id', checkAuthenticated, (req, res) => {
-    clientDB.all('SELECT * FROM leaderboard WHERE personID = ?', req.params.id, (err, leaderboard) => {
-        if(err) user_access_logs('ACCESS', err)
-        clientDB.all('SELECT id, pfp, name, username, last_played, best_played, points, creation_date, is_admin FROM users WHERE id = ?', req.params.id, (err, user) => {
-            if(err) user_access_logs('ACCESS', err)
-            clientDB.all('SELECT * FROM history WHERE personID = ?', req.params.id, (err, history) => {
-                if(err) user_access_logs('ACCESS', err)
-                res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: req.user.is_admin, userID: req.user.id })
-            })
-        })
-    })
-})
-
-app.post('/edit_picture', checkAuthenticated, (req, res) => {
-    if(isImage(req.body.url)) {
-        clientDB.run(`UPDATE users SET pfp = '${req.body.url}' WHERE id = ${req.user.id}`, [], err => {
-            if(!err) res.redirect('/settings/general')
-        })
-    } else {
-        res.redirect('/settings/general')
-    }
-})
-
-app.post('/update_details/:id', checkAuthenticated, (req, res) => {
+app.post('/backend/update/details/:id', checkAuthenticated, (req, res) => {
     if(req.body.name_before != req.body.name) {
         clientDB.all(`UPDATE users SET name = "${req.body.name}" WHERE id = ${req.params.id};`, [], err => {
             if(err) console.error(err);
@@ -310,9 +287,94 @@ app.post('/update_details/:id', checkAuthenticated, (req, res) => {
     }
     if(req.body.email_before != req.body.email) {
         clientDB.all(`UPDATE users SET username = "${req.body.email}" WHERE id = ${req.params.id};`, [], err => {
-            if(!err) res.redirect(`/settings/admin/p/${req.params.id}`)
+            if(err) console.log(err);
         })
     }
+
+    res.send(`
+        <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/details/${req.params.id}">
+            <div class="field">
+                <p class="fs15">Your Name</p>
+                <input type="text" name="name" value="${req.body.name}" class="field-entry" style="background-color: green;" required>
+            </div>
+            <div class="field">
+                <p class="fs15">Email</p>
+                <input type="email" name="email" value="${req.body.email}" class="field-entry" style="background-color: green;" required>
+            </div>
+            <button type="submit">Apply changes</button>
+        </form>
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script>
+            setTimeout(() => {
+                $('.field-entry').css('background-color', 'rgba(127, 127, 127, 0.266)')
+            }, 1200)
+        </script>
+    `)
+})
+
+app.post('/backend/update/user/image/:id', checkAuthenticated, (req, res) => {
+    if(isImage(req.body.url)) {
+        clientDB.run(`UPDATE users SET pfp = '${req.body.url}' WHERE id = ${req.user.id}`, [], err => {})
+    }
+
+    res.send(`
+        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/image/${req.params.id}">
+            <div class="container">
+                <img src="${req.body.url}" alt="" id="pfp" class="changed">
+            </div>
+            <div class="container">
+                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" id="pfp-entry" value="${req.body.url}" style="background-color: green;" required>
+                <button type="submit" style="width: 20%;">✔</button>
+            </div>
+        </form>
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script>
+            setTimeout(() => {
+                $('#pfp').removeClass('changed')
+            }, 500)
+            setTimeout(() => {
+                $('#pfp-entry').css('background-color', 'rgba(127, 127, 127, 0.266)')
+            }, 1200)
+        </script>
+    `)
+})
+
+app.post('/backend/reset/user/image/:id', checkAuthenticated, (req, res) => {
+    const defaultImage = 'https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg?w=1800'
+    clientDB.run(`UPDATE users SET pfp = '${defaultImage}' WHERE id = ${req.params.id}`, [], err => {})
+    res.send(`
+        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/reset/user/image/${req.params.id}">
+            <div class="container">
+                <img src="${defaultImage}" alt="" class="changed" id="pfp">
+            </div>
+            <div class="main-section">
+                <button type="submit" id="reset-image" style="background-color: green;">Reset</button>
+            </div>
+        </form>
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <script>
+            setTimeout(() => {
+                $('#reset-image').css('background-color', 'white')
+            }, 1200)
+            setTimeout(() => {
+                $('#pfp').removeClass('changed')
+            }, 500)
+        </script>
+    `)
+})
+
+app.get('/settings/admin/p/:id', checkAuthenticated, (req, res) => {
+    clientDB.all('SELECT * FROM leaderboard WHERE personID = ?', req.params.id, (err, leaderboard) => {
+        if(err) user_access_logs('ACCESS', err)
+        clientDB.all('SELECT id, pfp, name, username, last_played, best_played, points, creation_date, is_admin FROM users WHERE id = ?', req.params.id, (err, user) => {
+            if(err) user_access_logs('ACCESS', err)
+            clientDB.all('SELECT * FROM history WHERE personID = ?', req.params.id, (err, history) => {
+                console.log(`History:\n${JSON.stringify(history)}`);
+                if(err) user_access_logs('ACCESS', err)
+                res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: req.user.is_admin, userID: req.user.id })
+            })
+        })
+    })
 })
 
 app.post('/reset_points/:id', checkAuthenticated, (req, res) => {
@@ -420,8 +482,8 @@ app.get('/levels', checkAuthenticated, (req, res) => { // to add checkAuthentica
     })
 })
 
-app.get('/play-ended', checkAuthenticated, (req, res) => {
-    clientDB.all(`INSERT INTO history (date, score, level, personID) VALUES('${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => {})
+app.get('/end', checkAuthenticated, (req, res) => {
+    clientDB.all(`INSERT INTO history (date, score, level, time_taken, personID) VALUES('${formatTime()}', ${req.query.score}, '${req.query.level}', '${convertSecToMin(req.query.time)}', ${req.user.id});`, [], err => {})
     clientDB.get('SELECT points FROM users WHERE id = ?', req.user.id, (err, row) => {
         if(err) add_user_log('ACCESS', err)
         clientDB.all('UPDATE users SET points = ? WHERE id = ?', parseInt(row.points) + parseInt(req.query.score), req.user.id, err => { }) 
@@ -436,7 +498,7 @@ app.get('/play-ended', checkAuthenticated, (req, res) => {
     clientDB.all(`INSERT INTO leaderboard (name, date, score, level, personID) VALUES('${req.user.name}', '${formatTime()}', ${req.query.score}, '${req.query.level}', ${req.user.id});`, [], err => { })
 
     gameDB.all('SELECT image_reference FROM levels WHERE airport_name=?', req.query.level, (err, image) => {
-        res.render('private/terminate_play.ejs', { level: req.query.level, image: image[0].image_reference, score: req.query.score, time: req.query.time, reason: req.query.reason })
+        res.render('private/terminate_play.ejs', { level: req.query.level, image: image[0].image_reference, score: req.query.score, time: convertSecToMin(req.query.time), reason: req.query.reason })
     })
 })
 
@@ -569,6 +631,14 @@ function formatTime() {
     const hours = date.getHours()
     const mins = `${date.getMinutes()<10?'0':''}${date.getMinutes()}`
     return `${day} ${hours}:${mins}`
+}
+
+function convertSecToMin(seconds) {
+    let minutes = Math.floor(seconds / 60);
+    let extraSeconds = seconds % 60;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    extraSeconds = extraSeconds< 10 ? "0" + extraSeconds : extraSeconds;
+    return `${minutes}m ${extraSeconds}s`
 }
 
 // checking if current session is active

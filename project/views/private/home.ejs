@@ -9,7 +9,7 @@
     <%- include('navbar.ejs') -%>
     <div class="pt15vh">
         <h1 class="page-title">Homepage</h1>
-        <section class="landing">
+        <section class="landing main-section">
             <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Landing</h1>
             <p style="text-align: center; padding-top: 10px;">Levels will play as soon as you press on them</p>
             <div class="content">
@@ -27,7 +27,7 @@
             </div>
         </section>
         <%_ if(JSON.stringify(leaderboard) != '[]') { %>
-            <section class="leaderboard">
+            <section class="leaderboard main-section">
                 <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Leaderboard</h1>
                 <div class="content">
                     <a href="/leaderboard">
@@ -57,7 +57,7 @@
             </section>
         <%_ } %>
         <%_ if(following.length > 0) { %>
-            <section class="friends" style="padding: 10px;">
+            <section class="friends main-section" style="padding: 10px;">
                 <h1 class="title transform-105"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Friend Activity</h1>
                 <p style="text-align: center; padding-top: 10px;">See what your friends are doing</p>
                 <div class="content">
@@ -93,7 +93,7 @@
                 <%_ } %>
             </section>
         <%_ } %>
-        <section>
+        <section class=" main-section">
             <h1 class="title">GitHub Devlogs</h1>
             <p class="tcenter m10">Check out the development of this project!</p>
             <button><a href="https://github.com/danlovett/ATC-release/commit/main">Click here</a></button>

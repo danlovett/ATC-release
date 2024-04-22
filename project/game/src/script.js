@@ -87,7 +87,8 @@ function draw() {
         grid.render_selector_tool(grid_x, grid_y)
     } else { // if grid.gameplay_allowed is false
         // redirect user to this page with set values
-        window.location.href = `${window.location.origin}/play-ended?level=${$('#level_name').text()}&time=${grid.ellapsed_time_seconds}&score=${score.total_score}&reason=${grid.message}`
+        window.location.href = `${window.location.origin}/end?level=${$('#level_name').text()}&time=${grid.ellapsed_time_seconds}&score=${score.total_score}&reason=${grid.message}`
+        noloop()
     }
 }
 
@@ -133,7 +134,7 @@ function keyPressed() {
     }
     if(key === "Escape") {
         let leave = confirm("Are you sure you want to exit the game?\nYou'll lose your progress.")
-        if(leave) window.location.href = 'http://localhost:4000/home'
+        if(leave) window.location.pathname = '/home'
     }
 }
 
