@@ -45,6 +45,30 @@ app.get('/login', checkNotAuthenticated, (req, res, next) => {
     res.render('public/login');
 });
 
+app.post('/login/check-user', checkNotAuthenticated, (req, res) => {
+    clientDB.get('SELECT * FROM users WHERE username = ?', req.body.email, (err, row) => {
+        if(row) res.send(`
+            <form method="POST" action="/login">
+                <h2>Log in <button onClick="window.location.reload();" class="form-reset">Reload</button></h2>
+                <label for="name/email">Name/E-mail</label>
+                <input  type="name" name="email" id="email" autocomplete="on" value="${req.body.email}" readonly="true">
+                <label for="Password">Password</label>
+                <input type="password" name="password" id="password" autocomplete="on" placeholder="Start typing...">
+                <button type="submit" class="form-submit">Log in</button>
+            </form>
+        `)
+        if(!row) res.send(`
+            <form method="POST" action="/login">
+                <h2>Log in <button onClick="window.location.reload();" class="form-reset">Reload</button></h2>
+                <label for="name/email">Name/E-mail</label>
+                <input  type="name" name="email" id="email" autocomplete="on" value="${req.body.email}" readonly="true">
+                <p class='tcenter' style="margin-top: 25px;">No account found. Please <a href='/signup'>signup</a>.</p>
+                <button onClick="window.location.reload();" class="form-submit">Reload page</button>
+            </form>
+    `)
+    })
+})
+
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
         successRedirect: '/login-success/log',
         failureRedirect: `/login`,

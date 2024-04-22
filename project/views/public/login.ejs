@@ -4,23 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Log in | ATC</title>
+    <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
 </head>
 <body style="height: 100vh; background: linear-gradient(90deg, rgba(3,0,60,1) 0%, rgba(68,68,255,1) 38%, rgba(255,255,255,1) 100%);">
     <%- include('navbar.ejs') -%>
     <div class="sections">
         <section>
-            <form method="POST" action="login">
+            <form hx-swap="outerHTML" hx-post="/login/check-user">
                 <h2>Log in</h2>
-                <div class="name">
-                    <label for="name/email">Name/E-mail</label>
-                    <input  type="name" name="email" autocomplete="on" placeholder="Start typing...">
-                </div>
-                <div class="password">
-                    <label for="Password">Password</label>
-                    <input type="password" name="password" id="password" autocomplete="on">
-                </div>
-
-                <button type="submit" class="form-submit">Log in</button>
+                <label for="name/email">Name/E-mail</label>
+                <input  type="name" name="email" id="email" autocomplete="on" placeholder="Start typing...">
+                <button class="form-submit">Next</button>
 
                 <p style="padding-top: 10px; text-align: center;">Don't have an account? <a href="/signup">Sign up here</a></p>
             </form>
