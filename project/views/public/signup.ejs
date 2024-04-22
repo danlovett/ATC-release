@@ -3,117 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log in | ATC</title>
+    <title>Sign up | ATC</title>
+    <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
 </head>
 <body style="height: 100vh; background: linear-gradient(90deg, rgb(42, 42, 42) 0%, rgb(125, 125, 125) 38%, rgba(255,255,255,1) 100%);">
     <%- include('navbar.ejs') -%>
     <div class="sections">
         <section>
-            <div class="spacer">
-                <%_ if(error == 'exists') { %>
-                    <p class="tcenter">Account with that email found. Please <a href="/login">login</a>.</p>
-                <%_ } %>
-            </div>
-            <form action="signup" method="POST" class="signup">
-                <h2>Sign up <button type="reset" class="form-reset">Reset</button> </h2>
-                <div class="name">
-                    <label for="name">Full Name</label>
-                    <input type="text" name="name" id="signup-full-name" placeholder="Start typing...">
-                </div>
-                <div class="email">
-                    <label for="name/email">E-mail</label>
-                    <input type="email" name="email" id="signup-email" placeholder="Start typing..." required>
-                </div>
-                <div class="password">
-                    <label for="Password">Password</label>
-                    <input type="password" name="password" id="password" placeholder="Start typing..." required>
-                    <div class="requirements">
-                        <p class="tcenter"><span id="passwordLength">X</span>At least 8 characters</p>
-                        <p class="tcenter"><span id="passwordUpperChar">X</span>Upper character</p>
-                        <p class="tcenter"><span id="passwordHasNumber">X</span>Includes a number</p>
-                        <p class="tcenter"><span id="passwordNotSpace">X</span>No spaces</p>
-                    </div>
-                </div>
-                <div class="password">
-                    <label for="Password">Confirm Password <span id="message"></span></label>
-                    <input type="password" placeholder="Start typing..." name="password_confirm" id="confirmPassword">
-                </div>
-
-                <button id="submit-button" class="form-submit">Sign up</button>
-
-                <p style="padding-top: 10px; text-align: center;">Already have an account? <a href="/login">Log in here</a></p>
+            <form hx-swap="outerHTML" hx-post="/signup/check-user">
+                <h2>Sign up <button onClick="window.location.reload();" class="form-reset">Reset</button> </h2>
+                <label for="name">Full Name</label>
+                <input type="text" name="name" id="signup-full-name" placeholder="Start typing...">
+                <label for="name/email">E-mail</label>
+                <input type="email" name="email" id="signup-email" placeholder="Start typing..." required>
+                <button class="form-submit">Next</button>
             </form>
         </section>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <script>
-        console.log(Date.now());
-        let validationChecks = {
-            length: false,
-            upperChar: false,
-            number: false,
-            noSpaces: true,
-            confirm: false
-        }
-        $('#password, #confirmPassword').on('keyup', function () {
-            if ($('#password').val() == $('#confirmPassword').val() && $('#confirmPassword').val().length != 0) {
-                $('#confirmPassword').css('border', '1px green solid');
-                $('#message').html('Matches').css('color', 'green');
-                validationChecks.confirm = true
-            } else {
-                $('#confirmPassword').css('border', '1px red solid');
-                $('#message').html('');
-                $('#submit-button').css('cursor', 'not-allowed')
-                validationChecks.confirm = false
-            }
-
-            if(Object.values(validationChecks).every(item => item === true)) {
-                $('#submit-button').css('cursor', 'pointer')
-                $('#submit-button').attr('type', 'submit')
-            } else {
-                console.log('Validation checks fail');
-            }
-        });
-        $('#password').on('keyup', function () {
-            if ($('#password').val().length >= 8) {
-                $('#passwordLength').html('✔').css('color', 'green');
-                validationChecks.length = true
-            } else {
-                $('#passwordLength').html('X').css('color', 'red');
-                validationChecks.length = false
-            }
-
-            let string = $('#password').val()
-
-            for(let str in string) {
-                if((string[str].toUpperCase() === string[str]) && !(string[str] >= '0' && string[str] <= '9') && !(string[str] == ' ')) {
-                    $('#passwordUpperChar').html('✔').css('color', 'green')
-                    validationChecks.upperChar = true
-                    break
-                } else {
-                    $('#passwordUpperChar').html('X').css('color', 'red')
-                    validationChecks.upperChar = false
-                }
-            };
-            for(let str in string) {
-                if(string[str] >= '0' && string[str] <= '9') {
-                    $('#passwordHasNumber').html('✔').css('color', 'green')
-                    validationChecks.number = true
-                    break
-                } else {
-                    $('#passwordHasNumber').html('X').css('color', 'red')
-                    validationChecks.number = false
-                }
-            };
-
-            if(!$('#password').val().includes(' ')) {
-                $('#passwordNotSpace').html('✔').css('color', 'green');
-                validationChecks.noSpaces = true
-            } else {
-                $('#passwordNotSpace').html('X').css('color', 'red');
-                validationChecks.noSpaces = false
-            }
-        });
-    </script>
 </body>
 </html>

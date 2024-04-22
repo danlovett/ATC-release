@@ -46,7 +46,7 @@ app.get('/login', checkNotAuthenticated, (req, res, next) => {
 });
 
 app.post('/login/check-user', checkNotAuthenticated, (req, res) => {
-    clientDB.get('SELECT * FROM users WHERE username = ?', req.body.email, (err, row) => {
+    clientDB.get('SELECT id FROM users WHERE username = ?', req.body.email, (err, row) => {
         if(row) res.send(`
             <form method="POST" action="/login">
                 <h2>Log in <button onClick="window.location.reload();" class="form-reset">Reload</button></h2>
@@ -78,6 +78,123 @@ app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
 app.get('/signup', checkNotAuthenticated, (req, res) => {
     res.render('public/signup', { error: null });
 });
+
+app.post('/signup/check-user', checkNotAuthenticated, (req, res) => {
+    clientDB.get('SELECT id FROM users WHERE username = ?', req.body.email, (err, row) => {
+        if(!row) { 
+            res.send(`
+                <form method="POST" action="signup">
+                    <h2>Sign up <button onClick="window.location.reload();" class="form-reset">Reset</button> </h2>
+                    <label for="name">Full Name</label>
+                    <input type="text" name="name" value="${req.body.name}" readonly="true">
+                    <label for="name/email">E-mail</label>
+                    <input type="email" name="email" value="${req.body.email}" readonly="true">
+                    <label for="Password">Password</label>
+                    <input type="password" name="password" id="password" placeholder="Start typing..." required>
+                    <div class="requirements">
+                        <p class="tcenter"><span id="passwordLength">X</span>At least 8 characters</p>
+                        <p class="tcenter"><span id="passwordUpperChar">X</span>Upper character</p>
+                        <p class="tcenter"><span id="passwordHasNumber">X</span>Includes a number</p>
+                        <p class="tcenter"><span id="passwordNotSpace">X</span>No spaces</p>
+                    </div>
+                    <label for="Password">Confirm Password <span id="message"></span></label>
+                    <input type="password" placeholder="Start typing..." name="password_confirm" id="confirmPassword">
+
+                    <button id="submit-button" class="form-submit">Sign up</button>
+                </form>
+                <script>
+                    validationChecks = {
+                        length: false,
+                        upperChar: false,
+                        number: false,
+                        noSpaces: true,
+                        confirm: false
+                    }
+                    $('#password, #confirmPassword').on('keyup', function () {
+                        if ($('#password').val() == $('#confirmPassword').val() && $('#confirmPassword').val().length != 0) {
+                            $('#confirmPassword').css('border', '1px green solid');
+                            $('#message').html('Matches').css('color', 'green');
+                            validationChecks.confirm = true
+                        } else {
+                            $('#confirmPassword').css('border', '1px red solid');
+                            $('#message').html('');
+                            $('#submit-button').css('cursor', 'not-allowed')
+                            validationChecks.confirm = false
+                        }
+
+                        if(Object.values(validationChecks).every(item => item === true)) {
+                            $('#submit-button').css('cursor', 'pointer')
+                            $('#submit-button').attr('type', 'submit')
+                        }
+                    });
+                    $('#password').on('keyup', function () {
+                        if ($('#password').val().length >= 8) {
+                            $('#passwordLength').html('✔').css('color', 'green');
+                            validationChecks.length = true
+                        } else {
+                            $('#passwordLength').html('X').css('color', 'red');
+                            validationChecks.length = false
+                        }
+
+                        let string = $('#password').val()
+
+                        for(let str in string) {
+                            if((string[str].toUpperCase() === string[str]) && !(string[str] >= '0' && string[str] <= '9') && !(string[str] == ' ')) {
+                                $('#passwordUpperChar').html('✔').css('color', 'green')
+                                validationChecks.upperChar = true
+                                break
+                            } else {
+                                $('#passwordUpperChar').html('X').css('color', 'red')
+                                validationChecks.upperChar = false
+                            }
+                        };
+                        for(let str in string) {
+                            if(string[str] >= '0' && string[str] <= '9') {
+                                $('#passwordHasNumber').html('✔').css('color', 'green')
+                                validationChecks.number = true
+                                break
+                            } else {
+                                $('#passwordHasNumber').html('X').css('color', 'red')
+                                validationChecks.number = false
+                            }
+                        };
+
+                        if(!$('#password').val().includes(' ')) {
+                            $('#passwordNotSpace').html('✔').css('color', 'green');
+                            validationChecks.noSpaces = true
+                        } else {
+                            $('#passwordNotSpace').html('X').css('color', 'red');
+                            validationChecks.noSpaces = false
+                        }
+                    });
+                </script>
+            `)
+        } else {
+            res.send(`
+                <form>
+                    <h2>Sign up <button onClick="window.location.reload();" class="form-reset">Reset</button> </h2>
+                    <label for="name">Full Name</label>
+                    <input type="text" name="name" value="${req.body.name}" readonly="true">
+                    <label for="name/email" style="color: red;">E-mail is taken!</label>
+                    <input type="email" name="email" value="${req.body.email}" readonly="true">
+                    <p class="tcenter" style="margin-top: 20px;" id="redirect">Redirecting to login in <span id="countdown"></span> seconds. <a href="/login">Go there now</a>.</p>
+                    <p class="tcenter" style="margin-top: 20px;"><a onClick="window.location.reload();" href="#">Cancel redirect and restart form</a></p>
+                </form>
+                <script>
+                    document.getElementById('countdown').innerHTML = 5
+                    let i = 1;
+                    setInterval(() => {
+                        if(i == 5){
+                            window.location.pathname = "/login"
+                        }
+                        document.getElementById('countdown').innerHTML = 5 - i
+                        i++;
+                    }, 1000);
+                </script>
+            `)
+        }
+    })
+})
 
 app.post('/signup', checkNotAuthenticated, async (req,res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
