@@ -16,11 +16,14 @@
             <%- include('sidebar.ejs') -%>
             <div class="content">
                 <div class="profile-inner">
-                    <div style="display: flex;">
-                        <img src="<%= user.pfp %>" alt="">
-                        <div class="sidebar" style="height: 100%; margin-right: 0; margin-top: auto;">
-                            <p><%= user.name %></p>
-                            <p><%= user.username %></p>
+                    <div id="profile-top-container">
+                        <img src="<%= user.cover_image %>" alt="" id="profile-top-img">
+                        <div id="profile-top-details">
+                            <img src="<%= user.pfp %>" id="profile-picture" alt="">
+                            <div class="container">
+                                <p><%= user.name %></p>
+                                <p><%= user.username %></p>
+                            </div>
                         </div>
                     </div>
                     <div class="content">

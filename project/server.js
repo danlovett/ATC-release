@@ -229,10 +229,8 @@ app.get('/leaderboard', checkAuthenticated, (req, res) => { // to add checkAuthe
 })
 
 app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAuthenticated
-    if(req.params.page == 'home') {
-        res.render('private/settings/settings.ejs', { is_admin: req.user.is_admin } )
-    } else if(req.params.page == 'profile') {
-        clientDB.get(`SELECT id, name, username, pfp FROM users WHERE id = ${req.user.id}`,(err, user) => {
+    if(req.params.page == 'profile') {
+        clientDB.get(`SELECT id, name, username, pfp, cover_image FROM users WHERE id = ${req.user.id}`,(err, user) => {
             if(err) add_user_log('ACCESS', err)
             clientDB.all(`SELECT score, level, date FROM leaderboard WHERE personID = ${req.user.id}`, [], (err, leaderboard) => {
                 if(err) add_user_log('ACCESS', err)
@@ -260,7 +258,7 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAu
             })
         })
     } else if(req.params.page == 'general') {
-        clientDB.get(`SELECT id, name, username, pfp FROM users WHERE id = ${req.user.id}`,(err, user) => {
+        clientDB.get(`SELECT id, name, username, pfp, cover_image FROM users WHERE id = ${req.user.id}`,(err, user) => {
             if(err) add_user_log('PFP', err)
             res.render('private/settings/general.ejs', { is_admin: req.user.is_admin, user: user, success: req.params.bool })
         })
@@ -312,52 +310,61 @@ app.post('/backend/update/details/:id', checkAuthenticated, (req, res) => {
     `)
 })
 
-app.post('/backend/update/user/image/:id', checkAuthenticated, (req, res) => {
+app.post('/backend/update/user/:option/:id', checkAuthenticated, (req, res) => {
     if(isImage(req.body.url)) {
-        clientDB.run(`UPDATE users SET pfp = '${req.body.url}' WHERE id = ${req.user.id}`, [], err => {})
+        if(req.params.option == 'profile-picture') {
+            clientDB.run(`UPDATE users SET pfp = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {})
+        }
+        if(req.params.option == 'cover-picture') {
+            clientDB.run(`UPDATE users SET cover_image = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {})
+        }
     }
 
     res.send(`
         <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/image/${req.params.id}">
             <div class="container">
-                <img src="${req.body.url}" alt="" id="pfp" class="changed">
+                <img src="${req.body.url}" alt="" class="change_image changed">
             </div>
             <div class="container">
-                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" id="pfp-entry" value="${req.body.url}" style="background-color: green;" required>
+                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black change_image_entry" value="${req.body.url}" style="background-color: green;" required>
                 <button type="submit" style="width: 20%;">✔</button>
             </div>
         </form>
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
         <script>
             setTimeout(() => {
-                $('#pfp').removeClass('changed')
+                $('.change_image').removeClass('changed')
             }, 500)
             setTimeout(() => {
-                $('#pfp-entry').css('background-color', 'rgba(127, 127, 127, 0.266)')
+                $('.change_image_entry').css('background-color', 'rgba(127, 127, 127, 0.266)')
             }, 1200)
         </script>
     `)
 })
 
-app.post('/backend/reset/user/image/:id', checkAuthenticated, (req, res) => {
-    const defaultImage = 'https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg?w=1800'
-    clientDB.run(`UPDATE users SET pfp = '${defaultImage}' WHERE id = ${req.params.id}`, [], err => {})
+app.post('/backend/reset/user/:option/:id', checkAuthenticated, (req, res) => {
+    let defaultImage;
+    if(req.params.option == 'profile-picture') {
+        defaultImage = 'https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg?w=1800'
+        clientDB.run(`UPDATE users SET pfp = '${defaultImage}' WHERE id = ${req.params.id}`, [], err => {})
+    }
+    if(req.params.option == 'cover-image') {
+        defaultImage = 'https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D.jpg'
+        clientDB.run(`UPDATE users SET cover_image = '${defaultImage}' WHERE id = ${req.params.id}`, [], err => {})
+    }
     res.send(`
-        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/reset/user/image/${req.params.id}">
-            <div class="container">
-                <img src="${defaultImage}" alt="" class="changed" id="pfp">
-            </div>
-            <div class="main-section">
-                <button type="submit" id="reset-image" style="background-color: green;">Reset</button>
-            </div>
+        <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/${req.params.option}/${req.params.id}">
+            <h1 class="title tcenter">${req.params.option}</h1>
+            <img src="${defaultImage}" alt="" class="changed changed_image">
+            <button type="submit" class="reset-image" style="background-color: green;">Reset</button>
         </form>
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
         <script>
             setTimeout(() => {
-                $('#reset-image').css('background-color', 'white')
+                $('.reset-image').css('background-color', 'white')
             }, 1200)
             setTimeout(() => {
-                $('#pfp').removeClass('changed')
+                $('.changed_image').removeClass('changed')
             }, 500)
         </script>
     `)
@@ -366,7 +373,7 @@ app.post('/backend/reset/user/image/:id', checkAuthenticated, (req, res) => {
 app.get('/settings/admin/p/:id', checkAuthenticated, (req, res) => {
     clientDB.all('SELECT * FROM leaderboard WHERE personID = ?', req.params.id, (err, leaderboard) => {
         if(err) user_access_logs('ACCESS', err)
-        clientDB.all('SELECT id, pfp, name, username, last_played, best_played, points, creation_date, is_admin FROM users WHERE id = ?', req.params.id, (err, user) => {
+        clientDB.all('SELECT id, cover_image, pfp, name, username, last_played, best_played, points, creation_date, is_admin FROM users WHERE id = ?', req.params.id, (err, user) => {
             if(err) user_access_logs('ACCESS', err)
             clientDB.all('SELECT * FROM history WHERE personID = ?', req.params.id, (err, history) => {
                 console.log(`History:\n${JSON.stringify(history)}`);
@@ -450,7 +457,7 @@ app.get('/search', checkAuthenticated, (req, res) => {
 
 app.get('/profile/:id', checkAuthenticated, (req, res) => {
     if(req.params.id == req.user.id) res.redirect('/settings/profile')
-    clientDB.get(`SELECT id, name, username, pfp FROM users WHERE id = ${req.params.id}`,(err, user) => {
+    clientDB.get(`SELECT id, name, username, pfp, cover_image FROM users WHERE id = ${req.params.id}`,(err, user) => {
         if(err) add_user_log('ACCESS', err)
         clientDB.all(`SELECT score, level, date FROM leaderboard WHERE personID = ${req.params.id}`, [], (err, leaderboard) => {
             if(err) add_user_log('ACCESS', err)
@@ -524,8 +531,15 @@ app.get('/remove_request/:id', checkAuthenticated, (req, res) => {
      })
 })
 
-app.get('/remove_friend/:id', checkAuthenticated, (req, res) => {
+app.get('/remove_following/:id', checkAuthenticated, (req, res) => {
     clientDB.all('DELETE FROM friends WHERE lead_user = ? AND passive_user = ?', [req.user.id, req.params.id], err => { 
+        if(err) add_user_log('ACCESS', err)
+        res.redirect('/settings/friends')
+    })
+})
+
+app.get('/remove_follower/:id', checkAuthenticated, (req, res) => {
+    clientDB.all('DELETE FROM friends WHERE lead_user = ? AND passive_user = ?', [req.params.id, req.user.id], err => { 
         if(err) add_user_log('ACCESS', err)
         res.redirect('/settings/friends')
     })

@@ -16,11 +16,20 @@
         <%_ } %>
         <section class="settings main-section">
             <div id="profile-details">
-                <img src="<%= user.pfp %>" alt="">
-                <div class="sidebar">
+                <img src="<%= user.pfp %>" id="other-profile-img" alt="">
+                <div id="profile-top-container" style="height: 10em; margin: 0;">
+                    <img src="<%= user.cover_image %>" alt="" id="profile-top-img">
+                    <div id="profile-top-details" style="width: 100%;">
+                        <div class="container" style="width: 100%;">
+                            <p><%= user.name %></p>
+                            <p><%= user.username %></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="sidebar">
                     <p class="tcenter"><%= user.name %></p>
                     <p class="tcenter"><%= user.username %></p>
-                </div>
+                </div> -->
             </div>
             <div class="details" id="friend-details">
                 <%_ if(JSON.stringify(leaderboard) != '[]') { %>

@@ -23,14 +23,22 @@
                         <br>
                         <span style="font-size: 13px; color: rgb(184, 184, 184);">Created: <%= user[0].creation_date %></span>
                     </h1>
-                    <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/reset/user/image/<%= user[0].id %>">
-                        <div class="container">
+                    <div class="container-grid-split-middle">
+                        <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/profile-picture/<%= user[0].id %>">
+                            <h1 class="title tcenter">profile-picture</h1>
+                            <input type="text" name="url" style="display: none;" value="<%= user[0].pfp %>">
                             <img src="<%= user[0].pfp %>" alt="">
-                        </div>
-                        <div class="main-section">
                             <button type="submit">Reset</button>
-                        </div>
-                    </form>
+                        </form>
+                        <span></span>
+                        <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/cover-image/<%= user[0].id %>">
+                            <h1 class="title tcenter">cover-image</h1>
+                            <input type="text" name="url" style="display: none;" value="<%= user[0].cover_image %>">
+                            <img src="<%= user[0].cover_image %>" alt="">
+                            <button type="submit">Reset</button>
+                        </form>
+
+                    </div>
                     <section class="w100">
                         <h4 class="title">Edit details</h4>
                         <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/details/<%= user[0].id %>">
