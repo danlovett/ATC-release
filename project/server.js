@@ -42,7 +42,7 @@ app.get('/', checkNotAuthenticated, (req, res) => {
 })
 
 app.get('/login', checkNotAuthenticated, (req, res, next) => {
-    res.render('public/login');
+    res.render('public/login', { fail: req.query.fail });
 });
 
 app.post('/login/check-user', checkNotAuthenticated, (req, res) => {
@@ -58,7 +58,7 @@ app.post('/login/check-user', checkNotAuthenticated, (req, res) => {
             </form>
         `)
         if(!row) res.send(`
-            <form method="POST" action="/login">
+            <form>
                 <h2>Log in <button onClick="window.location.reload();" class="form-reset">Reload</button></h2>
                 <label for="name/email">Name/E-mail</label>
                 <input  type="name" name="email" id="email" autocomplete="on" value="${req.body.email}" readonly="true">
@@ -71,7 +71,7 @@ app.post('/login/check-user', checkNotAuthenticated, (req, res) => {
 
 app.post('/login', checkNotAuthenticated, passport.authenticate('local', {
         successRedirect: '/login-success/log',
-        failureRedirect: `/login`,
+        failureRedirect: `/login?fail=password`,
         failureFlash: true
 }));
 
@@ -272,6 +272,8 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAu
                 })
             })
         })
+    } else if(req.params.page == 'privacy') {
+        res.render('private/settings/privacy', { is_admin: true }) 
     } else {
         res.redirect('/error/settings')
     }

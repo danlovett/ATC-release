@@ -21,17 +21,19 @@
                     <section class="w100">
                         <h1 class="title">Results</h1>
                         <p style="text-align: center; padding: 10px 0px;">You can manage friends and requests from settings > friends.</p>
-                        <section class="results people transform-101" style="width: 100%; margin-left: 0;">
+                        <section class="results people" style="width: 100%; margin-left: 0;">
                             <%_ for(i in users) { %>
                                 <%_ if(users[i].id != current_user) { %>
                                     <div class="result" id="<%= i %>">
-                                        <div class="info">
-                                            <img src="<%= users[i].pfp %>" alt="">
-                                            <div class="inner">
-                                                <p><%= users[i].name %></p>
-                                                <p><%= users[i].username %></p>
+                                        <a class="details" href="/profile/<%= users[i].id %>">
+                                            <div class="info">
+                                                <img src="<%= users[i].pfp %>" alt="">
+                                                <div class="inner">
+                                                    <p><%= users[i].name %></p>
+                                                    <p><%= users[i].username %></p>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </a>
                                         <div class="action">
                                             <%_ if(users[i].status == 'Requested' && users[i].lead_user == current_user) { %>
                                                 <p>Requested <%= users[i].creation_date.substr(0,10) %></p>
@@ -54,12 +56,17 @@
                         <section class="results levels" style="width: 100%; margin-left: 0;">
                             <%_ for(i in levels) { %>
                                 <div class="result" id="<%= i %>">
-                                    <div class="info">
-                                        <img src="<%= levels[i].image_reference %>" alt="" style="height: 150px;">
-                                    </div>
-                                    <div class="info">
-                                    <p><%= levels[i].airport_name %></p>
-                                    <p><%= levels[i].airport_icao %></p>                            
+                                    <a class="details" href="/profile/<%= users[i].id %>">
+                                        <div class="info">
+                                            <img src="<%= levels[i].image_reference %>" alt="" style="height: 150px;">
+                                            <div class="inner">
+                                                <p><%= levels[i].airport_name %></p>
+                                                <p><%= levels[i].airport_icao %></p>   
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="action">
+                                        <button><a href="/levels">See more</a></button>
                                     </div>
                                 </div>
                             <%_ } %>

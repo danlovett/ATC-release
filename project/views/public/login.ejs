@@ -10,14 +10,25 @@
     <%- include('navbar.ejs') -%>
     <div class="sections">
         <section>
-            <form hx-swap="outerHTML" hx-post="/login/check-user">
-                <h2>Log in</h2>
-                <label for="name/email">Name/E-mail</label>
-                <input  type="name" name="email" id="email" autocomplete="on" placeholder="Start typing...">
-                <button class="form-submit">Next</button>
+            <%_ if(fail != 'password') { %>
+                <form hx-swap="outerHTML" hx-post="/login/check-user">
+                    <h2>Log in</h2>
+                    <label for="name/email">Name/E-mail</label>
+                    <input  type="name" name="email" id="email" autocomplete="on" placeholder="Start typing...">
+                    <button class="form-submit">Next</button>
 
-                <p style="padding-top: 10px; text-align: center;">Don't have an account? <a href="/signup">Sign up here</a></p>
-            </form>
+                    <p style="padding-top: 10px; text-align: center;">Don't have an account? <a href="/signup">Sign up here</a></p>
+                </form>
+            <%_ } else { %>
+                <form method="POST" action="/login">
+                    <h2>Log in <button onClick="window.location.reload();" class="form-reset">Reload</button></h2>
+                    <label for="name/email">Name/E-mail</label>
+                    <input  type="name" name="email" id="email" autocomplete="on" placeholder="Start typing...">
+                    <label for="Password">Password <span style="color: red;">Incorrect. Try again</span> </label>
+                    <input type="password" name="password" id="password" autocomplete="on" placeholder="Start typing..." style="border: 1px solid red;">
+                    <button type="submit" class="form-submit">Log in</button>
+                </form>
+            <%_ } %>
         </section>
     </div>
 </body>

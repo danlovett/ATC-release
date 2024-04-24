@@ -30,7 +30,6 @@
                             <img src="<%= user[0].pfp %>" alt="">
                             <button type="submit">Reset</button>
                         </form>
-                        <span></span>
                         <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/cover-image/<%= user[0].id %>">
                             <h1 class="title tcenter">cover-image</h1>
                             <input type="text" name="url" style="display: none;" value="<%= user[0].cover_image %>">

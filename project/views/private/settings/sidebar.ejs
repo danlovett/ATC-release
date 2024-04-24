@@ -1,12 +1,25 @@
 <section class="sidebar">
     <h1 class="title transform-105">Options</h1>
-    <div class="items">
-        <p class="transform-105" style="cursor: pointer;"><a href="/settings/profile">Profile</a></p>
-        <p class="transform-105" style="cursor: pointer;"><a href="/settings/friends">Friends</a></p>
-        <p class="transform-105" style="cursor: pointer;"><a href="/settings/general">General</a></p>
+    <div class="items sidebar-items">
+        <a id="0" class="transform-105 item profile" href="/settings/profile">Profile</a>
+        <a id="1" class="transform-105 item friends" href="/settings/friends">Friends</a>
+        <a id="2" class="transform-105 item general" href="/settings/general">General</a>
+        <a id="3" class="transform-105 item privacy" href="/settings/privacy">Privacy</a>
         <%_ if(is_admin == "true") { %>
-            <p class="transform-105" style="cursor: pointer;"><a href="/settings/admin">Admin</a></p>
+            <a id="4" class="transform-105 item" href="/settings/admin">Admin</a>
         <%_ } %>
-        <p class="transform-105" style="cursor: pointer;"><a href="/logout/confirm/this" >Log out</a></p>
+        <a id="5" class="transform-105 item" href="/logout/confirm/this" >Log out</a>
     </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script>
+    let path = window.location.pathname.split('/')[2]
+    console.log(path);
+    for(i in $('.item').parents($('.sidebar-items').length)) {
+        if($(`#${i}`).text().toLowerCase() == path) {
+            $(`#${i}`).attr('id', 'active')
+        }
+    }
+</script>
