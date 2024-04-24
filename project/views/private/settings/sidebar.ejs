@@ -8,17 +8,17 @@
         <%_ if(is_admin == "true") { %>
             <a id="4" class="transform-105 item" href="/settings/admin">Admin</a>
         <%_ } %>
-        <a id="5" class="transform-105 item" href="/logout/confirm/this" >Log out</a>
+        <a id="5" class="transform-105 item" href="/settings/version" >Version</a>
+        <a id="6" class="transform-105 item" href="/logout/confirm/this" >Log out</a>
     </div>
 </section>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
 <script>
-    let path = window.location.pathname.split('/')[2]
-    console.log(path);
-    for(i in $('.item').parents($('.sidebar-items').length)) {
-        if($(`#${i}`).text().toLowerCase() == path) {
+    let path = window.location.pathname
+    for(i in $('.item').parents($('.sidebar-items').length)) {;
+        if($(`#${i}`).attr('href') == path) {
             $(`#${i}`).attr('id', 'active')
         }
     }

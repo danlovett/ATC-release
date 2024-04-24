@@ -198,12 +198,8 @@ app.post('/signup/check-user', checkNotAuthenticated, (req, res) => {
 
 app.post('/signup', checkNotAuthenticated, async (req,res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    const sql = `INSERT INTO users(name, username, password, creation_date) VALUES ("${req.body.name}", "${req.body.email}", "${hashedPassword}", "${formatTime()}")`
-    clientDB.all(sql, [], err => { 
-        if(err) {
-            if(err.errno == 19) res.render('public/signup', { error: 'exists' })
-        }
-        if(req.body.password.length >= 8 && req.body.name.includes(' ') && !err) res.redirect('/login')
+    clientDB.all(`INSERT INTO users(name, username, password, creation_date) VALUES ("${req.body.name}", "${req.body.email}", "${hashedPassword}", "${formatTime()}")`, [], err => {
+                
     })
 })
 
@@ -211,7 +207,10 @@ app.post('/signup', checkNotAuthenticated, async (req,res) => {
 app.get('/home', checkAuthenticated, (req, res) => { // to add checkAuthenticated
     gameDB.all('SELECT image_reference, airport_name, airport_icao FROM levels', [], (err, levels) => {
         if(err) add_user_log('ACCESS', err)
-        clientDB.all(`SELECT name, date, score, level, personID FROM leaderboard ORDER BY score DESC LIMIT 3;`, [], (err, leaderboard) => {
+        clientDB.all(`SELECT * FROM leaderboard LEFT JOIN privacy ON leaderboard.personID = privacy.personID ORDER BY score DESC LIMIT 3;`, [], (err, leaderboard) => {
+            leaderboard.forEach(leaderboardEntry => {
+                if(leaderboardEntry.leaderboard != 'global') leaderboard.splice(leaderboard.indexOf(leaderboardEntry), 1)
+            })
             if(err) add_user_log('ACCESS', err)
             clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => { // change 30 to current user
                 if(err) add_user_log('ACCESS', err)
@@ -222,7 +221,10 @@ app.get('/home', checkAuthenticated, (req, res) => { // to add checkAuthenticate
 })
 
 app.get('/leaderboard', checkAuthenticated, (req, res) => { // to add checkAuthenticated
-    clientDB.all(`SELECT name, date, score, level, personID FROM leaderboard ORDER BY score DESC;`, [], (err, leaderboard) => {
+    clientDB.all(`SELECT * FROM leaderboard LEFT JOIN privacy ON leaderboard.personID = privacy.personID ORDER BY score DESC;`, [], (err, leaderboard) => {
+        leaderboard.forEach(leaderboardEntry => {
+            if(leaderboardEntry.leaderboard == 'private') leaderboard.splice(leaderboard.indexOf(leaderboardEntry), 1)
+        })
         if(err) add_user_log('ACCESS', err)
         res.render('private/leaderboard.ejs', { leaderboard: leaderboard });
     })
@@ -260,7 +262,9 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAu
     } else if(req.params.page == 'general') {
         clientDB.get(`SELECT id, name, username, pfp, cover_image FROM users WHERE id = ${req.user.id}`,(err, user) => {
             if(err) add_user_log('PFP', err)
-            res.render('private/settings/general.ejs', { is_admin: req.user.is_admin, user: user, success: req.params.bool })
+            clientDB.get('SELECT id FROM history WHERE personID = ?', req.user.id, (err, history) => {
+                res.render('private/settings/general.ejs', { is_admin: req.user.is_admin, user: user, success: req.params.bool, history: history })
+            })
         })
     } else if(req.params.page == 'admin') {
         clientDB.all('SELECT * FROM logs WHERE type == "ACCESS"', [], (err, user_access_logs) => {
@@ -273,7 +277,13 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => { // to add checkAu
             })
         })
     } else if(req.params.page == 'privacy') {
-        res.render('private/settings/privacy', { is_admin: true }) 
+        clientDB.all(`SELECT * FROM privacy WHERE personID = ${req.user.id}`, [], (err, privacy) => {
+            res.render('private/settings/privacy', { is_admin: req.user.is_admin, user: req.user, privacy: privacy[0] }) 
+        })
+    } else if(req.params.page == 'version') {
+        clientDB.all('SELECT * FROM version_history ORDER BY date_added DESC', [], (err, version_history) => {
+            res.render('private/settings/versionHistory', { is_admin: req.user.is_admin, entries: version_history })
+        })
     } else {
         res.redirect('/error/settings')
     }
@@ -287,7 +297,6 @@ app.post('/backend/update/details/:id', checkAuthenticated, (req, res) => {
     }
     if(req.body.email_before != req.body.email) {
         clientDB.all(`UPDATE users SET username = "${req.body.email}" WHERE id = ${req.params.id};`, [], err => {
-            if(err) console.log(err);
         })
     }
 
@@ -313,63 +322,75 @@ app.post('/backend/update/details/:id', checkAuthenticated, (req, res) => {
 })
 
 app.post('/backend/update/user/:option/:id', checkAuthenticated, (req, res) => {
-    if(isImage(req.body.url)) {
-        if(req.params.option == 'profile-picture') {
-            clientDB.run(`UPDATE users SET pfp = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {})
+    if(req.params.option != 'privacy') {
+        if(isImage(req.body.url)) {
+            if(req.params.option == 'profile-picture') {
+                clientDB.run(`UPDATE users SET pfp = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {})
+            }
+            if(req.params.option == 'cover-picture') {
+                clientDB.run(`UPDATE users SET cover_image = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {})
+            }
+            res.send(`
+                <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/image/${req.params.id}">
+                    <div class="container">
+                        <img src="${req.body.url}" alt="" class="change_image changed">
+                    </div>
+                    <div class="container">
+                        <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black change_image_entry" value="${req.body.url}" style="background-color: green;" required>
+                        <button type="submit" style="width: 20%;">✔</button>
+                    </div>
+                </form>
+                <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+                <script>
+                    setTimeout(() => {
+                        $('.change_image').removeClass('changed')
+                    }, 500)
+                    setTimeout(() => {
+                        $('.change_image_entry').css('background-color', 'rgba(127, 127, 127, 0.266)')
+                    }, 1200)
+                </script>
+            `)
         }
-        if(req.params.option == 'cover-picture') {
-            clientDB.run(`UPDATE users SET cover_image = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {})
-        }
+    
+    } else {
+        clientDB.all(`UPDATE privacy SET profile = "${req.body.privacy_setting_profile}", history = "${req.body.privacy_setting_history}", leaderboard = "${req.body.privacy_setting_leaderboard}" WHERE personID = ${req.user.id}`, [], (err) => {
+            res.redirect('/settings/privacy')
+        })
     }
-
-    res.send(`
-        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/image/${req.params.id}">
-            <div class="container">
-                <img src="${req.body.url}" alt="" class="change_image changed">
-            </div>
-            <div class="container">
-                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black change_image_entry" value="${req.body.url}" style="background-color: green;" required>
-                <button type="submit" style="width: 20%;">✔</button>
-            </div>
-        </form>
-        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-        <script>
-            setTimeout(() => {
-                $('.change_image').removeClass('changed')
-            }, 500)
-            setTimeout(() => {
-                $('.change_image_entry').css('background-color', 'rgba(127, 127, 127, 0.266)')
-            }, 1200)
-        </script>
-    `)
 })
 
 app.post('/backend/reset/user/:option/:id', checkAuthenticated, (req, res) => {
     let defaultImage;
-    if(req.params.option == 'profile-picture') {
-        defaultImage = 'https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg?w=1800'
-        clientDB.run(`UPDATE users SET pfp = '${defaultImage}' WHERE id = ${req.params.id}`, [], err => {})
+    if(req.params.option == 'profile-picture' || req.params.option == 'cover-image') {
+        if(req.params.option == 'profile-picture') {
+            defaultImage = 'https://img.freepik.com/premium-vector/male-avatar-icon-unknown-anonymous-person-default-avatar-profile-icon-social-media-user-business-man-man-profile-silhouette-isolated-white-background-vector-illustration_735449-122.jpg?w=1800'
+            clientDB.run(`UPDATE users SET pfp = '${defaultImage}' WHERE id = ${req.params.id}`, [], err => {})
+        }
+        if(req.params.option == 'cover-image') {
+            defaultImage = 'https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D.jpg'
+            clientDB.run(`UPDATE users SET cover_image = '${defaultImage}' WHERE id = ${req.params.id}`, [], err => {})
+        }
+        res.send(`
+            <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/${req.params.option}/${req.params.id}">
+                <h1 class="title tcenter">${req.params.option}</h1>
+                <img src="${defaultImage}" alt="" class="changed changed_image">
+                <button type="submit" class="reset-image" style="background-color: green;">Reset</button>
+            </form>
+            <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+            <script>
+                setTimeout(() => {
+                    $('.reset-image').css('background-color', 'white')
+                }, 1200)
+                setTimeout(() => {
+                    $('.changed_image').removeClass('changed')
+                }, 500)
+            </script>
+        `)
+    } else {
+        clientDB.all('DELETE FROM leaderboard WHERE personID = ?', req.user.id, err => {  })
+        clientDB.all('DELETE FROM history WHERE personID = ?', req.user.id, err => {  })
+        res.redirect('/settings/general')
     }
-    if(req.params.option == 'cover-image') {
-        defaultImage = 'https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D.jpg'
-        clientDB.run(`UPDATE users SET cover_image = '${defaultImage}' WHERE id = ${req.params.id}`, [], err => {})
-    }
-    res.send(`
-        <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/${req.params.option}/${req.params.id}">
-            <h1 class="title tcenter">${req.params.option}</h1>
-            <img src="${defaultImage}" alt="" class="changed changed_image">
-            <button type="submit" class="reset-image" style="background-color: green;">Reset</button>
-        </form>
-        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-        <script>
-            setTimeout(() => {
-                $('.reset-image').css('background-color', 'white')
-            }, 1200)
-            setTimeout(() => {
-                $('.changed_image').removeClass('changed')
-            }, 500)
-        </script>
-    `)
 })
 
 app.get('/settings/admin/p/:id', checkAuthenticated, (req, res) => {
@@ -378,7 +399,6 @@ app.get('/settings/admin/p/:id', checkAuthenticated, (req, res) => {
         clientDB.all('SELECT id, cover_image, pfp, name, username, last_played, best_played, points, creation_date, is_admin FROM users WHERE id = ?', req.params.id, (err, user) => {
             if(err) user_access_logs('ACCESS', err)
             clientDB.all('SELECT * FROM history WHERE personID = ?', req.params.id, (err, history) => {
-                console.log(`History:\n${JSON.stringify(history)}`);
                 if(err) user_access_logs('ACCESS', err)
                 res.render('private/settings/manage_profile.ejs', { user: user, leaderboard: leaderboard, history: history, is_admin: req.user.is_admin, userID: req.user.id })
             })

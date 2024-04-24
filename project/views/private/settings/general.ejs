@@ -66,12 +66,16 @@
                         <button type="submit">Apply changes</button>
                     </form>
                 </section>
-                <section>
-                    <h1 class="title">Reset</h1>
-                    <p class=" m10 tcenter">If you delete history, the leaderboard must be deleted due to backend links</p>
-                    <button><a href="#" style="color: red;">Reset history and leaderboard</a></button>
-                    <p class="tcenter m10">Contact an admin to delete individual history entries</p>
-                </section>
+                <%_ if(history != undefined) { %>
+                    <section>
+                        <h1 class="title">Reset</h1>
+                        <p class=" m10 tcenter">If you delete history, the leaderboard must be deleted due to backend links</p>
+                        <form action="/backend/reset/user/lboard_history/<%= user.id %>" method="POST">
+                            <button style="color: red;">Reset history and leaderboard</button>
+                        </form>
+                        <p class="tcenter m10">Contact an admin to delete individual history entries</p>
+                    </section>
+                <%_ } %>
             </div>
         </section>
     </div>

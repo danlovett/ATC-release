@@ -832,6 +832,39 @@ input{
 }
 
 
+/* PRIVACY */
+
+#privacy-form {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+select {
+    width: 60%;
+    font-size: 15px;
+    margin-right: 0;
+    /* display: block; */
+    text-align: center;
+    background-color: grey;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+option {
+    padding: 20px 0;
+}
+
+label {
+    color: white;
+    margin-left: 0;
+}
+
+.container-flex {
+    padding: 20px 0;
+    display: flex;
+}
+
+
 .bg-blue {
     background: linear-gradient(90deg, rgb(6, 0, 120) 0%, rgb(61, 61, 151) 38%, rgb(136, 72, 181)100%);
 }
