@@ -5,8 +5,13 @@
     box-sizing: border-box;
 }
 
+body {
+    height: max-content;
+}
+
 .sections {
     padding-top: 18vh;
+    padding-bottom: 20px;
 }
 
 a {
@@ -107,7 +112,7 @@ h4 {
 }
 
 section {
-    width: 96%;
+    width: 100%;
     border: 2px solid rgba(103, 103, 103, 0.1);
     box-shadow: 0 0 20px rgba(8,7,16,0.8);
     border-radius: 10px;
@@ -225,7 +230,7 @@ button:hover {
 }
 
 .content {
-    margin: 10px;
+    margin: 0 10px;
 }
 
 a {
@@ -257,7 +262,7 @@ a {
 }
 
 .sidebar {
-    margin: 10px 0;
+    margin-top: 0;
     width: 100%;
     height: fit-content;
     padding: 20px;
@@ -268,11 +273,10 @@ a {
 }
 
 #profile-top-container {
-    width: 100%;
     height: 15em;
     position: relative;
     background-color: #3131319d;
-    margin: 0 10px;
+    margin-bottom: 10px;
     border-radius: 10px;
 }
 
@@ -323,17 +327,14 @@ a {
 
 .profile-inner {
     overflow: hidden;
+    width: 100%;
 }
 
 .profile-inner section {
     width: 100%;
 }
 
-#profile-details {
-    width: 100%;
-}
-
-#profile-details img {
+.sidebar img {
     width: inherit;
     border-radius: 10px;
 }
@@ -444,7 +445,7 @@ a {
 
 .container-grid-split-middle {
     display: grid;
-    grid-template-columns: 48% 4% 48%;
+    grid-template-columns: 50% 50%;
     align-content: center;
 }
 
@@ -535,6 +536,7 @@ a {
 .content #person img {
     height: 7em;
     object-fit: cover;
+    border-radius: 10px;
 }
 
 /* LEVELS PAGE CSS */
@@ -791,7 +793,7 @@ input{
 
 .details {
     margin-top: 0;
-    width: 90%;
+    width: 100%;
 }
 
 .details section {
@@ -828,7 +830,7 @@ input{
 }
 
 #friend-details {
-    margin-top: auto;
+    margin-top: 0;
 }
 
 
@@ -864,6 +866,13 @@ label {
     display: flex;
 }
 
+
+/* SETUP PAGES */
+
+.setup-middle {
+    margin: auto;
+    margin-top: 20%;
+}
 
 .bg-blue {
     background: linear-gradient(90deg, rgb(6, 0, 120) 0%, rgb(61, 61, 151) 38%, rgb(136, 72, 181)100%);

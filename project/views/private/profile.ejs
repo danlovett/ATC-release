@@ -8,14 +8,9 @@
 <body class="bg-blue">
     <%- include('navbar.ejs') -%>
     <div class="sections">
-        <%_ if(current_user == user.id) { %>
-            <h1 class="page-title">Your Profile</h1>
-            <p><a href="/settings/profile">See more about your profile</a></p>
-        <%_ } else { %>
-            <h1 class="page-title"><%= user.name %>'s Profile</h1>
-        <%_ } %>
+        <h1 class="page-title"><%= user.name %>'s Profile</h1>
         <section class="settings main-section">
-            <div id="profile-details">
+            <div class="sidebar">
                 <img src="<%= user.pfp %>" id="other-profile-img" alt="">
                 <div id="profile-top-container" style="height: 10em; margin: 0;">
                     <img src="<%= user.cover_image %>" alt="" id="profile-top-img">
@@ -31,60 +26,71 @@
                     <p class="tcenter"><%= user.username %></p>
                 </div> -->
             </div>
-            <div class="details" id="friend-details">
-                <%_ if(JSON.stringify(leaderboard) != '[]') { %>
-                    <section class="profile-section transform-105">
-                        <p class="tcenter">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
-                    </section>
-                <%_ } else { %>
-                    <p style="text-align: center; padding: 20px;">No leaderboard entry for <%= user.name.split(' ')[0] %></p>
-                <%_ } %>
-                <%_ if(JSON.stringify(history) != '[]') { %>
-                    <section class="profile-section transform-105">
-                        <h1 class="title" style="margin-bottom: 10px;">History</h1>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Level</th>
-                                    <th>Date</th>
-                                    <th>Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <%_ for(i in history) { %>
+            <div class="content">
+                <div class="details" id="friend-details">
+                    <%_ if(is_friend) { %>
+                        <section class="profile-section" style="background-color: rgb(71, 184, 71);">
+                            <p class="tcenter">✔ Friends</p>
+                        </section>
+                    <%_ } else { %>
+                        <section class="profile-section" style="background-color: rgb(184, 71, 71);">
+                            <p class="tcenter">Not friends <a href="/add_friend/<%= user.id %>">Send request</a></p>
+                        </section>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(leaderboard) != '[]') { %>
+                        <section class="profile-section">
+                            <p class="tcenter">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px;">No leaderboard entry for <%= user.name.split(' ')[0] %></p>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(history) != '[]') { %>
+                        <section class="profile-section">
+                            <h1 class="title" style="margin-bottom: 10px;">History</h1>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td><%= history[i].level %></td>
-                                        <td><%= history[i].date %></td>
-                                        <td><%= history[i].score %></td>
+                                        <th>Level</th>
+                                        <th>Date</th>
+                                        <th>Score</th>
                                     </tr>
-                                <%_ } %>
-                            </tbody>
-                        </table>
-                    </section>
-                <%_ } else { %>
-                    <p style="text-align: center; padding: 20px;">No history for <%= user.name.split(' ')[0] %></p>
-                <%_ } %>
-                <%_ if(JSON.stringify(followers) != '[]') { %>
-                    <section class="profile-section transform-105">
-                        <h1 class="title" style="margin-bottom: 10px;">Friends</h1>
-                        <table>
-                            <tbody>
-                                <%_ for(i in followers) { %>
-                                    <tr>
-                                        <td style="width: 100%; display: flex;">
-                                            <img src="<%= followers[i].pfp %>" alt="pic" style="height: auto; width: 30%; border-radius: 10px;">
-                                        </td>
-                                        <td style="width: 50%;">
-                                            <p class="name"><%= followers[i].name %></p>
-                                        </td>
-                                    </tr>
-                                <%_ } %>
-                            </tbody>
-                        </table>
-                    </section>
-                <%_ } else { %>
-                    <p style="text-align: center; padding: 20px;">No followers for <%= user.name.split(' ')[0] %></p>
-                <%_ } %>
+                                </thead>
+                                <tbody>
+                                    <%_ for(i in history) { %>
+                                        <tr>
+                                            <td><%= history[i].level %></td>
+                                            <td><%= history[i].date %></td>
+                                            <td><%= history[i].score %></td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px;">No history for <%= user.name.split(' ')[0] %></p>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(followers) != '[]') { %>
+                        <section class="profile-section">
+                            <h1 class="title" style="margin-bottom: 10px;">Friends</h1>
+                            <table>
+                                <tbody>
+                                    <%_ for(i in followers) { %>
+                                        <tr>
+                                            <td style="width: 100%; display: flex;">
+                                                <img src="<%= followers[i].pfp %>" alt="pic" style="height: auto; width: 30%; border-radius: 10px;">
+                                            </td>
+                                            <td style="width: 50%;">
+                                                <p class="name"><%= followers[i].name %></p>
+                                            </td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px;">No followers for <%= user.name.split(' ')[0] %></p>
+                    <%_ } %>
+                </div>
             </div>
         </section>
     </div>

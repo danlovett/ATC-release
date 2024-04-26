@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[current_user]'s Homepage</title>
+    <link rel="stylesheet" href="/css/private.css">
+</head>
+<body class="bg-main" style="height: 100vh;">
+    <section class="main-section setup-middle">
+        <section style="padding: 20px 0;">
+            <h1 class="tcenter">Welcome to your new profile!</h1>
+            <p class="tcenter">It's great to have you here</p>
+        </section>
+        <section style="margin: 20px 0;">
+            <div class="container-grid-split-middle">
+                <div class="w100">
+                    <h1 class="title">
+                        Change profile picture
+                    </h1>
+                    <div class="edit">
+                        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/profile-picture/">
+                            <div class="container">
+                                <img src="<%= user.pfp %>" alt="">
+                            </div>
+                            <div class="container">
+                                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" value="<%= user.pfp %>" required>
+                                <button type="submit" style="width: 20%;">✔</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="w100">
+                    <h1 class="title">
+                        Change cover image
+                    </h1>
+                    <div class="edit">
+                        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/profile-picture/">
+                            <div class="container">
+                                <img src="<%= user.cover_image %>" alt="">
+                            </div>
+                            <div class="container">
+                                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" value="<%= user.cover_image %>" required>
+                                <button type="submit" style="width: 20%;">✔</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <button><a href="/account/setup/privacy">Next</a></button>
+    </section>
+</body>
