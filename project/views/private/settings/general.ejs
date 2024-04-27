@@ -13,10 +13,10 @@
             <h1 style="text-align: center;"><%_ if(success == "true") { %> Updated <span style="color: green;">✔</span> <%_ } %></h1>
             <p style="padding:10px; text-align: center;">Managing profile settings</p>
         </div>
-        <section class="profile settings main-section">
+        <section class="grid-30-70 main-section">
             <%- include('sidebar.ejs') -%>
-            <div class="content">
-                <section class="profile-inner">
+            <div class="content content-child">
+                <section>
                     <h1 class="title">
                         Change profile picture
                     </h1>
@@ -34,7 +34,7 @@
                         </form>
                     </div>
                 </section>
-                <section class="profile-inner">
+                <section>
                     <h1 class="title">
                         Change cover picture
                     </h1>

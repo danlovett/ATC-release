@@ -12,12 +12,12 @@
             <h1 class="page-title">Friends</h1>
             <p style="padding: 10px; text-align: center;">See all friend details here</p>
         </div>
-        <section class="profile settings main-section">
+        <section class="grid-30-70 main-section">
             <%- include('sidebar.ejs') -%>
             <%_ if(JSON.stringify(followers) == '[]' && JSON.stringify(following) == '[]' && JSON.stringify(follower_requests) == '[]' && JSON.stringify(requested_followers) == '[]') { %>
                 <p style="text-align: center; margin-top: auto;">Nothing here. Either wait for requests or <a href="/search">search</a> for people.</p>
             <%_ } else { %>
-                <div class="content">
+                <div class="content content-child">
                     <%_ if(JSON.stringify(follower_requests) != '[]') { %>
                         <section>
                             <h1 class="title">Incoming requests</h1>
@@ -32,15 +32,22 @@
                                     <%_ for(i in follower_requests) { %>
                                         <tr>
                                             <td id="person">
-                                                <img src="<%= follower_requests[i].pfp %>" alt="">
-                                                <a href="/profile/<%= follower_requests[i].id %>">
-                                                    <p><%= follower_requests[i].name %></p>
-                                                    <p><%= follower_requests[i].username %></p>
-                                                </a>
+                                                <div id="profile-top-container">
+                                                    <a href="/profile/<%= follower_requests[i].id %>">
+                                                        <img src="<%= follower_requests[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
+                                                        <div id="profile-top-details">
+                                                            <img src="<%= follower_requests[i].pfp %>" id="profile-picture" alt="">
+                                                            <div class="container">
+                                                                <p><%= follower_requests[i].name %></p>
+                                                                <p><%= follower_requests[i].username %></p>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
                                             </td>
                                             <td>
-                                                <a href="/accept_request/<%= follower_requests[i].id %>" class="transform-120">Accept</a>
-                                                <a href="/reject_friend/<%= follower_requests[i].id %>" class="transform-120">Reject</a>
+                                                <p class="m10"><a href="/accept_request/<%= follower_requests[i].id %>" style="color: green;">Accept</a></p>
+                                                <p class="m10"><a href="/reject_friend/<%= follower_requests[i].id %>" style="color: red;">Reject</a></p>
                                             </td>
                                         </tr>
                                     <%_ } %>
@@ -62,11 +69,18 @@
                                     <%_ for(i in following) { %>
                                         <tr>
                                             <td id="person">
-                                                <img src="<%= following[i].pfp %>" alt="">
-                                                <a href="/profile/<%= following[i].id %>">
-                                                    <p><%= following[i].name %></p>
-                                                    <p><%= following[i].username %></p>
-                                                </a>
+                                                <div id="profile-top-container">
+                                                    <a href="/profile/<%= following[i].id %>">
+                                                        <img src="<%= following[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
+                                                        <div id="profile-top-details">
+                                                            <img src="<%= following[i].pfp %>" id="profile-picture" alt="">
+                                                            <div class="container">
+                                                                <p><%= following[i].name %></p>
+                                                                <p><%= following[i].username %></p>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
                                             </td>
                                             <td><%= following[i].creation_date.substr(0, 10) %></td>
                                             <td><a href="/remove_following/<%= following[i].id %>" class="transform-120">X</a></td>
@@ -90,11 +104,18 @@
                                     <%_ for(i in followers) { %>
                                         <tr>
                                             <td id="person">
-                                                <img src="<%= followers[i].pfp %>" alt="">
-                                                <a href="/profile/<%= followers[i].id %>">
-                                                    <p><%= followers[i].name %></p>
-                                                    <p><%= followers[i].username %></p>
-                                                </a>
+                                                <div id="profile-top-container">
+                                                    <a href="/profile/<%= followers[i].id %>">
+                                                        <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
+                                                        <div id="profile-top-details">
+                                                            <img src="<%= followers[i].pfp %>" id="profile-picture" alt="">
+                                                            <div class="container">
+                                                                <p><%= followers[i].name %></p>
+                                                                <p><%= followers[i].username %></p>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
                                             </td>
                                             <td><%= followers[i].creation_date.substr(0, 10) %></td>
                                             <td><a href="/remove_follower/<%= followers[i].id %>" class="transform-120">X</a></td>
@@ -118,11 +139,18 @@
                                     <%_ for(i in requested_followers) { %>
                                         <tr>
                                             <td id="person">
-                                                <img src="<%= requested_followers[i].pfp %>" alt="">
-                                                <a href="/profile/<%= requested_followers[i].id %>">
-                                                    <p><%= requested_followers[i].name %></p>
-                                                    <p><%= requested_followers[i].username %></p>
-                                                </a>
+                                                <div id="profile-top-container">
+                                                    <a href="/profile/<%= requested_followers[i].id %>">
+                                                        <img src="<%= requested_followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
+                                                        <div id="profile-top-details">
+                                                            <img src="<%= requested_followers[i].pfp %>" id="profile-picture" alt="">
+                                                            <div class="container">
+                                                                <p><%= requested_followers[i].name %></p>
+                                                                <p><%= requested_followers[i].username %></p>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+                                                </div>
                                             </td>
                                             <td><a href="/remove_request/<%= requested_followers[i].id %>" id="remove-request" class="transform-120">X</a></td>
                                         </tr>

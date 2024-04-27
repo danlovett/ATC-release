@@ -15,7 +15,7 @@
             <h1 class="tcenter">Welcome to your new profile!</h1>
             <p class="tcenter">It's great to have you here</p>
         </section>
-        <form id="privacy-form" action="/backend/update/user/privacy/<%= user.id %>" method="POST" style="margin-bottom: 20px;">
+        <form id="privacy-form" action="/account/setup/privacy" method="POST" style="margin-bottom: 20px;">
             <div class="container-flex">
                 <label for="privacy_setting_profile">Who can view your Profile?</label>
                 <select id="privacy_setting_profile_select" name="privacy_setting_profile">
@@ -39,23 +39,14 @@
                     <option id="leaderboard_private" value="private">Private</option>
                 </select>
             </div>
-            <button type="submit">Submit</button>
+            <div class="container-flex">
+                <label for="privacy_setting_friends">Who can view your Friends?</label>
+                <select id="privacy_setting_friends_select" name="privacy_setting_friends">
+                    <option id="friends_everyone" value="global">Everyone</option>
+                    <option id="friends_private" value="private">Private</option>
+                </select>
+            </div>
+            <button>Next</button>
         </form>
-        <button><a href="/account/setup/finish">Finish</a></button>
     </section>
-
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
-        $('#privacy_setting_profile_select').val(`${$('#profile_visibility').text()}`).attr('selected', true)
-        $('#privacy_setting_history_select').val(`${$('#history_visibility').text()}`).attr('selected', true)
-        $('#privacy_setting_leaderboard_select').val(`${$('#leaderboard_visibility').text()}`).attr('selected', true)
-
-        $('#privacy_setting_profile_select').on('change', () => {
-            if($('#profile_friends').is(':selected')) {
-                $('#history_everyone').remove()
-            } else if($('#profile_everyone').is(':selected')) {
-                $('#privacy_setting_history_select').prepend(`<option id="history_everyone" value="global">Everyone</option>`)
-            }
-        })
-    </script>
 </body>

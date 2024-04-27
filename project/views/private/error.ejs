@@ -8,12 +8,16 @@
 <body class="bg-vibrant">
     <%- include('navbar.ejs') -%>
     <div class="sections">
-        <p></p>
-        <section style="height: 50vh;">
-            <h1 class="title transform-105" style="text-align: center;">404 Not Found.</h1>
-            <p style="padding-top: 100px; text-align: center;">Oops. Something in the <%= message %> section didn't like that!</p>
-            <p style="padding: 50px; text-align: center;">We're working hard to fix it.</p>
-            <button class="transform-120"><a onclick="javascript:window.history.back(-3);return false;" style="all: unset;">< Go back</a></button>
+        <section class="main-section">
+            <%_ if(message == 'privacy') { %>
+                <h1 class="title tcenter">Privacy error</h1>
+                <p class="tcenter m10">You are unable to access this page as the user has modified their privacy settings</p>
+            <%_ } else { %>
+                <h1 class="title" style="text-align: center;">404 Not Found.</h1>
+                <p style="padding-top: 100px; text-align: center;">Oops. Something in the <%= message %> section didn't like that!</p>
+                <p style="padding: 50px; text-align: center;">We're working hard to fix it.</p>
+            <%_ } %>
+            <button style="margin-top: 20px;"><a onclick="javascript:window.history.back(-3);return false;" style="all: unset;">< Go back</a></button>
         </section>
     </div>
 </body>

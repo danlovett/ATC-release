@@ -12,10 +12,10 @@
             <h1 class="page-title">Your Profile</h1>
             <p style="padding: 10px; text-align: center;">Manage these details in the <a href="/settings/general">general</a> tab</p>
         </div>
-        <section class="profile settings main-section">
+        <section class="grid-30-70 main-section">
             <%- include('sidebar.ejs') -%>
             <div class="content">
-                <div class="profile-inner">
+                <div class="content-child">
                     <div id="profile-top-container">
                         <img src="<%= user.cover_image %>" alt="" id="profile-top-img">
                         <div id="profile-top-details">
@@ -26,61 +26,59 @@
                             </div>
                         </div>
                     </div>
-                    <div class="content">
-                        <%_ if(JSON.stringify(leaderboard) != '[]') { %>
-                            <section>
-                                <p style="text-align: center;">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
-                            </section>
-                        <%_ } else { %>
-                            <p style="text-align: center; padding: 20px; cursor: pointer;">You have no leadboard entry, <a href="/levels">play now</a>.</p>
-                        <%_ } %>
-                        <%_ if(JSON.stringify(history) != '[]') { %>
-                            <section>
-                                <h1 class="title" style="margin-bottom: 10px;">History</h1>
-                                <table>
-                                    <thead>
+                    <%_ if(JSON.stringify(leaderboard) != '[]') { %>
+                        <section>
+                            <p style="text-align: center;">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px; cursor: pointer;">You have no leadboard entry, <a href="/levels">play now</a>.</p>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(history) != '[]') { %>
+                        <section>
+                            <h1 class="title" style="margin-bottom: 10px;">History</h1>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Level</th>
+                                        <th>Date</th>
+                                        <th>Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%_ for(i in history) { %>
                                         <tr>
-                                            <th>Level</th>
-                                            <th>Date</th>
-                                            <th>Score</th>
+                                            <td><%= history[i].level %></td>
+                                            <td><%= history[i].date %></td>
+                                            <td><%= history[i].score %></td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        <%_ for(i in history) { %>
-                                            <tr>
-                                                <td><%= history[i].level %></td>
-                                                <td><%= history[i].date %></td>
-                                                <td><%= history[i].score %></td>
-                                            </tr>
-                                        <%_ } %>
-                                    </tbody>
-                                </table>
-                            </section>
-                        <%_ } else { %>
-                            <p style="text-align: center; padding: 20px; cursor: pointer;">You have no history, <a href="/levels">play now</a>.</p>
-                        <%_ } %>
-                        <%_ if(JSON.stringify(followers) != '[]') { %>
-                            <section class="ransform-105">
-                                <h1 class="title" style="margin-bottom: 10px;">Friends</h1>
-                                <table>
-                                    <tbody>
-                                        <%_ for(i in followers) { %>
-                                            <tr>
-                                                <td>
-                                                    <img src="<%= followers[i].pfp %>" alt="pic" style="height: auto; width: 30%; border-radius: 10px;">
-                                                </td>
-                                                <td style="width: 50%;">
-                                                    <a href="/profile/<%= followers[i].id %>" style="cursor: pointer;"><%= followers[i].name %></a>
-                                                </td>
-                                            </tr>
-                                        <%_ } %>
-                                    </tbody>
-                                </table>
-                            </section>
-                        <%_ } else { %>
-                            <p style="text-align: center; padding: 20px; cursor: pointer;">You have not added any friends, <a href="/search">add friends</a>!</p>
-                        <%_ } %>
-                    </div>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px; cursor: pointer;">You have no history, <a href="/levels">play now</a>.</p>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(followers) != '[]') { %>
+                        <section class="ransform-105">
+                            <h1 class="title" style="margin-bottom: 10px;">Friends</h1>
+                            <table>
+                                <tbody>
+                                    <%_ for(i in followers) { %>
+                                        <tr>
+                                            <td>
+                                                <img src="<%= followers[i].pfp %>" alt="pic" style="height: auto; width: 30%; border-radius: 10px;">
+                                            </td>
+                                            <td style="width: 50%;">
+                                                <a href="/profile/<%= followers[i].id %>" style="cursor: pointer;"><%= followers[i].name %></a>
+                                            </td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px; cursor: pointer;">You have not added any friends, <a href="/search">add friends</a>!</p>
+                    <%_ } %>
                 </div>
             </div>
         </section>

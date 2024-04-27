@@ -170,12 +170,6 @@ section:nth-child(odd) {
     color: white;
 }
 
-.title:hover {
-    background-color: rgba(67, 67, 67, 0.8);
-    border: 2px solid rgb(255, 255, 255);
-    transition: 0.5s 
-}
-
 button{
     width: 100%;
     background-color: #d3d3d3;
@@ -230,7 +224,11 @@ button:hover {
 }
 
 .content {
-    margin: 0 10px;
+    margin: 0;
+}
+
+.content-child {
+    margin-left: 10px;
 }
 
 a {
@@ -238,11 +236,6 @@ a {
     cursor: pointer;
     display: block;
     width: inherit;
-}
-
-.settings {
-    display: grid;
-    grid-template-columns: 30% 70%;
 }
 
 .sections p a {
@@ -325,18 +318,11 @@ a {
     object-fit: cover;
 }
 
-.profile-inner {
-    overflow: hidden;
-    width: 100%;
-}
-
-.profile-inner section {
-    width: 100%;
-}
-
 .sidebar img {
+    height: 200px;
     width: inherit;
     border-radius: 10px;
+    object-fit: cover;
 }
 
 .items {
@@ -533,6 +519,10 @@ a {
     object-fit: cover;
 }
 
+#person {
+    width: 100%;
+}
+
 .content #person img {
     height: 7em;
     object-fit: cover;
@@ -635,7 +625,7 @@ form *{
     border: none;
 }
 
-input{
+input {
     display: block;
     height: 100%;
     width: 100%;
@@ -740,34 +730,6 @@ input{
     margin-right: 0;
 }
 
-.profile {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    height: 100%;
-}
-
-.profile .container {
-    width: 100%;
-    margin-top: 0;
-    height: 100%;
-    display: block;
-    max-height: 500px;
-}
-
-.profile .container img {
-    height: auto;
-    width: 100%;
-}
-
-.profile .profile-section {
-    width: 100%;
-    margin-left: 0;
-    margin-top: 0;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.557);
-    transition: 0.5s;
-}
-
 .edit {
     display: flex;
     flex-wrap: wrap;
@@ -812,8 +774,9 @@ input{
 }
 
 .friends img {
-    height: 50px;
-    width: auto;
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
     margin-right: 10px;
     margin-top: auto;
     margin-bottom: auto;
@@ -847,7 +810,7 @@ select {
     margin-right: 0;
     /* display: block; */
     text-align: center;
-    background-color: grey;
+    background-color: rgb(182, 182, 182);
     padding: 20px;
     border-radius: 10px;
 }
@@ -936,6 +899,14 @@ label {
     transition: 0.5s;
 }
 
+.color-red {
+    color: red;
+}
+
+.weight-600 {
+    font-weight: 600;
+}
+
 .cursor-pointer:hover {
     cursor: pointer;
 }
@@ -965,9 +936,67 @@ label {
     width: 100%;
 }
 
+.grid-30-70 {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    height: 100%;
+}
+
+.container {
+    width: 100%;
+    margin-top: 0;
+    height: 100%;
+    display: block;
+    max-height: 500px;
+}
+
+.container img {
+    height: auto;
+    width: 100%;
+}
+
+.profile-section {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.557);
+    transition: 0.5s;
+}
+
 textarea {
     height: auto;
     width: 100%;
     overflow-y: scroll;
     resize: none;
+}
+
+/* NEW USER */
+
+#new-user-form  {
+    margin-bottom: 20px;
+}
+
+#new-user-form input {
+    height: 50px;
+    border-radius: 15px;
+}
+
+#new-user-form .edit {
+    display: grid;
+    align-content: space-between;
+    padding: 20px;
+}
+
+.new-user-form-revert {
+    padding: 10px 30px;
+    background-color: rgb(182, 182, 182);
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+.new-user-form-revert:hover {
+    cursor: pointer;
+    background-color: white;
+    transition: 0.5s;
 }

@@ -8,46 +8,62 @@
 </head>
 <body class="bg-main" style="height: 100vh;">
     <section class="main-section setup-middle">
+        <span id="default-pfp" style="display: none;"><%= user.pfp %></span>
+        <span id="default-cover-image" style="display: none;"><%= user.cover_image %></span>
         <section style="padding: 20px 0;">
             <h1 class="tcenter">Welcome to your new profile!</h1>
-            <p class="tcenter">It's great to have you here</p>
+            <%_ if(message) {%>
+                <p class="tcenter color-red">Make sure that an image is showing above the inputs before you continue.</p>
+            <%_ } else { %>
+                <p class="tcenter">It's great to have you here</p>
+            <%_ } %>
         </section>
         <section style="margin: 20px 0;">
-            <div class="container-grid-split-middle">
-                <div class="w100">
-                    <h1 class="title">
-                        Change profile picture
-                    </h1>
-                    <div class="edit">
-                        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/profile-picture/">
-                            <div class="container">
-                                <img src="<%= user.pfp %>" alt="">
-                            </div>
-                            <div class="container">
-                                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" value="<%= user.pfp %>" required>
-                                <button type="submit" style="width: 20%;">✔</button>
-                            </div>
-                        </form>
+            <form action="/account/setup/details" method="POST" style="padding: 10px;">
+                <div class="container-grid-split-middle" id="new-user-form">
+                    <div class="edit w100" style="display: grid;">
+                        <h1 class="title" style="display: grid; grid-template-columns: 70% 30%; width: 100%; align-items: center;">Change profile picture <p class="new-user-form-revert" id="revert-pfp" style="color: black;">Default</p></h1>
+                        <img src="<%= user.pfp %>" alt="No image found." id="output-pfp">
+                        <input id="input-pfp" type="url" name="pfp" placeholder="Link" class="fs15 text-center color-black" value="<%= user.pfp %>" required>
+                    </div>
+                    <div class="edit w100" style="display: grid;">
+                        <h1 class="title" style="display: grid; grid-template-columns: 70% 30%; width: 100%; align-items: center;">Change cover image <p class="new-user-form-revert" id="revert-cover-image" style="color: black;">Default</p></h1>
+                        <img src="<%= user.cover_image %>" alt="No image Found." id="output-cover-image">
+                        <input id="input-cover-image" type="url" name="cover_image" placeholder="Link" class="fs15 text-center color-black" value="<%= user.cover_image %>" required>
                     </div>
                 </div>
-                <div class="w100">
-                    <h1 class="title">
-                        Change cover image
-                    </h1>
-                    <div class="edit">
-                        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/profile-picture/">
-                            <div class="container">
-                                <img src="<%= user.cover_image %>" alt="">
-                            </div>
-                            <div class="container">
-                                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" value="<%= user.cover_image %>" required>
-                                <button type="submit" style="width: 20%;">✔</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+                <button>Next</button>
+            </form>
         </section>
-        <button><a href="/account/setup/privacy">Next</a></button>
     </section>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script>
+        $('#input-pfp').on('keyup', () => {
+            console.log($('#input-pfp').val());
+            $('#output-pfp').attr('src', `${$('#input-pfp').val()}`)
+        })
+        $('#input-cover-image').on('keyup', () => {
+            console.log($('#input-cover-image').val());
+            $('#output-cover-image').attr('src', `${$('#input-cover-image').val()}`)
+        })
+        $('#revert-pfp').click(() => {
+            $('#output-pfp').addClass('changed')
+
+            $('#input-pfp').val(`${$('#default-pfp').text()}`)
+            $('#output-pfp').attr('src', `${$('#default-pfp').text()}`)
+            setTimeout(() => {
+                $('#output-pfp').removeClass('changed')
+            }, 500)
+        })
+        $('#revert-cover-image').click(() => {
+            $('#output-cover-image').addClass('changed')
+
+            $('#input-cover-image').val(`${$('#default-cover-image').text()}`)
+            $('#output-cover-image').attr('src', `${$('#default-cover-image').text()}`)
+            setTimeout(() => {
+                $('#output-cover-image').removeClass('changed')
+            }, 500)
+        })
+    </script>
 </body>

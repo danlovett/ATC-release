@@ -38,7 +38,7 @@
                                             <%_ if(users[i].status == 'Requested' && users[i].lead_user == current_user) { %>
                                                 <p>Requested <%= users[i].creation_date.substr(0,10) %></p>
                                             <%_ } else if(users[i].status == 'Active' && users[i].lead_user == current_user) { %>
-                                                <button>Active</button>
+                                                <p>Active since <%= users[i].creation_date.substr(0, 10) %></p>
                                             <%_ } else { %>
                                                 <button><a href="/add_friend/<%= users[i].id %>">Request</a></button>
                                             <%_ } %>
