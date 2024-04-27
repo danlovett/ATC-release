@@ -16,10 +16,10 @@
             <h1 class="page-title">Privacy</h1>
             <p style="padding: 10px; text-align: center;">Manage your privacy details here</p>
         </div>
-        <section class="grid-30-70 main-section">
+        <div class="content-settings">
             <%- include('sidebar.ejs') -%>
-            <div class="content content-child">
-                <section>
+            <section class="main-section main-section-settings">
+                <div class="content content-child">
                     <h1 class="title">Edit settings</h1>
                     <form id="privacy-form" action="/backend/update/user/privacy/<%= user.id %>" method="POST">
                         <div class="container-flex">
@@ -55,9 +55,9 @@
                         </div>
                         <button type="submit">Submit</button>
                     </form>
-                </section>
-            </div>
-        </section>
+                </div>
+            </section>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>

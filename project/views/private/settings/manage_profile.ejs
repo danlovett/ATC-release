@@ -12,125 +12,127 @@
             <h1 class="page-title">Manage user</h1>
             <p style="padding: 10px; text-align: center;">Manage <%= user[0].name %></p>
         </div>
-        <section class="grid-30-70 main-section">
+        <div class="content-settings">
             <%- include('sidebar.ejs') -%>
-            <section style="margin-left: 20px;">
-                <p style="margin: 10px; text-align: center;">This section may have missing features/bugs</p>
-                <section class="w100">
-                    <h1 class="title" style="margin-bottom: 20px;">User Details
-                        <br>
-                        <span style="font-size: 13px; color: rgb(184, 184, 184);">ID: <%= user[0].id %></span>
-                        <br>
-                        <span style="font-size: 13px; color: rgb(184, 184, 184);">Created: <%= user[0].creation_date %></span>
-                    </h1>
-                    <div class="container-grid-split-middle">
-                        <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/profile-picture/<%= user[0].id %>">
-                            <h1 class="title tcenter">profile-picture</h1>
-                            <input type="text" name="url" style="display: none;" value="<%= user[0].pfp %>">
-                            <img src="<%= user[0].pfp %>" alt="">
-                            <button type="submit">Reset</button>
-                        </form>
-                        <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/cover-image/<%= user[0].id %>">
-                            <h1 class="title tcenter">cover-image</h1>
-                            <input type="text" name="url" style="display: none;" value="<%= user[0].cover_image %>">
-                            <img src="<%= user[0].cover_image %>" alt="">
-                            <button type="submit">Reset</button>
-                        </form>
-
-                    </div>
+            <section class="main-section main-section-settings">
+                <div class="content content-child">
+                    <p style="margin: 10px; text-align: center;">This section may have missing features/bugs</p>
                     <section class="w100">
-                        <h4 class="title">Edit details</h4>
-                        <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/details/<%= user[0].id %>">
-                            <div class="field">
-                                <p class="fs15">Name</p>
-                                <input name="name_before" value="<%= user[0].name %>" style="display: none;">
-                                <input type="text" name="name" value="<%= user[0].name %>" class="field-entry" required>
-                            </div>
-                            <div class="field">
-                                <p class="fs15">Email</p>
-                                <input name="email_before" value="<%= user[0].username %>" style="display: none;">
-                                <input type="email" name="email" value="<%= user[0].username %>" class="field-entry" required>
-                            </div>
-                            <button type="submit">Apply changes</button>
-                        </form>
-                        <form action="/reset_points/<%= user[0].id %>" method="POST" id="edit_details_form">
-                            <h4 class="title">Points</h4>
-                            <div class="field">
-                                <p class="fs15 tcenter"><%= user[0].name %> currently has <%= user[0].points %> points.</p>
-                            </div>
-                            <button type="submit">Reset</button>
-                        </form>
+                        <h1 class="title" style="margin-bottom: 20px;">User Details
+                            <br>
+                            <span style="font-size: 13px; color: rgb(184, 184, 184);">ID: <%= user[0].id %></span>
+                            <br>
+                            <span style="font-size: 13px; color: rgb(184, 184, 184);">Created: <%= user[0].creation_date %></span>
+                        </h1>
+                        <div class="container-grid-split-middle">
+                            <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/profile-picture/<%= user[0].id %>">
+                                <h1 class="title tcenter">profile-picture</h1>
+                                <input type="text" name="url" style="display: none;" value="<%= user[0].pfp %>">
+                                <img src="<%= user[0].pfp %>" alt="">
+                                <button type="submit">Reset</button>
+                            </form>
+                            <form class="admin-reset-image" hx-swap="outerHTML" hx-post="/backend/reset/user/cover-image/<%= user[0].id %>">
+                                <h1 class="title tcenter">cover-image</h1>
+                                <input type="text" name="url" style="display: none;" value="<%= user[0].cover_image %>">
+                                <img src="<%= user[0].cover_image %>" alt="">
+                                <button type="submit">Reset</button>
+                            </form>
+    
+                        </div>
+                        <section class="w100">
+                            <h4 class="title">Edit details</h4>
+                            <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/details/<%= user[0].id %>">
+                                <div class="field">
+                                    <p class="fs15">Name</p>
+                                    <input name="name_before" value="<%= user[0].name %>" style="display: none;">
+                                    <input type="text" name="name" value="<%= user[0].name %>" class="field-entry" required>
+                                </div>
+                                <div class="field">
+                                    <p class="fs15">Email</p>
+                                    <input name="email_before" value="<%= user[0].username %>" style="display: none;">
+                                    <input type="email" name="email" value="<%= user[0].username %>" class="field-entry" required>
+                                </div>
+                                <button type="submit">Apply changes</button>
+                            </form>
+                            <form action="/reset_points/<%= user[0].id %>" method="POST" id="edit_details_form">
+                                <h4 class="title">Points</h4>
+                                <div class="field">
+                                    <p class="fs15 tcenter"><%= user[0].name %> currently has <%= user[0].points %> points.</p>
+                                </div>
+                                <button type="submit">Reset</button>
+                            </form>
+                        </section>
+                        <%_ if(user[0].is_admin == "true" && user[0].id != userID) { %>
+                            <button style="margin-top: 10px; color: red;"><a href="/remove_admin/<%= user[0].id %>">Remove as admin</a></button>
+                        <%_ } else if(user[0].id != userID) { %>
+                            <button style="margin-top: 10px; color: rgb(43, 92, 43);"><a href="/make_admin/confirm/<%= user[0].id %>">Make admin</a></button>
+                        <%_ } %>
+                        <%_ if(user[0].id != userID) { %>
+                            <button style="margin-top: 10px;"><a href="/delete_user/confirm/<%= user[0].id %>" style="color: red;">Delete user</a></button>
+                        <%_ } %>
                     </section>
-                    <%_ if(user[0].is_admin == "true" && user[0].id != userID) { %>
-                        <button style="margin-top: 10px; color: red;"><a href="/remove_admin/<%= user[0].id %>">Remove as admin</a></button>
-                    <%_ } else if(user[0].id != userID) { %>
-                        <button style="margin-top: 10px; color: rgb(43, 92, 43);"><a href="/make_admin/confirm/<%= user[0].id %>">Make admin</a></button>
-                    <%_ } %>
-                    <%_ if(user[0].id != userID) { %>
-                        <button style="margin-top: 10px;"><a href="/delete_user/confirm/<%= user[0].id %>" style="color: red;">Delete user</a></button>
-                    <%_ } %>
-                </section>
-                <%_ if(JSON.stringify(leaderboard) != '[]') { %>
-                    <section style="width: 100%;">
-                        <h1 class="title" style="margin-bottom: 10px;">Leaderboard</h1>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Date</th>
-                                    <th>Score</th>
-                                    <th>Level</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><%= leaderboard[0].id %></td>
-                                    <td><%= leaderboard[0].name %></td>
-                                    <td><%= leaderboard[0].date %></td>
-                                    <td><%= leaderboard[0].score %></td>
-                                    <td><%= leaderboard[0].level %></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </section>
-                <%_ } else { %>
-                    <section style="width: 100%;">
-                        <p class="tcenter">No Leaderboard</p>
-                    </section>
-                <%_ } %>
-                <%_ if(JSON.stringify(history) != '[]') { %>
-                    <section style="width: 100%;">
-                        <h1 class="title" style="margin-bottom: 10px;">History</h1>
-                        <p class="tcenter m10"><a href="/remove_history/<%= user[0].id %>">Remove all user history</a></p>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Level</th>
-                                    <th>Date</th>
-                                    <th>Score</th>
-                                    
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <%_ for(i in history) { %>
+                    <%_ if(JSON.stringify(leaderboard) != '[]') { %>
+                        <section style="width: 100%;">
+                            <h1 class="title" style="margin-bottom: 10px;">Leaderboard</h1>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td><%= history[i].level %></td>
-                                        <td><%= history[i].date %></td>
-                                        <td><%= history[i].score %></td>
-                                        <td><a style="color: red;" href="/remove/history/<%= history[i].id %>/<%= user[0].id %>">X</a></td>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Date</th>
+                                        <th>Score</th>
+                                        <th>Level</th>
                                     </tr>
-                                <%_ } %>
-                            </tbody>
-                        </table>
-                    </section>
-                <%_ } else { %>
-                    <section style="width: 100%;">
-                        <p class="tcenter">No History</p>
-                    </section>
-                <%_ } %>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><%= leaderboard[0].id %></td>
+                                        <td><%= leaderboard[0].name %></td>
+                                        <td><%= leaderboard[0].date %></td>
+                                        <td><%= leaderboard[0].score %></td>
+                                        <td><%= leaderboard[0].level %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } else { %>
+                        <section style="width: 100%;">
+                            <p class="tcenter">No Leaderboard</p>
+                        </section>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(history) != '[]') { %>
+                        <section style="width: 100%;">
+                            <h1 class="title" style="margin-bottom: 10px;">History</h1>
+                            <p class="tcenter m10"><a href="/remove_history/<%= user[0].id %>">Remove all user history</a></p>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Level</th>
+                                        <th>Date</th>
+                                        <th>Score</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <%_ for(i in history) { %>
+                                        <tr>
+                                            <td><%= history[i].level %></td>
+                                            <td><%= history[i].date %></td>
+                                            <td><%= history[i].score %></td>
+                                            <td><a style="color: red;" href="/remove/history/<%= history[i].id %>/<%= user[0].id %>">X</a></td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        </section>
+                    <%_ } else { %>
+                        <section style="width: 100%;">
+                            <p class="tcenter">No History</p>
+                        </section>
+                    <%_ } %>
+                    </div>
             </section>
-        </section>
+        </div>
     </div>
 </body>
 </html>

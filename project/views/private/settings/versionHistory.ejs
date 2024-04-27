@@ -12,13 +12,13 @@
             <h1 class="page-title">Version History</h1>
             <p style="padding: 10px; text-align: center;">Check the development of Air Traffic City</p>
         </div>
-        <section class="grid-30-70 main-section">
+        <div class="content-settings">
             <%- include('sidebar.ejs') -%>
-            <div class="content content-child">
-                <section style="margin-top: auto; height: 640px;">
+            <section class="main-section main-section-settings" style="height: 640px;">
+                <div class="content content-child">
                     <h1 class="title" style="margin-bottom: 20px;">Version History</h1>
                     <p class="tcenter"><a href="https://github.com/danlovett/ATC-release" class="tcenter m10">Github Repo</a></p>
-                    <div style="overflow-y: scroll; height: 80%; margin-top: 20px;">
+                    <div style="overflow-y: scroll; margin-top: 20px; height: 480px;">
                         <%_ for(i in entries) { %>
                             <section style="padding: 20px; background-color: rgb(93, 93, 93); border-radius: 10px;">
                                 <h1 style="text-align: center; margin-bottom: 10px;"><%= entries[i].title %></h1>
@@ -26,10 +26,11 @@
                                 <p style="white-space: pre-line; text-align: left;"><%= entries[i].details %></p>
                             </section>
                         <%_ } %>
-                        </div>
-                </section>
-            </div>
-        </section>
+                    </div>
+                </div>
+            </section>
+
+        </div>
     </div>
 </body>
 </html>

@@ -285,7 +285,7 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => {
             if(err) add_user_log('ACCESS', err)
             clientDB.all(`SELECT score, level, date FROM leaderboard WHERE lPersonID = ${req.user.id}`, [], (err, leaderboard) => {
                 if(err) add_user_log('ACCESS', err)
-                clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.id, users.username, users.name, users.pfp FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, followers) => {
+                clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.id, users.username, users.name, users.pfp, users.cover_image FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, followers) => {
                     if(err) add_user_log('ACCESS', err)
                     clientDB.all(`SELECT * FROM history LEFT JOIN users ON history.hPersonID = users.id WHERE users.id = ${req.user.id} ORDER BY history.date DESC`, [], (err, history) => {
                         if(err) add_user_log('ACCESS', err)
@@ -341,7 +341,6 @@ app.get('/settings/:page', checkAuthenticated, (req, res) => {
 app.post('/backend/update/details/:id', checkAuthenticated, (req, res) => {
     if(req.body.name_before != req.body.name) {
         clientDB.all(`UPDATE users SET name = "${req.body.name}" WHERE id = ${req.params.id};`, [], err => {
-            if(err) console.error(err);
         })
     }
     if(req.body.email_before != req.body.email) {
@@ -531,30 +530,34 @@ app.get('/search', checkAuthenticated, checkNewUser, (req, res) => {
 })
 
 app.get('/profile/:id', checkAuthenticated, checkNewUser, (req, res) => {
-    let friend = {active: false, since: null}
+    let friend = {status: false, since: null}
     if(req.params.id == req.user.id) res.redirect('/settings/profile')
     clientDB.get(`SELECT id, name, username, pfp, cover_image, profile, friend, history, leaderboard FROM users LEFT JOIN privacy ON id = pPersonID WHERE id = ${req.params.id}`,(err, user) => {
         if(err) add_user_log('ACCESS', err)
         clientDB.all(`SELECT * FROM leaderboard LEFT JOIN privacy ON leaderboard.lPersonID = privacy.pPersonID WHERE lPersonID = ${req.params.id}`, [], (err, leaderboard) => {
             if(err) add_user_log('ACCESS', err)
-            clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.id, users.username, users.name, users.pfp, users.cover_image FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.params.id , "Active"], (err, followers) => {
-                if(err) add_user_log('ACCESS', err)
-                clientDB.all(`SELECT * FROM history LEFT JOIN users ON history.hPersonID = users.id LEFT JOIN privacy ON history.hPersonID = privacy.pPersonID WHERE users.id = ${req.params.id} ORDER BY history.date DESC`, [], (err, history) => {
+            clientDB.all(`SELECT friends.lead_user, friends.passive_user, friends.status, friends.creation_date, users.id, users.username, users.name, users.pfp, users.cover_image FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.params.id , "Active"], (err, followers) => {
+                clientDB.get(`SELECT * FROM users LEFT JOIN friends ON friends.passive_user = users.id WHERE friends.lead_user = ${req.user.id} AND friends.passive_user = ${req.params.id}`, [], (err, requests) => {
+                    if(requests) friend = {status: 'requested', since: requests.creation_date}
                     if(err) add_user_log('ACCESS', err)
-                    followers.forEach(follower => {
-                        if(follower.lead_user == req.user.id) friend = {active: true, since: follower.creation_date}
+                    clientDB.all(`SELECT * FROM history LEFT JOIN users ON history.hPersonID = users.id LEFT JOIN privacy ON history.hPersonID = privacy.pPersonID WHERE users.id = ${req.params.id} ORDER BY history.date DESC`, [], (err, history) => {
+                        if(err) add_user_log('ACCESS', err)
+                        followers.forEach(follower => {
+                            if(follower.lead_user == req.user.id) friend = {status: 'active', since: follower.creation_date}
+                        })
+                    if(user.profile == 'private' || (user.profile == 'friends' && friend.status == false && user.id != req.user.id)) {
+                        res.redirect('/error/privacy')
+                    } else {
+                        if(user.leaderboard == 'private') leaderboard = []
+                        if(user.leaderboard == 'friend' && friend.active == false && user.id != req.user.id) leaderboard = '[]'
+                        if(user.history == 'private') history = []
+                        if(user.history == 'friends' && friend.active == false && user.id != req.user.id) history = []
+                        if(user.friend == 'private') followers = []
+                        if(user.friend == 'friend' && friend.active == false && user.id != req.user.id) followers = []
+                        console.log(friend);
+                        res.render('private/profile', { user: user, history: history, leaderboard: leaderboard, followers: followers, current_user: req.user.id, friend: friend, privacy: {profile: user.profile, leaderboard: user.leaderboard, history: user.history, friends: user.friend, friend: friend} })
+                    }
                     })
-                if(user.profile == 'private' || (user.profile == 'friends' && friend.active == false && user.id != req.user.id)) {
-                    res.redirect('/error/privacy')
-                } else {
-                    if(user.leaderboard == 'private') leaderboard = []
-                    if(user.leaderboard == 'friend' && friend.active == false && user.id != req.user.id) leaderboard = '[]'
-                    if(user.history == 'private') history = []
-                    if(user.history == 'friends' && friend.active == false && user.id != req.user.id) history = []
-                    if(user.friend == 'private') followers = []
-                    if(user.friend == 'friend' && friend.active == false && user.id != req.user.id) followers = []
-                    res.render('private/profile', { user: user, history: history, leaderboard: leaderboard, followers: followers, current_user: req.user.id, friend: friend, privacy: {profile: user.profile, leaderboard: user.leaderboard, history: user.history, friends: user.friend} })
-                }
                 })
             })
         })

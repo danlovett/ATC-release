@@ -10,29 +10,47 @@
     <div class="sections">
         <h1 class="page-title"><%= user.name %>'s Profile</h1>
         <section class="grid-30-70 main-section">
-            <div class="sidebar" style="position: relative;">
-                <img src="<%= user.cover_image %>" alt="" id="profile-top-img" style="left: 0; top: 0; height: 100%; z-index: -2;">
-                <img src="<%= user.pfp %>" id="other-profile-img" alt="">
-                <div id="profile-top-container" style="height: 10em; margin: 0;">
-                    <div id="profile-top-details" style="width: 100%;">
-                        <div class="container" style="width: 100%;">
-                            <p><%= user.name %></p>
-                            <p><%= user.username %></p>
+            <div class="profile-sidebar">
+                <div style="margin-bottom: 5px;">
+                    <section class="profile-section" style="display: grid; grid-template-columns: 50% 50%; justify-content: space-between;">
+                        <%_ if(followers != undefined) {%>                        
+                            <a href="/profile/<%= user.id %>/friends" style="color: white">Friends <br> <%= followers.length %></a>
+                        <%_ } else { %>
+                            <p>Friends <br> 0</p>
+                        <%_ } %>
+                        <p class="tcenter">History <br> <%= history.length %></p>
+                    </section>
+                </div>
+                <div class="sidebar" style="position: relative;">
+                    <img src="<%= user.cover_image %>" alt="" id="profile-top-img" style="left: 0; top: 0; height: 100%; z-index: -2;">
+                    <img src="<%= user.pfp %>" id="other-profile-img" alt="">
+                    <div id="profile-top-container" style="height: 10em; margin: 0;">
+                        <div id="profile-top-details" style="width: 100%;">
+                            <div class="container" style="width: 100%;">
+                                <p><%= user.name %></p>
+                                <p><%= user.username %></p>
+                            </div>
                         </div>
                     </div>
+                </div>
+                <div style="height: 70px; display: flex;">
+                    <%_ if(friend.status == 'active') { %>
+                        <section style="background-color: rgb(71, 184, 71);">
+                            <p class="tcenter">✔ Friends - since <%= friend.since.substr(0, 10) %></p>
+                        </section>
+                    <%_ } else if(friend.status == 'requested') { %>
+                        <section style="background-color: rgb(197, 98, 37);">
+                            <p class="tcenter">Friend request sent on <%= friend.since.substr(0, 10) %></p>
+                        </section>
+                    <%_ } else { %>
+                        <section id="send-request-in-profile" style="background-color: rgb(184, 71, 71);">
+                            <p class="tcenter"><a href="/add_friend/<%= user.id %>">Send friend request</a></p>
+                        </section>
+                    <%_ } %>
                 </div>
             </div>
             <div class="content content-child">
                 <div class="details" id="friend-details">
-                    <%_ if(friend.active) { %>
-                        <section class="profile-section" style="background-color: rgb(71, 184, 71);">
-                            <p class="tcenter">✔ Friends - since <%= friend.since.substr(0, 10) %></p>
-                        </section>
-                    <%_ } else { %>
-                        <section class="profile-section" style="background-color: rgb(184, 71, 71);">
-                            <p class="tcenter">Not friends <a href="/add_friend/<%= user.id %>">Send request</a></p>
-                        </section>
-                    <%_ } %>
                     <%_ if(JSON.stringify(leaderboard) != '[]' && (privacy.leaderboard == 'global' || (privacy.leaderboard == 'friends' && friend.active))) { %>
                         <section class="profile-section">
                             <p class="tcenter">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
@@ -78,10 +96,12 @@
                                         <tr>
                                             <td style="position: relative; height: 300px;">
                                                 <a href="/profile/<%= followers[i].id %>">
-                                                    <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
-                                                    <div id="profile-top-details">
-                                                        <img src="<%= followers[i].pfp %>" id="profile-picture" alt="">
-                                                        <p class="name"><%= followers[i].name %></p>
+                                                    <div id="profile-top-container">
+                                                        <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
+                                                        <div id="profile-top-details">
+                                                            <img src="<%= followers[i].pfp %>" id="profile-picture" alt="" style="width: 40%;">
+                                                            <p class="name"><%= followers[i].name %></p>
+                                                        </div>
                                                     </div>
                                                 </a>
                                             </td>

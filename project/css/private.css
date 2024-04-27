@@ -231,6 +231,21 @@ button:hover {
     margin-left: 10px;
 }
 
+.content-settings {
+    display: flex;
+    justify-content: center;
+}
+
+.main-section-settings {
+    margin: 0 10px;
+}
+
+#sidebar-settings {
+    width: 300px;
+    margin: 20px 20px;
+    height: fit-content;
+}
+
 a {
     all: unset;
     cursor: pointer;
@@ -265,6 +280,11 @@ a {
     box-shadow: 0 0 30px rgba(57, 57, 57, 0.8);
 }
 
+.profile-sidebar {
+    width: 100%;
+    margin-top: 0;
+}
+
 #profile-top-container {
     height: 15em;
     position: relative;
@@ -281,6 +301,7 @@ a {
     height: inherit;
     object-fit: cover;
     border-radius: inherit;
+    transition: 1s;
 }
 
 #profile-top-details {
@@ -298,6 +319,7 @@ a {
     border: 1px white solid;
     display: flex;
     box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+    transition: 1s;
 }
 
 #profile-top-details .container {
@@ -520,7 +542,40 @@ a {
 }
 
 #person {
+    width: 70%;
+}
+
+#profile-top-container:hover #profile-top-img {
+    filter: blur(8px);
+    transition: 0.2s;
+}
+
+#profile-top-container:hover #profile-top-details {
     width: 100%;
+    height: 100%;
+    transition: 0.2s;
+}
+
+
+#friends a {
+    display: block;
+    margin: 20px 0;
+    padding: 10px;
+}
+
+#friends a:hover {
+    display: block;
+    margin: 20px 0;
+    padding: 60px 0;
+}
+
+#send-request-in-profile {
+    transition: 1s
+}
+
+#send-request-in-profile:hover {
+    padding: 20px 0;
+    transition: 0.2s;
 }
 
 .content #person img {
@@ -962,6 +1017,17 @@ label {
     text-align: center;
     background-color: rgba(255, 255, 255, 0.557);
     transition: 0.5s;
+}
+
+.profile-section a {
+    transition: 0.5s;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.profile-section a:hover {
+    background-color: rgb(152, 152, 152);
+    transition: 0.2s;
 }
 
 textarea {

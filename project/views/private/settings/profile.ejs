@@ -12,10 +12,10 @@
             <h1 class="page-title">Your Profile</h1>
             <p style="padding: 10px; text-align: center;">Manage these details in the <a href="/settings/general">general</a> tab</p>
         </div>
-        <section class="grid-30-70 main-section">
+        <div class="content-settings">
             <%- include('sidebar.ejs') -%>
-            <div class="content">
-                <div class="content-child">
+            <section class="main-section main-section-settings">
+                <div class="content content-child">
                     <div id="profile-top-container">
                         <img src="<%= user.cover_image %>" alt="" id="profile-top-img">
                         <div id="profile-top-details">
@@ -64,14 +64,15 @@
                             <table>
                                 <tbody>
                                     <%_ for(i in followers) { %>
-                                        <tr>
-                                            <td>
-                                                <img src="<%= followers[i].pfp %>" alt="pic" style="height: auto; width: 30%; border-radius: 10px;">
-                                            </td>
-                                            <td style="width: 50%;">
-                                                <a href="/profile/<%= followers[i].id %>" style="cursor: pointer;"><%= followers[i].name %></a>
-                                            </td>
-                                        </tr>
+                                            <a href="/profile/<%= followers[i].id %>">
+                                                <div id="profile-top-container">
+                                                    <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
+                                                    <div id="profile-top-details">
+                                                        <img src="<%= followers[i].pfp %>" id="profile-picture" alt="" style="width: 40%;">
+                                                        <p class="name"><%= followers[i].name %></p>
+                                                    </div>
+                                                </div>
+                                            </a>
                                     <%_ } %>
                                 </tbody>
                             </table>
@@ -80,8 +81,8 @@
                         <p style="text-align: center; padding: 20px; cursor: pointer;">You have not added any friends, <a href="/search">add friends</a>!</p>
                     <%_ } %>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
 </body>
 </html>

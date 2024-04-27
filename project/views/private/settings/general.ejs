@@ -13,71 +13,73 @@
             <h1 style="text-align: center;"><%_ if(success == "true") { %> Updated <span style="color: green;">✔</span> <%_ } %></h1>
             <p style="padding:10px; text-align: center;">Managing profile settings</p>
         </div>
-        <section class="grid-30-70 main-section">
+        <div class="content-settings">
             <%- include('sidebar.ejs') -%>
-            <div class="content content-child">
-                <section>
-                    <h1 class="title">
-                        Change profile picture
-                    </h1>
-                    <p class="tcenter m10">Note that the image may not be in full scale. Right click and open image in new tab to see full image</p>
-                    <%_ if(success == "false") { %> <p style="padding: 10px; color: red; font-weight: 500; font-size: 18px;">Not an image. Try again.</p> <%_ } %>
-                    <div class="edit">
-                        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/profile-picture/<%= user.id %>">
-                            <div class="container">
-                                <img src="<%= user.pfp %>" alt="">
-                            </div>
-                            <div class="container">
-                                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" value="<%= user.pfp %>" required>
-                                <button type="submit" style="width: 20%;">✔</button>
-                            </div>
-                        </form>
-                    </div>
-                </section>
-                <section>
-                    <h1 class="title">
-                        Change cover picture
-                    </h1>
-                    <p class="tcenter m10">Note that the image may not be in full scale. Right click and open image in new tab to see full image</p>
-                    <%_ if(success == "false") { %> <p style="padding: 10px; color: red; font-weight: 500; font-size: 18px;">Not an image. Try again.</p> <%_ } %>
-                    <div class="edit">
-                        <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/cover-picture/<%= user.id %>">
-                            <div class="container">
-                                <img src="<%= user.cover_image %>" alt="">
-                            </div>
-                            <div class="container">
-                                <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" value="<%= user.cover_image %>" required>
-                                <button type="submit" style="width: 20%;">✔</button>
-                            </div>
-                        </form>
-                    </div>
-                </section>
-                <section>
-                    <h1 class="title">Edit details</h1>
-                    <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/details/<%= user.id %>">
-                        <div class="field">
-                            <p class="fs15">Your Name</p>
-                            <input type="text" name="name" value="<%= user.name %>" required>
-                        </div>
-                        <div class="field">
-                            <p class="fs15">Email</p>
-                            <input type="email" name="email" value="<%= user.username %>" required>
-                        </div>
-                        <button type="submit">Apply changes</button>
-                    </form>
-                </section>
-                <%_ if(history != undefined) { %>
+            <section class="main-section main-section-settings">
+                <div class="content content-child">
                     <section>
-                        <h1 class="title">Reset</h1>
-                        <p class=" m10 tcenter">If you delete history, the leaderboard must be deleted due to backend links</p>
-                        <form action="/backend/reset/user/lboard_history/<%= user.id %>" method="POST">
-                            <button style="color: red;">Reset history and leaderboard</button>
-                        </form>
-                        <p class="tcenter m10">Contact an admin to delete individual history entries</p>
+                        <h1 class="title">
+                            Change profile picture
+                        </h1>
+                        <p class="tcenter m10">Note that the image may not be in full scale. Right click and open image in new tab to see full image</p>
+                        <%_ if(success == "false") { %> <p style="padding: 10px; color: red; font-weight: 500; font-size: 18px;">Not an image. Try again.</p> <%_ } %>
+                        <div class="edit">
+                            <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/profile-picture/<%= user.id %>">
+                                <div class="container">
+                                    <img src="<%= user.pfp %>" alt="">
+                                </div>
+                                <div class="container">
+                                    <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" value="<%= user.pfp %>" required>
+                                    <button type="submit" style="width: 20%;">✔</button>
+                                </div>
+                            </form>
+                        </div>
                     </section>
-                <%_ } %>
-            </div>
-        </section>
+                    <section>
+                        <h1 class="title">
+                            Change cover picture
+                        </h1>
+                        <p class="tcenter m10">Note that the image may not be in full scale. Right click and open image in new tab to see full image</p>
+                        <%_ if(success == "false") { %> <p style="padding: 10px; color: red; font-weight: 500; font-size: 18px;">Not an image. Try again.</p> <%_ } %>
+                        <div class="edit">
+                            <form id="form-change-pfp" hx-swap="outerHTML" hx-post="/backend/update/user/cover-picture/<%= user.id %>">
+                                <div class="container">
+                                    <img src="<%= user.cover_image %>" alt="">
+                                </div>
+                                <div class="container">
+                                    <input type="url" name="url" placeholder="Link" class="fs15 text-center color-black" value="<%= user.cover_image %>" required>
+                                    <button type="submit" style="width: 20%;">✔</button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <section>
+                        <h1 class="title">Edit details</h1>
+                        <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/details/<%= user.id %>">
+                            <div class="field">
+                                <p class="fs15">Your Name</p>
+                                <input type="text" name="name" value="<%= user.name %>" required>
+                            </div>
+                            <div class="field">
+                                <p class="fs15">Email</p>
+                                <input type="email" name="email" value="<%= user.username %>" required>
+                            </div>
+                            <button type="submit">Apply changes</button>
+                        </form>
+                    </section>
+                    <%_ if(history != undefined) { %>
+                        <section>
+                            <h1 class="title">Reset</h1>
+                            <p class=" m10 tcenter">If you delete history, the leaderboard must be deleted due to backend links</p>
+                            <form action="/backend/reset/user/lboard_history/<%= user.id %>" method="POST">
+                                <button style="color: red;">Reset history and leaderboard</button>
+                            </form>
+                            <p class="tcenter m10">Contact an admin to delete individual history entries</p>
+                        </section>
+                    <%_ } %>
+                </div>
+            </section>
+        </div>
     </div>
 </body>
 </html>
