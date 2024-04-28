@@ -258,9 +258,10 @@ app.get('/home', checkAuthenticated, (req, res) => { // to add checkAuthenticate
     gameDB.all('SELECT image_reference, airport_name, airport_icao FROM levels', [], (err, levels) => {
         if(err) add_user_log('ACCESS', err)
         clientDB.all(`SELECT * FROM leaderboard LEFT JOIN privacy ON leaderboard.lPersonID = privacy.pPersonID ORDER BY score DESC LIMIT 3;`, [], (err, leaderboard) => {
-            leaderboard.forEach(leaderboardEntry => {
-                if(leaderboardEntry.leaderboard != 'global') leaderboard.splice(leaderboard.indexOf(leaderboardEntry), 1)
-            })
+            // disabled due to error getting friends for each row
+            // leaderboard.forEach(leaderboardEntry => {
+            //     if(leaderboardEntry.leaderboard != 'global') leaderboard.splice(leaderboard.indexOf(leaderboardEntry), 1)
+            // })
             clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => { // change 30 to current user
                 if(err) add_user_log('ACCESS', err)
                 res.render('private/home.ejs', { levels: levels, leaderboard: leaderboard, following: following });
@@ -554,7 +555,6 @@ app.get('/profile/:id', checkAuthenticated, checkNewUser, (req, res) => {
                         if(user.history == 'friends' && friend.active == false && user.id != req.user.id) history = []
                         if(user.friend == 'private') followers = []
                         if(user.friend == 'friend' && friend.active == false && user.id != req.user.id) followers = []
-                        console.log(friend);
                         res.render('private/profile', { user: user, history: history, leaderboard: leaderboard, followers: followers, current_user: req.user.id, friend: friend, privacy: {profile: user.profile, leaderboard: user.leaderboard, history: user.history, friends: user.friend, friend: friend} })
                     }
                     })

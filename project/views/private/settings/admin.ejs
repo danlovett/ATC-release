@@ -12,74 +12,76 @@
             <h1 class="page-title">Admin Settings</h1>
             <p style="padding: 10px; text-align: center;">Hello admin! here are your utilities:</p>
         </div>
-        <section class="grid-30-70 main-section">
+        <div class="content-settings">
             <%- include('sidebar.ejs') -%>
-            <div class="content content-child">
-                <section>
-                    <h1 class="title">User Access errors</h1>
-                    <%_ if(JSON.stringify(user_access_logs) != '[]') { %>
+            <section class="main-section main-section-settings">
+                <div class="content content-child">
+                    <section>
+                        <h1 class="title">User Access errors</h1>
+                        <%_ if(JSON.stringify(user_access_logs) != '[]') { %>
+                            <table>
+                                <thead>
+                                    <td>Date</td>
+                                    <td>Description</td>
+                                </thead>
+                                <tbody>
+                                    <%_ for(i in user_access_logs) { %>
+                                        <tr>
+                                            <td><%= user_access_logs[i].date %></td>
+                                            <td><%= user_access_logs[i].description %></td>
+                                        </tr>
+                                    <%_ } %>
+                                </tbody>
+                            </table>
+                        <%_ } else { %>
+                            <p style="padding: 30px; text-align: center;">None</p>
+                    </section>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(all_users) != '[]') { %>
+                        <h1 class="title">Manage Users</h1>
                         <table>
                             <thead>
-                                <td>Date</td>
-                                <td>Description</td>
+                                <td>ID</td>
+                                <td>Manage</td>
+                                <td>Creation Date</td>
                             </thead>
                             <tbody>
-                                <%_ for(i in user_access_logs) { %>
+                                <%_ for(i in all_users) { %>
                                     <tr>
-                                        <td><%= user_access_logs[i].date %></td>
-                                        <td><%= user_access_logs[i].description %></td>
+                                        <td><%= all_users[i].id %></td>
+                                        <td><a href="/settings/admin/p/<%= all_users[i].id %>"><%= all_users[i].name %></a></td>
+                                        <td><%= all_users[i].creation_date %></td>
                                     </tr>
                                 <%_ } %>
                             </tbody>
                         </table>
                     <%_ } else { %>
-                        <p style="padding: 30px; text-align: center;">None</p>
-                </section>
-                <%_ } %>
-                <%_ if(JSON.stringify(all_users) != '[]') { %>
-                    <h1 class="title">Manage Users</h1>
-                    <table>
-                        <thead>
-                            <td>ID</td>
-                            <td>Manage</td>
-                            <td>Creation Date</td>
-                        </thead>
-                        <tbody>
-                            <%_ for(i in all_users) { %>
-                                <tr>
-                                    <td><%= all_users[i].id %></td>
-                                    <td><a href="/settings/admin/p/<%= all_users[i].id %>"><%= all_users[i].name %></a></td>
-                                    <td><%= all_users[i].creation_date %></td>
-                                </tr>
-                            <%_ } %>
-                        </tbody>
-                    </table>
-                <%_ } else { %>
-                    <p style="padding: 10px; text-align: center;">There are no access errors for users.</p>
-                <%_ } %>
-                <%_ if(JSON.stringify(levels) != '[]') { %>
-                    <h1 class="title">Level Information</h1>
-                    <table>
-                        <thead>
-                            <td>ID</td>
-                            <td>Location</td>
-                            <td>Modify?</td>
-                        </thead>
-                        <tbody>
-                            <%_ for(i in levels) { %>
-                                <tr>
-                                    <td><%= levels[i].id %></td>
-                                    <td><%= levels[i].airport_icao %></td>
-                                    <td><a href="/admin/edit/<%= levels[i].id %>/details">Modify</a></td>
-                                </tr>
-                            <%_ } %>
-                        </tbody>
-                    </table>
-                <%_ } else { %>
-                    <p style="padding: 10px; text-align: center;">There are no authentication logs for users.</p>
-                <%_ } %>
-                </div>
-        </section>
+                        <p style="padding: 10px; text-align: center;">There are no access errors for users.</p>
+                    <%_ } %>
+                    <%_ if(JSON.stringify(levels) != '[]') { %>
+                        <h1 class="title">Level Information</h1>
+                        <table>
+                            <thead>
+                                <td>ID</td>
+                                <td>Location</td>
+                                <td>Modify?</td>
+                            </thead>
+                            <tbody>
+                                <%_ for(i in levels) { %>
+                                    <tr>
+                                        <td><%= levels[i].id %></td>
+                                        <td><%= levels[i].airport_icao %></td>
+                                        <td><a href="/admin/edit/<%= levels[i].id %>/details">Modify</a></td>
+                                    </tr>
+                                <%_ } %>
+                            </tbody>
+                        </table>
+                    <%_ } else { %>
+                        <p style="padding: 10px; text-align: center;">There are no authentication logs for users.</p>
+                    <%_ } %>
+                    </div>
+            </section>
+        </div>
     </div>
 </body>
 </html>

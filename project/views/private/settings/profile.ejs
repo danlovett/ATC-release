@@ -61,21 +61,20 @@
                     <%_ if(JSON.stringify(followers) != '[]') { %>
                         <section class="ransform-105">
                             <h1 class="title" style="margin-bottom: 10px;">Friends</h1>
-                            <table>
-                                <tbody>
-                                    <%_ for(i in followers) { %>
-                                            <a href="/profile/<%= followers[i].id %>">
-                                                <div id="profile-top-container">
-                                                    <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
-                                                    <div id="profile-top-details">
-                                                        <img src="<%= followers[i].pfp %>" id="profile-picture" alt="" style="width: 40%;">
-                                                        <p class="name"><%= followers[i].name %></p>
+                                <%_ for(i in followers) { %>
+                                        <a href="/profile/<%= followers[i].id %>">
+                                            <div id="profile-top-container">
+                                                <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
+                                                <div id="profile-top-details">
+                                                    <img src="<%= followers[i].pfp %>" id="profile-picture" alt="">
+                                                    <div class="container">
+                                                        <p class="tcenter"><%= followers[i].name %></p>
+                                                        <p class="tcenter"><%= followers[i].creation_date %></p>
                                                     </div>
                                                 </div>
-                                            </a>
-                                    <%_ } %>
-                                </tbody>
-                            </table>
+                                            </div>
+                                        </a>
+                                <%_ } %>
                         </section>
                     <%_ } else { %>
                         <p style="text-align: center; padding: 20px; cursor: pointer;">You have not added any friends, <a href="/search">add friends</a>!</p>

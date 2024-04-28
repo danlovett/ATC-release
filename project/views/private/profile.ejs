@@ -51,7 +51,7 @@
             </div>
             <div class="content content-child">
                 <div class="details" id="friend-details">
-                    <%_ if(JSON.stringify(leaderboard) != '[]' && (privacy.leaderboard == 'global' || (privacy.leaderboard == 'friends' && friend.active))) { %>
+                    <%_ if(JSON.stringify(leaderboard) != '[]' && (privacy.leaderboard == 'global' || (privacy.leaderboard == 'friends' && friend.status == 'active'))) { %>
                         <section class="profile-section">
                             <p class="tcenter">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
                         </section>
@@ -60,7 +60,7 @@
                     <%_ } else { %>
                         <p style="text-align: center; padding: 20px;">No leaderboard entry for <%= user.name.split(' ')[0] %></p>
                     <%_ } %>
-                    <%_ if(JSON.stringify(history) != '[]' && (privacy.history == 'global' || (privacy.history == 'friends' && friend.active))) { %>
+                    <%_ if(JSON.stringify(history) != '[]' && (privacy.history == 'global' || (privacy.history == 'friends' && friend.status == 'active'))) { %>
                         <section class="profile-section">
                             <h1 class="title" style="margin-bottom: 10px;">History</h1>
                             <table>
@@ -87,7 +87,7 @@
                     <%_ } else { %>
                         <p style="text-align: center; padding: 20px;">No history for <%= user.name.split(' ')[0] %></p>
                     <%_ } %>
-                    <%_ if(JSON.stringify(followers) != '[]' && (privacy.friends == 'global' || (privacy.friends == 'friends' && friend.active))) { %>
+                    <%_ if(JSON.stringify(followers) != '[]' && (privacy.friends == 'global' || (privacy.friends == 'friends' && friend.status == 'active'))) { %>
                         <section class="profile-section">
                             <h1 class="title" style="margin-bottom: 10px;">Friends - <%= followers.length %></h1>
                             <table>
