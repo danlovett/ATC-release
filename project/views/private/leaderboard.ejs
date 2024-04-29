@@ -8,12 +8,14 @@
 <body class="bg-blue">
     <%- include('navbar.ejs') -%>
     <div class="sections">
-        <h1 class="page-title">Leaderboard</h1>
+        <div class="page-title">
+            <img src="../../images/private/leaderboard.svg" alt="">
+            <h1>Leaderboard
+            </h1>
+        </div>
         <section class="leaderboard main-section">
             <div class="content">
                 <%_ if(leaderboard.length > 0) { %>
-                    <p class="tcenter">Due to backend issues, leaderboard privacy is disabled and set to everyone.</p>
-                    <p class="tcenter m10">You can still <a href="/settings/general">delete your leaderboard</a> here</p>
                     <table>
                         <thead>
                             <tr>

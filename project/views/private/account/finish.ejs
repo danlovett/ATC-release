@@ -38,13 +38,14 @@
                 <button style="margin-top: 20px;"><a href="/account/setup/details">Edit</a></button>
             </section>
             <section style="border: 2px white solid;">
-                <h1 class="title tcenter">Let's finish with privacy <p class="tcenter fs15 m10">Visibility across the platform</p></h1>
+                <h1 class="title tcenter" style="display: grid;">Let's finish with privacy <p class="tcenter fs15 m10">Visibility across the platform</p></h1>
                 <table style="width: 50%;">
                     <thead>
                         <tr>
                             <th>Profile</th>
                             <th>Leaderboard</th>
                             <th>History</th>
+                            <th>Friends</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,6 +53,7 @@
                             <td><%= user.profile.substr(0,1).toUpperCase() + user.profile.substr(1, user.profile.length) %></td>
                             <td><%= user.leaderboard.substr(0,1).toUpperCase() + user.leaderboard.substr(1, user.leaderboard.length) %></td>
                             <td><%= user.history.substr(0,1).toUpperCase() + user.history.substr(1, user.history.length) %></td>
+                            <td><%= user.friend.substr(0,1).toUpperCase() + user.friend.substr(1, user.friend.length) %></td>
                         </tr>
                     </tbody>
                 </table>

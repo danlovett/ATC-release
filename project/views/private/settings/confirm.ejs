@@ -7,24 +7,38 @@
 </head>
 <body class="bg-blue">
     <%- include('../navbar.ejs') -%>
-    <div class="sections content-settings">
-        <%- include('sidebar.ejs') -%>
-        <section class="main-section main-section-settings">
-            <div class="content content-child">
-                <section class="profile-inner" style="margin-top: auto;">
-                    <%_ if(message == "logout") { %>
-                        <p class="tcenter fs15">Are you sure you want to logout?</p>
-                        <button style="margin-top: 20px;"><a href="/logout">Log out</a></button>
-                    <%_ } else if(message == "delete_user") { %>
-                        <h1 class="title tcenter">Are you sure you want to delete this user?</h1>
-                        <button style="margin-top: 20px;"><a href="/delete_user/<%= user_to_delete %>">Delete User</a></button>
-                    <%_ } else if(message == "make_admin") { %>
-                        <h1 class="title tcenter">Are you sure you want to make this user an admin?</h1>
-                        <button style="margin-top: 20px;"><a href="/make_admin/<%= make_admin_user %>">Make Admin</a></button>
-                    <%_ } %>
-                </section>
-            </div>
-        </section>
+    <div class="sections">
+        <div class="page-title">
+            <%_ if(message == "logout") { %>
+                <img src="../../../images/private/settings/logout.svg" alt="">
+                <h1>Logout</h1>
+            <%_ } else if(message == 'make_admin') { %>
+                <img src="../../../images/private/settings/admin.svg" alt="">
+                <h1>Make Admin</h1>
+            <%_ } else if(message == 'delete_user') { %>
+                <img src="../../../images/private/settings/remove_profile.svg" alt="">
+                <h1>Remove user</h1>
+            <%_ } %>
+        </div>
+        <div class="content-settings">
+            <%- include('sidebar.ejs') -%>
+            <section class="main-section main-section-settings">
+                <div class="content content-child">
+                    <section class="profile-inner" style="margin-top: auto;">
+                        <%_ if(message == "logout") { %>
+                            <p class="tcenter fs15">Are you sure you want to logout?</p>
+                            <button style="margin-top: 20px;"><a href="/logout">Log out</a></button>
+                        <%_ } else if(message == "delete_user") { %>
+                            <h1 class="title tcenter">Are you sure you want to delete this user?</h1>
+                            <button style="margin-top: 20px;"><a href="/delete_user/<%= user_to_delete %>">Delete User</a></button>
+                        <%_ } else if(message == "make_admin") { %>
+                            <h1 class="title tcenter">Are you sure you want to make this user an admin?</h1>
+                            <button style="margin-top: 20px;"><a href="/make_admin/<%= make_admin_user %>">Make Admin</a></button>
+                        <%_ } %>
+                    </section>
+                </div>
+            </section>
+        </div>
     </div>
 </body>
 </html>

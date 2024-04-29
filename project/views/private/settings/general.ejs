@@ -8,11 +8,11 @@
 <body class="bg-blue">
     <%- include('../navbar.ejs') -%>
     <div class="sections">
-        <div>
-            <h1 class="page-title">Your Profile</h1>
-            <h1 style="text-align: center;"><%_ if(success == "true") { %> Updated <span style="color: green;">✔</span> <%_ } %></h1>
-            <p style="padding:10px; text-align: center;">Managing profile settings</p>
+        <div class="page-title">
+            <img src="../../../images/private/settings/cog.svg" alt="">
+            <h1>General Settings</h1>
         </div>
+        <p style="padding:10px; text-align: center;">Managing profile settings</p>
         <div class="content-settings">
             <%- include('sidebar.ejs') -%>
             <section class="main-section main-section-settings">
@@ -67,14 +67,20 @@
                             <button type="submit">Apply changes</button>
                         </form>
                     </section>
-                    <%_ if(history != undefined) { %>
+                    <%_ if(leaderboard || history) { %>
                         <section>
-                            <h1 class="title">Reset</h1>
-                            <p class=" m10 tcenter">If you delete history, the leaderboard must be deleted due to backend links</p>
-                            <form action="/backend/reset/user/lboard_history/<%= user.id %>" method="POST">
-                                <button style="color: red;">Reset history and leaderboard</button>
-                            </form>
-                            <p class="tcenter m10">Contact an admin to delete individual history entries</p>
+                            <%_ if(leaderboard != undefined && history == undefined) { %>
+                                <h1 class="title">Reset</h1>
+                                <form action="/backend/reset/user/lboard/<%= user.id %>" method="POST" class="m10">
+                                    <button style="color: red;">Reset leaderboard</button>
+                                </form>
+                            <%_ } else if(history != undefined) { %>
+                                <p class="tcenter m10">If you delete history, leaderboard must also be deleted</p>
+                                <form action="/backend/reset/user/lboard_history/<%= user.id %>" method="POST" class="m10">
+                                    <button style="color: red;">Reset history and leaderboard</button>
+                                </form>
+                                <p class="tcenter m10">Contact an admin to delete individual history entries</p>
+                            <%_ } %>
                         </section>
                     <%_ } %>
                 </div>

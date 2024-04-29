@@ -12,24 +12,22 @@
     <span id="friends_visibility" style="display: none;"><%= privacy.friend %></span>
     <%- include('../navbar.ejs') -%>
     <div class="sections">
-        <div>
-            <h1 class="page-title">Privacy</h1>
-            <p style="padding: 10px; text-align: center;">Manage your privacy details here</p>
+        <div class="page-title">
+            <img src="../../../images/private/settings/privacy.svg" alt="">
+            <h1>Privacy</h1>
         </div>
+        <p style="padding: 10px; text-align: center;">Manage your privacy details here</p>
         <div class="content-settings">
             <%- include('sidebar.ejs') -%>
             <section class="main-section main-section-settings">
                 <div class="content content-child">
                     <h1 class="title">Edit settings</h1>
-                    <p class="tcenter m10">Due to backend issues, leaderboard privacy is disabled and set to everyone.</p>
-                    <p class="tcenter m10">You can still <a href="/settings/general">delete your leaderboard</a> here</p>
                     <form id="privacy-form" action="/backend/update/user/privacy/<%= user.id %>" method="POST">
                         <div class="container-flex">
                             <label for="privacy_setting_profile">Who can view your Profile?</label>
                             <select id="privacy_setting_profile_select" name="privacy_setting_profile">
                                 <option id="profile_everyone" value="global">Everyone</option>
                                 <option id="profile_friends" value="friends">Friends</option>
-                                <option id="profile_private" value="private">Private</option>
                             </select>
                         </div>
                         <div class="container-flex" id="privacy_setting_history">
@@ -42,9 +40,8 @@
                         </div>
                         <div class="container-flex">
                             <label for="privacy_setting_leaderboard">Who can view your Leaderboard?</label>
-                            <select id="privacy_setting_leaderboard_select" name="privacy_setting_leaderboard" disabled style="background-color: rgb(87, 87, 87); cursor: not-allowed;">
+                            <select id="privacy_setting_leaderboard_select" name="privacy_setting_leaderboard">
                                 <option id="leaderboard_everyone" value="global">Everyone</option>
-                                <option id="leaderboard_friends" value="friends">Friends</option>
                                 <option id="leaderboard_private" value="private">Private</option>
                             </select>
                         </div>

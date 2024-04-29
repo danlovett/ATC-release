@@ -9,7 +9,7 @@
     <%- include('navbar.ejs') -%>
     <div class="pt15vh">
         <h1 class="page-title">Homepage</h1>
-        <section class="main-section">
+        <section class="main-section section-home">
             <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Landing</h1>
             <p style="text-align: center; padding-top: 10px;">Levels will play as soon as you press on them</p>
             <div class="content">
@@ -27,8 +27,8 @@
             </div>
         </section>
         <%_ if(JSON.stringify(leaderboard) != '[]') { %>
-            <section class="main-section">
-                <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Leaderboard</h1>
+            <section class="main-section section-home">
+                <h1 class="title"><img src="../../images/private/leaderboard.svg" alt="" style="height: 30px; margin-right: 10px;">Leaderboard</h1>
                 <div class="content">
                     <a href="/leaderboard">
                         <table>
@@ -57,8 +57,8 @@
             </section>
         <%_ } %>
         <%_ if(following.length > 0) { %>
-            <section class="main-section" style="padding: 10px;">
-                <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Friend Activity</h1>
+            <section class="main-section section-home" style="padding: 10px;">
+                <h1 class="title"><img src="../../images/private/settings/friends.svg" alt="" style="height: 30px; margin-right: 10px;">Friend Activity</h1>
                 <p style="text-align: center; padding-top: 10px;">See what your friends are doing</p>
                 <div class="content">
                     <table class="friends">
@@ -93,7 +93,7 @@
                 <%_ } %>
             </section>
         <%_ } %>
-        <section class="main-section">
+        <section class="main-section section-home">
             <h1 class="title">GitHub Devlogs</h1>
             <p class="tcenter m10">Check out the development of this project!</p>
             <button><a href="https://github.com/danlovett/ATC-release/commit/main">Click here</a></button>

@@ -74,6 +74,7 @@
                     <%_ if(JSON.stringify(leaderboard) != '[]') { %>
                         <section style="width: 100%;">
                             <h1 class="title" style="margin-bottom: 10px;">Leaderboard</h1>
+                            <p class="tcenter m10"><a href="/remove_lboard/<%= user[0].id %>">Remove leaderboard</a></p>
                             <table>
                                 <thead>
                                     <tr>
@@ -86,7 +87,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><%= leaderboard[0].id %></td>
+                                        <td><%= leaderboard[0].leaderboard_id %></td>
                                         <td><%= leaderboard[0].name %></td>
                                         <td><%= leaderboard[0].date %></td>
                                         <td><%= leaderboard[0].score %></td>
@@ -119,7 +120,7 @@
                                             <td><%= history[i].level %></td>
                                             <td><%= history[i].date %></td>
                                             <td><%= history[i].score %></td>
-                                            <td><a style="color: red;" href="/remove/history/<%= history[i].id %>/<%= user[0].id %>">X</a></td>
+                                            <td><a href="/remove/history/<%= history[i].id %>/<%= user[0].id %>" style="background-color: rgb(148, 41, 41); padding: 10px 0;">Remove</a></td>
                                         </tr>
                                     <%_ } %>
                                 </tbody>

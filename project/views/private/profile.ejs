@@ -8,7 +8,10 @@
 <body class="bg-blue">
     <%- include('navbar.ejs') -%>
     <div class="sections">
-        <h1 class="page-title"><%= user.name %>'s Profile</h1>
+        <div class="page-title" id="profile-title">
+            <img src="../../images/private/settings/profile.svg" alt="">
+            <h1><%= user.name %></h1>
+        </div>
         <section class="grid-30-70 main-section">
             <div class="profile-sidebar">
                 <div style="margin-bottom: 5px;">
@@ -82,10 +85,12 @@
                                 </tbody>
                             </table>
                         </section>
+                    <%_ } else if(privacy.history == 'friends' && friend.status == 'active') { %>
+                        <p style="text-align: center; padding: 20px;">No History for <%= user.name.split(' ')[0] %></p>
                     <%_ } else if(privacy.history != 'global') { %>
                         <p style="text-align: center; padding: 20px;">History not shown due to privacy setting</p>
                     <%_ } else { %>
-                        <p style="text-align: center; padding: 20px;">No history for <%= user.name.split(' ')[0] %></p>
+                        <p style="text-align: center; padding: 20px;">No History for <%= user.name.split(' ')[0] %></p>
                     <%_ } %>
                     <%_ if(JSON.stringify(followers) != '[]' && (privacy.friends == 'global' || (privacy.friends == 'friends' && friend.status == 'active'))) { %>
                         <section class="profile-section">
@@ -110,11 +115,13 @@
                                 </tbody>
                             </table>
                         </section>
-                    <%_ } else if(privacy.friends != 'global') { %>
-                        <p style="text-align: center; padding: 20px;">Friends not shown due to privacy setting</p>
-                    <%_ } else { %>            
-                        <p style="text-align: center; padding: 20px;">No followers for <%= user.name.split(' ')[0] %></p>
-                    <%_ } %>
+                        <%_ } else if(privacy.friends == 'friends' && friend.status == 'active') { %>
+                            <p style="text-align: center; padding: 20px;">No friends for <%= user.name.split(' ')[0] %></p>
+                        <%_ } else if(privacy.friends != 'global') { %>
+                            <p style="text-align: center; padding: 20px;">Friends not shown due to privacy setting</p>
+                        <%_ } else { %>
+                            <p style="text-align: center; padding: 20px;">No friends for <%= user.name.split(' ')[0] %></p>
+                        <%_ } %>
                 </div>
             </div>
         </section>

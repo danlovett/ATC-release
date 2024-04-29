@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="/css/private.css">
 </head>
 <body class="bg-main" style="height: 100vh;">
-    <span id="profile_visibility" style="display: none;"><%= user.profile %></span>
-    <span id="history_visibility" style="display: none;"><%= user.history %></span>
-    <span id="leaderboard_visibility" style="display: none;"><%= user.leaderboard %></span>
+    <span id="profile_visibility" style="display: none;"><%= privacy.profile %></span>
+    <span id="history_visibility" style="display: none;"><%= privacy.history %></span>
+    <span id="leaderboard_visibility" style="display: none;"><%= privacy.leaderboard %></span>
+    <span id="friends_visibility" style="display: none;"><%= privacy.friend %></span>
     <section class="main-section setup-middle" style="margin-top: 20%;">
         <section style="padding: 20px 0;">
             <h1 class="tcenter">Welcome to your new profile!</h1>
             <p class="tcenter">It's great to have you here</p>
         </section>
         <form id="privacy-form" action="/account/setup/privacy" method="POST" style="margin-bottom: 20px;">
-            <p class="tcenter">Due to backend issues, leaderboard privacy is disabled and set to everyone.</p>
             <div class="container-flex">
                 <label for="privacy_setting_profile">Who can view your Profile?</label>
                 <select id="privacy_setting_profile_select" name="privacy_setting_profile">
@@ -34,9 +34,8 @@
             </div>
             <div class="container-flex">
                 <label for="privacy_setting_leaderboard">Who can view your Leaderboard?</label>
-                <select id="privacy_setting_leaderboard_select" name="privacy_setting_leaderboard" disabled style="background-color: rgb(87, 87, 87); cursor: not-allowed;">
+                <select id="privacy_setting_leaderboard_select" name="privacy_setting_leaderboard">
                     <option id="leaderboard_everyone" value="global">Everyone</option>
-                    <option id="leaderboard_friends" value="friends">Friends</option>
                     <option id="leaderboard_private" value="private">Private</option>
                 </select>
             </div>
@@ -50,4 +49,11 @@
             <button>Next</button>
         </form>
     </section>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script>
+        $('#privacy_setting_profile_select').val(`${$('#profile_visibility').text()}`).attr('selected', true)
+        $('#privacy_setting_history_select').val(`${$('#history_visibility').text()}`).attr('selected', true)
+        $('#privacy_setting_leaderboard_select').val(`${$('#leaderboard_visibility').text()}`).attr('selected', true)
+        $('#privacy_setting_friends_select').val(`${$('#friends_visibility').text()}`).attr('selected', true)
+    </script>
 </body>

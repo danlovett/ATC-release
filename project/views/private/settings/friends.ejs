@@ -8,10 +8,11 @@
 <body class="bg-blue">
     <%- include('../navbar.ejs') -%>
     <div class="sections">
-        <div>
-            <h1 class="page-title">Friends</h1>
-            <p style="padding: 10px; text-align: center;">See all friend details here</p>
+        <div class="page-title">
+            <img src="../../../images/private/settings/AI-friends.png" alt="">
+            <h1>Friends</h1>
         </div>
+        <p style="padding: 10px; text-align: center;">See all friend details here</p>
         <div class="content-settings">
             <%- include('sidebar.ejs') -%>
             <section class="main-section main-section-settings">
@@ -73,7 +74,7 @@
                                                     </div>
                                                 </td>
                                                 <td id="friends">
-                                                    <p class="m10"><a href="/remove_following/<%= following[i].id %>" style="background-color: rgb(151, 34, 34);">Remove</a></p>
+                                                    <p class="m10"><a href="/remove_following/<%= following[i].id %>" style="background-color: rgb(151, 34, 34); display: flex; justify-content: center; align-items: center;"><img src="../../../images/private/settings/remove_friend.png" style="height: 40px; margin: 0 10px;" alt="">Remove</a></p>
                                                 </td>
                                             </tr>
                                         <%_ } %>

@@ -131,8 +131,18 @@ h3 {
     margin: 0px;
 }
 
-.home {
-    height: 93vh;
+.homepage {
+    height: 80vh;
+    position: absolute;
+}
+
+.section-home section {
+    width: 100vh;
+}
+
+.section-home {
+    display: flex;
+    position: relative;
 }
 
 .content {

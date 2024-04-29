@@ -1,11 +1,14 @@
 function initPassport(passport, LocalStrategy, clientDB, bcrypt) {
     passport.use(new LocalStrategy({ usernameField: 'email' }, async (username, password, done) => {
-        clientDB.get('SELECT * FROM users WHERE username = ?', username, async (err, row) => {
-            if (!row) return done(null, false, { message: 'Incorrect username. Try again' })
-            if(row == null) return done(null, false);
+        clientDB.get('SELECT * FROM users WHERE username = ?', username, async (err, user) => {
+            if (!user) return done(null, false, { message: 'Incorrect username. Try again' })
+            if(user == null) {
+                console.log('got user!');
+                return done(null, false);
+            } 
             try {
-                if(await bcrypt.compare(password, row.password)) {
-                    return done(null, row)
+                if(await bcrypt.compare(password, user.password)) {
+                    return done(null, user)
                 } else {
                     return done(null, false, { message: 'Incorrect password. Try again' })
                 }
@@ -14,13 +17,13 @@ function initPassport(passport, LocalStrategy, clientDB, bcrypt) {
     }))
     
     passport.serializeUser((user, done) => {
-        return done(null, user.id)
+        return done(null, user)
     })
     
-    passport.deserializeUser((id, done) => {
-        clientDB.get('SELECT * FROM users WHERE id = ?', id, (err, row) => {
-            if (!row) return done(null, false);
-            return done(null, row);
+    passport.deserializeUser((user, done) => {
+        clientDB.get('SELECT * FROM users WHERE id = ?', user.id, (err, user) => {
+            if (!user) return done(null, false);
+            return done(null, user);
         });
     })
 }
