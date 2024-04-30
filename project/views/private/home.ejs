@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[current_user]'s Homepage</title>
 </head>
-<body class="bg-main">
+<body>
     <%- include('navbar.ejs') -%>
     <div class="pt15vh">
         <h1 class="page-title">Homepage</h1>
@@ -73,7 +73,7 @@
                                 <tr>
                                     <td style="width: 100%; display: flex;">
                                         <a href="/profile/<%= following[i].id %>">
-                                            <img src="<%= following[i].pfp %>" alt="pic">
+                                            <img src="<%= following[i].pfp %>" alt="pic" class="profile-picture-small">
                                             <div>
                                                 <p class="name"><%= following[i].name %></p>
                                                 <p class="username"><%= following[i].username %></p>       
@@ -100,4 +100,12 @@
         </section>
     </div>
 </body>
+<script>
+    let localS = localStorage.getItem('theme'), themeToSet = localS
+
+    if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
+    document.documentElement.setAttribute('data-theme', themeToSet)
+
+</script>
 </html>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>[current_user]'s Homepage</title>
     <link rel="stylesheet" href="/css/private.css">
 </head>
-<body class="bg-main" style="height: 100vh;">
+<body style="height: 100vh;">
     <section class="main-section setup-middle">
         <span id="default-pfp" style="display: none;"><%= user.pfp %></span>
         <span id="default-cover-image" style="display: none;"><%= user.cover_image %></span>
@@ -65,5 +65,13 @@
                 $('#output-cover-image').removeClass('changed')
             }, 500)
         })
+    </script>
+    <script>
+        let localS = localStorage.getItem('theme'), themeToSet = localS
+    
+        if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    
+        document.documentElement.setAttribute('data-theme', themeToSet)
+    
     </script>
 </body>

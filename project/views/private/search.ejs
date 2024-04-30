@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search | ATC</title>
 </head>
-<body class="bg-vibrant">
+<body>
     <%- include('navbar.ejs') -%>
     <div class="sections">
         <div class="page-title">
@@ -30,7 +30,7 @@
                                     <div class="result" id="<%= i %>">
                                         <a class="details" href="/profile/<%= users[i].id %>">
                                             <div class="info">
-                                                <img src="<%= users[i].pfp %>" alt="">
+                                                <img src="<%= users[i].pfp %>" alt="" class="profile-picture-small">
                                                 <div class="inner">
                                                     <p><%= users[i].name %></p>
                                                     <p><%= users[i].username %></p>
@@ -83,4 +83,12 @@
         </section>
     </div>
 </body>
+<script>
+    let localS = localStorage.getItem('theme'), themeToSet = localS
+
+    if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
+    document.documentElement.setAttribute('data-theme', themeToSet)
+
+</script>
 </html>

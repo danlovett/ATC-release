@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,5 +55,13 @@
         $('#privacy_setting_history_select').val(`${$('#history_visibility').text()}`).attr('selected', true)
         $('#privacy_setting_leaderboard_select').val(`${$('#leaderboard_visibility').text()}`).attr('selected', true)
         $('#privacy_setting_friends_select').val(`${$('#friends_visibility').text()}`).attr('selected', true)
+    </script>
+    <script>
+        let localS = localStorage.getItem('theme'), themeToSet = localS
+    
+        if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    
+        document.documentElement.setAttribute('data-theme', themeToSet)
+    
     </script>
 </body>

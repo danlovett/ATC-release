@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
 </head>
-<body class="bg-blue">
+<body>
     <%- include('navbar.ejs') -%>
     <div class="sections">
         <div class="page-title" id="profile-title">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="sidebar" style="position: relative;">
                     <img src="<%= user.cover_image %>" alt="" id="profile-top-img" style="left: 0; top: 0; height: 100%; z-index: -2;">
-                    <img src="<%= user.pfp %>" id="other-profile-img" alt="">
+                    <img src="<%= user.pfp %>" id="other-profile-img" class="profile-picture-large" alt="" style="margin-left: 40px;">
                     <div id="profile-top-container" style="height: 10em; margin: 0;">
                         <div id="profile-top-details" style="width: 100%;">
                             <div class="container" style="width: 100%;">
@@ -102,7 +102,7 @@
                                             <td style="position: relative; height: 300px;">
                                                 <a href="/profile/<%= followers[i].id %>">
                                                     <div id="profile-top-container">
-                                                        <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
+                                                        <img src="<%= followers[i].cover_image %>" alt=""class="profile-picture-large" style="height: 100%; left: 0; top: 0;">
                                                         <div id="profile-top-details">
                                                             <img src="<%= followers[i].pfp %>" id="profile-picture" alt="" style="width: 40%;">
                                                             <p class="name"><%= followers[i].name %></p>
@@ -127,4 +127,12 @@
         </section>
     </div>
 </body>
+<script>
+    let localS = localStorage.getItem('theme'), themeToSet = localS
+
+    if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
+    document.documentElement.setAttribute('data-theme', themeToSet)
+
+</script>
 </html>

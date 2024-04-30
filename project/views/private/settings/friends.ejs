@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Friends</title>
 </head>
-<body class="bg-blue">
+<body>
     <%- include('../navbar.ejs') -%>
     <div class="sections">
         <div class="page-title">
@@ -32,7 +32,7 @@
                                                         <a href="/profile/<%= follower_requests[i].id %>">
                                                             <img src="<%= follower_requests[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
                                                             <div id="profile-top-details">
-                                                                <img src="<%= follower_requests[i].pfp %>" id="profile-picture" alt="">
+                                                                <img src="<%= follower_requests[i].pfp %>" class="profile-picture-default" alt="">
                                                                 <div class="container">
                                                                     <p><%= follower_requests[i].name %></p>
                                                                     <p><%= follower_requests[i].username %></p>
@@ -42,8 +42,8 @@
                                                     </div>
                                                 </td>
                                                 <td id="friends">
-                                                    <p class="m10"><a href="/accept_request/<%= follower_requests[i].id %>" style="background-color: rgb(62, 189, 62);">Accept</a></p>
-                                                    <p class="m10"><a href="/reject_friend/<%= follower_requests[i].id %>" style="background-color: rgb(151, 34, 34);">Reject</a></p>
+                                                    <p class="m10"><a href="/accept_request/<%= follower_requests[i].id %>" style="background-color: var(--button-accept-background);">Accept</a></p>
+                                                    <p class="m10"><a href="/reject_friend/<%= follower_requests[i].id %>" style="background-color: var(--button-reject-background)">Reject</a></p>
                                                 </td>
                                             </tr>
                                         <%_ } %>
@@ -63,7 +63,7 @@
                                                         <a href="/profile/<%= following[i].id %>">
                                                             <img src="<%= following[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
                                                             <div id="profile-top-details">
-                                                                <img src="<%= following[i].pfp %>" id="profile-picture" alt="">
+                                                                <img src="<%= following[i].pfp %>" class="profile-picture-default" alt="">
                                                                 <div class="container">
                                                                     <p><%= following[i].name %></p>
                                                                     <p><%= following[i].username %></p>
@@ -74,7 +74,7 @@
                                                     </div>
                                                 </td>
                                                 <td id="friends">
-                                                    <p class="m10"><a href="/remove_following/<%= following[i].id %>" style="background-color: rgb(151, 34, 34); display: flex; justify-content: center; align-items: center;"><img src="../../../images/private/settings/remove_friend.png" style="height: 40px; margin: 0 10px;" alt="">Remove</a></p>
+                                                    <p class="m10"><a href="/remove_following/<%= following[i].id %>" style="background-color: var(--button-reject-background); display: flex; justify-content: center; align-items: center;"><img src="../../../images/private/settings/remove_friend.png" style="height: 40px; margin: 0 10px;" alt="">Remove</a></p>
                                                 </td>
                                             </tr>
                                         <%_ } %>
@@ -94,7 +94,7 @@
                                                         <a href="/profile/<%= followers[i].id %>">
                                                             <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
                                                             <div id="profile-top-details">
-                                                                <img src="<%= followers[i].pfp %>" id="profile-picture" alt="">
+                                                                <img src="<%= followers[i].pfp %>" class="profile-picture-default" alt="">
                                                                 <div class="container">
                                                                     <p><%= followers[i].name %></p>
                                                                     <p><%= followers[i].username %></p>
@@ -105,7 +105,7 @@
                                                     </div>
                                                 </td>
                                                 <td id="friends">
-                                                    <p class="m10"><a href="/remove_follower/<%= followers[i].id %>" style="background-color: rgb(151, 34, 34);">Remove</a></p>
+                                                    <p class="m10"><a href="/remove_follower/<%= followers[i].id %>" style="background-color: var(--button-reject-background);">Remove</a></p>
                                                 </td>
                                             </tr>
                                         <%_ } %>
@@ -125,7 +125,7 @@
                                                         <a href="/profile/<%= requested_followers[i].id %>">
                                                             <img src="<%= requested_followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
                                                             <div id="profile-top-details">
-                                                                <img src="<%= requested_followers[i].pfp %>" id="profile-picture" alt="">
+                                                                <img src="<%= requested_followers[i].pfp %>" class="profile-picture-default" alt="">
                                                                 <div class="container">
                                                                     <p><%= requested_followers[i].name %></p>
                                                                     <p><%= requested_followers[i].username %></p>
@@ -135,7 +135,7 @@
                                                     </div>
                                                 </td>
                                                 <td id="friends">
-                                                    <p class="m10"><a href="/remove_request/<%= requested_followers[i].id %>" style="background-color: rgb(151, 34, 34);">Remove</a></p>
+                                                    <p class="m10"><a href="/remove_request/<%= requested_followers[i].id %>" style="background-color: var(--button-reject-background);">Remove</a></p>
                                                 </td>
                                             </tr>
                                         <%_ } %>
@@ -149,4 +149,12 @@
         </div>
     </div>
 </body>
+<script>
+    let localS = localStorage.getItem('theme'), themeToSet = localS
+
+    if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
+    document.documentElement.setAttribute('data-theme', themeToSet)
+
+</script>
 </html>

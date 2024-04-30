@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finish</title>
     <link rel="stylesheet" href="/css/private.css">
 </head>
-<body class="bg-main">
+<body>
     <section class="main-section setup-middle" style="margin: 12vh auto;">
         <section style="padding: 20px 0;">
             <h1 class="tcenter">You've finished!</h1>
@@ -63,3 +63,11 @@
         <button><a href="/account/setup/push">Finish</a></button>
     </section>
 </body>
+<script>
+    let localS = localStorage.getItem('theme'), themeToSet = localS
+
+    if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
+    document.documentElement.setAttribute('data-theme', themeToSet)
+
+</script>

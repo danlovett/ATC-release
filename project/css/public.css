@@ -276,12 +276,12 @@ h3 {
 
 .navbar {
     overflow: hidden;
-    background-color: rgba(195, 195, 195, 0.807);
+    background-color: var(--main-primary);
     display: flex;
     justify-content: space-between;
     backdrop-filter: blur(2em);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--main-tertiary);
+    box-shadow: 0 0 100px var(--main-tertiary);
     border-radius: 25px;
     margin: 15px;
     position: fixed;
@@ -292,21 +292,23 @@ h3 {
 
 .navbar a {
     display: flex;
-    color: #f2f2f2;
+    color: var(--main-text);
     text-align: center;
     text-decoration: none;
     padding: 10px 20px;
-    transition: ease-in;
-    transition-duration: 0.4s;
+    transition: var(--transition-0-5s);
     border-radius: 45px;
     
 }
 
 .navbar a:hover {
-    transition: ease-out;
-    transition-duration: 0.4s;
-    background-color: rgba(255, 255, 255);
-    color: black;
+    transition: var(--transition-0-5s);
+    background-color: var(--main-secondary);
+    color: var(--main-text);
+}
+
+.navbar a p {
+    transition: var(--transition-0-5s);
 }
 
 .navbar ul {
@@ -370,4 +372,24 @@ h3 {
 
 .transform-2 {
     transition: 0.5s;
+}
+
+:root {
+    /* transparent items */
+
+    --transparent-main: rgba(255, 255, 255, 0.3);
+
+    --main-primary: rgb(179, 179, 179);
+    --main-secondary: rgb(133, 133, 133);
+    --main-tertiary: rgb(78, 78, 78);
+
+    --main-text: rgb(0, 0, 0);
+
+    --transition-0-2s: 0.2s var(--transition-type-eio);
+    --transition-0-5s: 0.5s var(--transition-type-eio);
+    --transition-0-8s: 0.8s var(--transition-type-eio);
+    --transition-1s: 1s var(--transition-type-eio);
+    --transition-1-5s: 1.5s var(--transition-type-eio);
+
+    --transition-type-eio: ease-in-out;
 }

@@ -7,6 +7,7 @@
 
 body {
     height: max-content;
+    background: var(--background-main);
 }
 
 .sections {
@@ -21,18 +22,18 @@ a {
 
 table {
     width: 100%;
-    border: 2px solid rgba(101, 101, 101, 0.538);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--main-secondary);
+    box-shadow: 0 0 40px var(--main-secondary);
     padding: 10px;
     border-radius: 15px;
-    transition: 0.5s ease-in-out;
+    transition: var(--transition-0-5s);
     margin-bottom: 20px;
     margin-top: 20px;
 }
 
 table:hover {
-    border: 2px solid rgba(245, 238, 238, 0.766);
-    transition: 0.5s ease-in-out;
+    border: 2px solid var(--main-tertiary);
+    transition: var(--transition-0-5s);
 }
 
 table tbody {
@@ -41,33 +42,36 @@ table tbody {
 
 td {
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.205);
+    background-color: var(--main-secondary);
     text-align: center;
     white-space: nowrap;
 }
 
 p {
-    color: white;
+    color: var(--main-text);
+}
+
+p:has(span) {
+    background-color: var(--main-primary);
 }
 
 ul a:hover p {
     color: black;
-    transition-duration: 0.5s;
-    transition: ease-out;
+    transition: var(--transition-0-5s);
 }
 
 h4 {
-    color: white;
+    color: var(--main-text);
 }
 
 .navbar {
     overflow: hidden;
-    background-color: rgba(195, 195, 195, 0.807);
+    background-color: var(--main-primary);
     display: flex;
     justify-content: space-between;
     backdrop-filter: blur(2em);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--main-tertiary);
+    box-shadow: 0 0 100px var(--main-tertiary);
     border-radius: 25px;
     margin: 15px;
     position: fixed;
@@ -78,26 +82,23 @@ h4 {
 
 .navbar a {
     display: flex;
-    color: #f2f2f2;
+    color: var(--main-text);
     text-align: center;
     text-decoration: none;
     padding: 10px 20px;
-    transition: ease-in;
-    transition-duration: 0.4s;
+    transition: var(--transition-0-5s);
     border-radius: 45px;
     
 }
 
 .navbar a:hover {
-    transition: ease-out;
-    transition-duration: 0.4s;
-    background-color: rgba(255, 255, 255);
-    color: black;
+    transition: var(--transition-0-5s);
+    background-color: var(--main-secondary);
+    color: var(--main-text);
 }
 
 .navbar a p {
-    transition-duration: 0.5s;
-    transition: ease-out;
+    transition: var(--transition-0-5s);
 }
 
 .navbar ul {
@@ -113,39 +114,24 @@ h4 {
 
 section {
     width: 100%;
-    border: 2px solid rgba(103, 103, 103, 0.1);
-    box-shadow: 0 0 20px rgba(8,7,16,0.8);
+    border: 2px solid var(--main-tertiary);
+    box-shadow: 0 0 10px var(--main-tertiary);
     border-radius: 10px;
     padding: 10px;
     backdrop-filter: blur(10px);
+    background-color: var(--main-primary);
 }
 
 section .detail {
     padding: 10px 0px;
 }
 
-section:nth-child(even) {
-    background-color: rgba(31, 31, 31, 0.507);
-}
-
-/* .profile-inner {
-    background-color: rgba(67, 67, 67, 0.507);
-} */
-
 section:not(:first-child) {
     margin-top: 20px;
 }
 
 h1, thead, tbody {
-    color: white;
-}
-
-section:nth-child(even) p {
-    color: white;
-}
-
-section:nth-child(odd) {
-    background-color: rgba(56, 56, 56, 0.599)
+    color: var(--main-text);
 }
 
 .main-section {
@@ -172,15 +158,15 @@ section:nth-child(odd) {
 
 .title {
     padding: 20px;
-    background-color: rgba(67, 67, 67, 0.507);
-    border: 2px solid rgba(103, 103, 103, 0.1);
-    box-shadow: 0 0 30px rgba(8,7,16,0.6);
+    background-color: var(--main-secondary);
+    border: 2px solid var(--main-tertiary);
+    box-shadow: 0 0 15px var(--main-tertiary);
     border-radius: 10px;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
     margin-left: 0px;
     padding-left: 10px;
-    color: white;
-    display: flex;
+    color: var(--main-text);
+    display: grid;
     justify-content: center;
 }
 
@@ -194,18 +180,19 @@ section:nth-child(odd) {
 
 button{
     width: 100%;
-    background-color: #d3d3d3;
-    color: #080710;
+    background-color: var(--main-secondary);
+    color: var(--main-text);
     padding: 15px 0;
     font-size: 18px;
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
+    border: none;
 }
 
 button:hover {
-    background-color: #ffffff;
+    background-color: var(--main-tertiary);
 }
 
 
@@ -216,10 +203,10 @@ button:hover {
 }
 
 .cards .container img {
-    border: 2px solid rgba(255, 255, 255, 0.623);
-    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    border: 2px solid var(--main-tertiary);
+    box-shadow: 0 0 40px var(--main-tertiary);
     border-radius: 15px;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
     opacity: 0.8;
     width: 80%;
     height: 300px;
@@ -227,14 +214,14 @@ button:hover {
 }
 
 .cards .container img:hover {
-    border: 2px solid rgba(255, 255, 255);
+    border: 2px solid var(--main-secondary);
     opacity: 1;
     cursor: pointer;
 }
 
 .cards p {
     padding: 20px;
-    color: white;
+    color: var(--main-text);
     font-weight: 300;
     font-size: 20px;
 }
@@ -242,7 +229,7 @@ button:hover {
 .container {
     display: grid;
     text-align: center;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 .content {
@@ -284,15 +271,15 @@ button:hover {
 
 #sidebar-settings a:not(#active) span {
     margin-left: -15px;
-    transition: 0.5s;
-    color: white;
+    transition: var(--transition-0-5s);
+    color: var(--main-text);
     font-weight: 400;
 }
 
 #sidebar-settings a:hover:not(#active) span {
     margin-left: 5px;
-    transition: 0.5s;
-    color: black;
+    transition: var(--transition-0-5s);
+    color: var(--main-text);
     font-weight: 600;
 }
 
@@ -315,10 +302,10 @@ a {
 
 .sections p a {
     all: unset;
-    transition: 0.5s;
-    background-color: rgba(238, 238, 238, 0.296);
+    transition: var(--transition-0-5s);
+    background-color: var(--transparent-main);
     border-radius: 10px;
-    box-shadow: 0 0 30px rgba(57, 57, 57, 0.8);
+    box-shadow: 0 0 30px var(--main-tertiary);
     padding: 5px;
     margin: 30px 0px;
     cursor: pointer;
@@ -334,10 +321,10 @@ a {
     width: 100%;
     height: fit-content;
     padding: 20px;
-    background-color: rgba(9, 9, 9, 0.3);
+    background-color: var(--transparent-main);
     border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 30px rgba(57, 57, 57, 0.8);
+    border: 2px solid var(--main-tertiary);
+    box-shadow: 0 0 30px var(--main-tertiary);
 }
 
 #profile-title {
@@ -356,20 +343,18 @@ a {
 #profile-top-container {
     height: 15em;
     position: relative;
-    background-color: #3131319d;
     margin-bottom: 10px;
     border-radius: 10px;
 }
 
 #profile-top-img {
     position: absolute;
-    transform: translate(-50, -50);
     filter: blur(2px);
     width: 100%;
     height: inherit;
     object-fit: cover;
     border-radius: inherit;
-    transition: 1s;
+    transition: var(--transition-1s);
 }
 
 #profile-top-details {
@@ -382,12 +367,12 @@ a {
     top: 50%;
     text-align: center;
     padding: 20px;
-    background-color: #00000070;
+    background-color: var(--transparent-main);
     border-radius: 10px;
-    border: 1px white solid;
+    border: 1px solid var(--main-tertiary);
     display: flex;
-    box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
-    transition: 1s;
+    box-shadow: 0 0 25px var(--main-tertiary);
+    transition: var(--transition-1s);
 }
 
 #profile-top-details .container {
@@ -400,76 +385,63 @@ a {
     padding: 20px 0;
 }
 
-#profile-top-details #profile-picture {
-    width: 80%;
-    height: 100%;
-    border: 1px rgb(76, 76, 76) solid;
-    border-radius: 10px;
-    object-fit: cover;
-}
-
-.sidebar img {
-    height: 200px;
-    width: inherit;
-    border-radius: 10px;
-    object-fit: cover;
-}
-
 .items {
     font-size: 18px;
 }
 
 .items a {
     margin: 10px 0px;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 #active{
     transform: scale(1.15);
     padding-left: 20px;
-    background-color: white;
-    color: black;
-    border: 2px solid black;
+    background-color: var(--main-tertiary);
+    color: var(--main-text);
+    border: 2px solid var(--sidebar-active-background);
     font-weight: 700;
-    transition-duration: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 #active span {
     margin-left: 5px;
+    color: var(--main-text);
 }
 
 .sidebar a {
     padding: 20px 0 20px 10px;
     margin: 10px 0;
-    border: 2px solid rgba(0, 0, 0, 0);
+    border: 2px solid var(--main-tertiary);
     border-radius: 10px;
     font-weight: 500;
     display: block;
     width: inherit;
-    background-color: rgba(148, 148, 148, 0.4);
-    color: white;
+    background-color: var(--sidebar-item-background);
+    color: var(--main-text);
+    transition: var(--transition-0-5s);
 }
 
 .sidebar a:hover {
     padding-left: 20px;
-    background-color: rgba(1, 253, 135, 0.121);
+    background-color: var(--sidebar-hover-item-background);
     border: 2px solid black;
-    font-weight: 700;
-    transition-duration: 0.5s;
+    font-weight: 600;
+    transition: var(--transition-0-5s);
 }
 
 .sidebar-title {
-    background-color: rgba(167, 167, 167, 0.8);
+    background-color: var(--main-secondary);
     border-radius: 10px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 30px rgba(57, 57, 57, 0.8);
+    border: 2px solid var(--main-tertiary);
+    box-shadow: 0 0 30px var(--main-tertiary);
     padding: 10px;
 }
 
 .content-show {
-    background-color: rgba(238, 238, 238, 0.296);
+    background-color: var(--main-secondary);
     border-radius: 10px;
-    box-shadow: 0 0 30px rgba(57, 57, 57, 0.8);
+    box-shadow: 0 0 30px var(--main-tertiary);
     width: 95%;
     height: 100%;
     padding: 10px;
@@ -505,14 +477,14 @@ a {
     height: auto;
     width: 80%;
     border-radius: 8px;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 .level-container img:hover {
-    border: 5px solid white;
+    border: 5px solid var(--main-tertiary);
     -webkit-transform: scale3d(1.05, 1.05, 1.05);
     transform: scale3d(1.05);
-    transition: 0.5s 
+    transition: var(--transition-0-5s);
 }
 
 .level-details p {
@@ -569,19 +541,19 @@ a {
 
 #edit_details_form .field input {
     height: 50px;
-    color: white;
-    background-color: rgba(127, 127, 127, 0.266);
-    transition-duration: 1.2s;
+    color: var(--main-text);
+    background-color: var(--main-tertiary);
+    transition: var(--transition-1-5s);
 }
 
 .container #pfp-entry {
-    color: white;
-    background-color: rgba(127, 127, 127, 0.266);
-    transition-duration: 1.2s;
+    color: var(--main-text);
+    background-color: var(--main-tertiary);
+    transition: var(--transition-1-5s);
 }
 
 #reset-img {
-    transition-duration: 1s;
+    transition: var(--transition-1s);
 }
 
 .admin-reset-image {
@@ -601,13 +573,13 @@ a {
 
 #profile-top-container:hover #profile-top-img {
     filter: blur(8px);
-    transition: 0.2s;
+    transition: var(--transition-0-2s);
 }
 
 #profile-top-container:hover #profile-top-details {
     width: 100%;
     height: 100%;
-    transition: 0.2s;
+    transition:var(--transition-0-2s);
 }
 
 
@@ -624,18 +596,12 @@ a {
 }
 
 #send-request-in-profile {
-    transition: 1s
+    transition: var(--transition-1s);
 }
 
 #send-request-in-profile:hover {
     padding: 20px 0;
-    transition: 0.2s;
-}
-
-.content #person img {
-    height: 7em;
-    object-fit: cover;
-    border-radius: 10px;
+    transition: var(--transition-0-2s);
 }
 
 /* LEVELS PAGE CSS */
@@ -653,7 +619,7 @@ a {
     margin-top: 10px;
     padding: 20px;
     border-radius: 10px;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
     width: 100%;
     margin-left: 0;
 }
@@ -667,10 +633,10 @@ a {
 .container-level img {
     width: 100%;
     height: 300px;
-    border: 2px solid white;
+    border: 2px solid var(--main-tertiary);
     border-radius: 10px;
     opacity: 0.8;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
     object-fit: cover;
 }
 
@@ -696,7 +662,7 @@ a {
     grid-template-columns: 90% 10%;
     width: 100%;
     padding: 20px;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 .search form button {
@@ -705,30 +671,28 @@ a {
 }
 
 .search .details {
-    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
-    transition-duration: 0.2s;
+    transition: var(--transition-0-2s);
     background-color: inherit;
     border-radius: 10px;
 }
 
 .search .details:hover {
-    background-color: rgba(0, 0, 0, 0.3);
-    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
-    transition-duration: 0.2s;
+    background-color: var(--main-tertiary);
+    transition: var(--transition-0-2s);
 }
 
 form{
-    background-color: rgba(169, 169, 169, 0.13);
+    background-color: var(--main-secondary);
     border-radius: 10px;
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(255,255,255,0.1);
-    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    border: 2px solid var(--main-tertiary);
+    box-shadow: 0 0 40px var(--main-tertiary);
 }
 
 
 form *{
     font-family: 'Poppins',sans-serif;
-    color: #000000;
+    color: var(--main-text);
     letter-spacing: 0.5px;
     outline: none;
     border: none;
@@ -738,8 +702,8 @@ input {
     display: block;
     height: 100%;
     width: 100%;
-    background-color: rgba(255,255,255,0.07);
-    color: white;
+    background-color: var(--main-primary);
+    color: var(--main-text);
     border-radius: 3px;
     padding: 0 10px;
     font-size: 14px;
@@ -762,16 +726,12 @@ input {
 .results {
     padding: 20px 10px;
     margin: 10px;
-    background-color: white;
-    border: 2px solid black;
+    background-color: var(--main-secondary);
+    border: 2px solid var(--main-tertiary);
 }
 
 .people .info img {
-    height: 100px;
-    width: 100px;
-    object-fit: cover;
     margin: 0 10px;
-    border-radius: 10px;
 }
 
 .levels .info img {
@@ -783,9 +743,9 @@ input {
 }
 
 .result {
-    background-color: grey;
+    background-color: var(--main-primary);
     border-radius: 10px;
-    border: 2px solid white;
+    border: 2px solid var(--main-secondary);
     display: grid;
     grid-template-columns: 60% 40%;
     margin: 10px 0px;
@@ -820,7 +780,7 @@ input {
     width: 100%;
     display: grid;
     grid-template-columns: 10% 90%;
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 .friend img {
@@ -882,15 +842,6 @@ input {
     overflow: hidden;
 }
 
-.friends img {
-    height: 200px;
-    object-fit: cover;
-    width: 100%;
-    margin-right: 10px;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
 .friends #person {
     display: grid;
     grid-template-columns: 30% 60%;
@@ -919,7 +870,7 @@ select {
     margin-right: 0;
     /* display: block; */
     text-align: center;
-    background-color: rgb(182, 182, 182);
+    background-color: var(--main-tertiary);
     padding: 20px;
     border-radius: 10px;
 }
@@ -936,6 +887,27 @@ label {
 .container-flex {
     padding: 20px 0;
     display: flex;
+}
+
+.profile-picture-default {
+    object-fit: cover;
+    border-radius: 100%;
+    width: 150px;
+    height: 150px;
+}
+
+.profile-picture-large {
+    object-fit: cover;
+    border-radius: 100%;
+    width: 200px;
+    height: 200px;
+}
+
+.profile-picture-small {
+    object-fit: cover;
+    border-radius: 100%;
+    width: 75px;
+    height: 75px;
 }
 
 
@@ -973,17 +945,17 @@ label {
 .transform-105:hover {
     -webkit-transform: scale3d(1.05, 1.05, 1.05);
     transform: scale3d(1.05);
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 .transform-105, .transform-115 {
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 .transform-115:hover {
     -webkit-transform: scale3d(1.15, 1.15, 1.15);
     transform: scale3d(1.15);
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
 }
 
 .color-red {
@@ -1042,19 +1014,19 @@ label {
     margin-left: 0;
     margin-top: 0;
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.557);
-    transition: 0.5s;
+    background-color: var(--main-tertiary);
+    transition: var(--transition-0-5s);
 }
 
 .profile-section a {
-    transition: 0.5s;
+    transition: var(--transition-0-5s);
     padding: 5px;
     border-radius: 10px;
 }
 
 .profile-section a:hover {
-    background-color: rgb(152, 152, 152);
-    transition: 0.2s;
+    background-color: var(--main-secondary);
+    transition: var(--transition-0-2s);
 }
 
 textarea {
@@ -1116,18 +1088,81 @@ textarea {
 
 .new-user-form-revert {
     padding: 10px 30px;
-    background-color: rgb(182, 182, 182);
+    background-color: var(--main-secondary);
     border-radius: 10px;
-    transition: 0.5s;
+    transition: var(--transition-0-2s);
 }
 
 .new-user-form-revert:hover {
     cursor: pointer;
-    background-color: white;
-    transition: 0.5s;
+    background-color: var(--main-tertiary);
+    transition: var(--transition-0-2s);
 }
 
 .new-user-form .container img {
     height: 300px;
     width: 100%;
+}
+
+:root {
+    --transition-0-2s: 0.2s var(--transition-type-eio);
+    --transition-0-5s: 0.5s var(--transition-type-eio);
+    --transition-0-8s: 0.8s var(--transition-type-eio);
+    --transition-1s: 1s var(--transition-type-eio);
+    --transition-1-5s: 1.5s var(--transition-type-eio);
+
+    --transition-type-eio: ease-in-out;
+}
+
+:root[data-theme = "light"] {
+
+    --background-main: linear-gradient(90deg, rgb(145, 145, 255) 0%, rgb(79, 179, 255) 38%, rgb(135, 119, 255) 100%);
+
+    /* Buttons */
+    --button-accept-background: rgb(66, 195, 66);
+    --button-reject-background: rgb(215, 59, 59);
+    --button-remove-background: rgb(245, 52, 52);
+    --button-apply: rgb(100, 230, 100);
+
+    /* sidebar */
+    --sidebar-active-background: white;
+    --sidebar-hover-item-background: rgb(117, 190, 233);
+    --sidebar-item-background: rgb(255, 255, 255);
+
+    /* transparent items */
+
+    --transparent-main: rgba(255, 255, 255, 0.3);
+
+    --main-primary: rgb(250, 250, 250);
+    --main-secondary: rgb(200, 200, 200);
+    --main-tertiary: rgb(150, 150, 150);
+
+    --main-text: rgb(0, 0, 0);
+
+}
+
+:root[data-theme = "dark"] {
+
+    --background-main:  linear-gradient(90deg, rgb(4, 0, 90) 0%, rgb(48, 48, 94) 38%, rgb(75, 56, 88)100%);
+
+    /* Buttons */
+    --button-accept-background: rgb(14 123 14);
+    --button-reject-background: rgb(151, 34, 34);
+    --button-remove-background: rgb(221, 87, 87);
+    --button-apply: rgb(108, 212, 108);
+    
+    /* sidebar */
+    --sidebar-active-background: rgb(180, 180, 180);
+    --sidebar-hover-item-background: rgb(92, 139, 225);
+    --sidebar-item-background: rgb(40, 40, 40);
+
+    /* transparent items */
+
+    --transparent-main: rgba(0, 0, 0, 0.3);
+
+    --main-primary: rgb(20, 20, 20);
+    --main-secondary: rgb(40, 40, 40);
+    --main-tertiary: rgb(60, 60, 60);
+
+    --main-text: rgb(255, 255, 255);
 }

@@ -1,22 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>General Settings</title>
 </head>
-<body class="bg-blue">
+<body>
     <%- include('../navbar.ejs') -%>
     <div class="sections">
         <div class="page-title">
             <img src="../../../images/private/settings/cog.svg" alt="">
             <h1>General Settings</h1>
         </div>
-        <p style="padding:10px; text-align: center;">Managing profile settings</p>
+        <p style="padding:10px; text-align: center;">Manage all settings here</p>
         <div class="content-settings">
             <%- include('sidebar.ejs') -%>
             <section class="main-section main-section-settings">
                 <div class="content content-child">
+                    <section>
+                        <h1 class="title">Colour Theme</h1>
+                        <div class="m10 colour-switcher">
+                            <button id="switch"></button>
+                        </div>
+                    </section>
                     <section>
                         <h1 class="title">
                             Change profile picture
@@ -88,4 +94,29 @@
         </div>
     </div>
 </body>
+
+<script>
+    let localS = localStorage.getItem('theme'), themeToSet = localS
+
+    if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
+    document.documentElement.setAttribute('data-theme', themeToSet)
+
+    document.getElementById('switch').textContent = themeToSet
+
+    function switchTheme() {
+        const bodyElement = document.documentElement
+        let dataTheme = bodyElement.getAttribute('data-theme'), newTheme
+    
+        newTheme = dataTheme === 'dark' ? 'light' : 'dark'
+        
+        document.getElementById('switch').textContent = newTheme
+
+        bodyElement.setAttribute('data-theme', newTheme)
+
+        localStorage.setItem('theme', newTheme)
+    }
+
+    document.querySelector('#switch').addEventListener('click', switchTheme)
+</script>
 </html>

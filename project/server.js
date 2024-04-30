@@ -16,6 +16,7 @@ const flash = require('express-flash')
 const session = require('express-session')
 
 const initPassport = require('./passport-config');
+const { localsName } = require('ejs');
 initPassport(passport, LocalStrategy, clientDB, bcrypt, fs)
 
 app.use(favicon('./images/icon.png'));
@@ -198,7 +199,7 @@ app.post('/signup/check-user', checkNotAuthenticated, (req, res) => {
 
 app.post('/signup', checkNotAuthenticated, async (req,res,next) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
-    clientDB.all(`INSERT INTO users(name, username, password, creation_date) VALUES ("${req.body.name}", "${req.body.email}", "${hashedPassword}", "${formatTime()}")`, [], err => {})
+    clientDB.all(`INSERT INTO users(name, username, password, creation_date, pfp) VALUES ("${req.body.name}", "${req.body.email}", "${hashedPassword}", "${formatTime()}", "https://ui-avatars.com/api/?name=${req.body.name.split(' ')[0]}+${req.body.name.split(' ')[1]}&size=512.jpg")`, [], err => {})
     clientDB.get(`SELECT id, username FROM users WHERE username = "${req.body.email}"`, [], (err, user) => {
         const userObject = {id: user.id, username: user.username}
         req.login(userObject, (err) => {
