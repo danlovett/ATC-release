@@ -4,49 +4,54 @@
 <section id="navbar" class="navbar sticky transform-101 main-section">
     <div style="margin-left: 10px;">
         <ul id="logo">
-            <li style="display: flex;"><a href="/home" class="transform-115"><img src="../../images/icon.png" alt="" style="height: 20px; margin-right: 10px;">AirTraffic City</a><span style="margin-left: 10px;"> v1.0.485</span></li>
+            <li style="display: flex;"><a href="/home" class="transform-115"><img class="icon" src="../../images/icon.png" alt="" style="height: 20px; margin-right: 10px;">AirTraffic City</a><span style="margin-left: 10px;"> v1.0.486</span></li>
         </ul>
         
     </div> 
     <div style="margin-right: 10px;">
         <ul id="expanded">
-            <li><a href="/search" class="transform-115"><img src="../../images/private/search.svg" alt="" style="height: 20px; margin-right: 10px;">Search</a></li>
-           <li><a href="/leaderboard" class="transform-115"><img src="../../images/private/leaderboard.svg" alt="" style="height: 20px; margin-right: 10px;">Leaderboard</a></li>
-           <li><a href="/settings/profile" class="transform-115"><img src="../../images/private/settings/cog.svg" alt="" style="height: 20px; margin-right: 10px;">Options</a></li>
+            <li><a href="/search" class="transform-115"><img class="icon" src="../../images/private/search.svg" alt="" style="height: 20px; margin-right: 10px;">Search</a></li>
+           <li><a href="/leaderboard" class="transform-115"><img class="icon" src="../../images/private/leaderboard.svg" alt="" style="height: 20px; margin-right: 10px;">Leaderboard</a></li>
+           <li><a href="/settings/profile" class="transform-115"><img class="icon" src="../../images/private/settings/cog.svg" alt="" style="height: 20px; margin-right: 10px;">Options</a></li>
         </ul>
         <ul id="reduced">
-            <button id="navbar-expand" onclick="showExpandedOptions()"><img src="https://api.iconify.design/material-symbols:menu.svg" alt="" style="height: 25px;"></button>
+            <button id="navbar-expand" onclick="showExpandedOptions()"><img class="icon" src="https://api.iconify.design/material-symbols:menu.svg" alt="" style="height: 25px;"></button>
         </ul>
         <ul id="options" style="display: none;">
-            <li><a href="/search" class="transform-115"><img src="../../images/private/search.svg" alt="" style="height: 20px; margin-right: 10px;">Search</a></li>
-           <li><a href="/leaderboard" class="transform-115"><img src="../../images/private/leaderboard.svg" alt="" style="height: 20px; margin-right: 10px;">Leaderboard</a></li>
-           <li><a href="/settings/profile" class="transform-115"><img src="../../images/private/settings/cog.svg" alt="" style="height: 20px; margin-right: 10px;">Options</a></li>
+            <li><a href="/search" class="transform-115"><img class="icon" src="../../images/private/search.svg" alt="" style="height: 20px; margin-right: 10px;">Search</a></li>
+           <li><a href="/leaderboard" class="transform-115"><img class="icon" src="../../images/private/leaderboard.svg" alt="" style="height: 20px; margin-right: 10px;">Leaderboard</a></li>
+           <li><a href="/settings/profile" class="transform-115"><img class="icon" src="../../images/private/settings/cog.svg" alt="" style="height: 20px; margin-right: 10px;">Options</a></li>
         </ul>
     </div>
 </section>
 
 <script>
     window.onscroll = function() {scrollFunction()};
-
+    const navbar = document.getElementById("navbar")
+    const extendedOptions = document.getElementById("options")
+    
     function scrollFunction() {
-        console.log('scroll')
         if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
-            console.log('scroll top more than 10')
-            document.getElementById("navbar").style.maxWidth = "100%";
-            document.getElementById("navbar").style.borderRadius = "0";
+            navbar.style.maxWidth = "100%";
+            navbar.style.borderRadius = "0";
+            navbar.style.border = "none";
+            navbar.style.borderBottom = "2px solid var(--main-tertiary)";
         } else {
-            document.getElementById("navbar").style.maxWidth = "70em";
-            document.getElementById("navbar").style.borderRadius = "0 0 10px 10px";
+            navbar.style.maxWidth = "80em";
+            navbar.style.borderRadius = "0 0 10px 10px";
+            navbar.style.border = "2px solid var(--main-tertiary)";
+            navbar.style.borderTop = "none";
 
         }
     }
 
     function showExpandedOptions() {
-        var x = document.getElementById("options");
-        if (x.style.display === "flex") {
-            x.style.display = "none";
+        if (extendedOptions.style.display === "flex") {
+            extendedOptions.style.display = "none";
+            navbar.style.borderRadius = "0 0 10px 10px";
         } else {
-            x.style.display = "flex";
+            extendedOptions.style.display = "flex";
+            navbar.style.borderRadius = "0";
         }
     }
 </script>

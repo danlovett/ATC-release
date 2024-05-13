@@ -10,7 +10,7 @@
     <div class="grid-gap-20 pt10vh">
         <h1 class="page-title">Homepage</h1>
         <section class="main-section section-home">
-            <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Landing</h1>
+            <h1 class="title"><img class="icon" src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Landing</h1>
             <p style="text-align: center; padding-top: 10px;">Levels will play as soon as you press on them</p>
             <div class="cards m10">
                 <%_ for(i in levels) { if(i <= 1) { %>
@@ -26,7 +26,7 @@
         </section>
         <%_ if(JSON.stringify(leaderboard) != '[]') { %>
             <section class="main-section section-home">
-                <h1 class="title"><img src="../../images/private/leaderboard.svg" alt="" style="height: 30px; margin-right: 10px;">Leaderboard</h1>
+                <h1 class="title"><img class="icon" src="../../images/private/leaderboard.svg" alt="" style="height: 30px; margin-right: 10px;">Leaderboard</h1>
                 <div class="content">
                     <a href="/leaderboard">
                         <table>
@@ -56,7 +56,7 @@
         <%_ } %>
         <%_ if(following.length > 0) { %>
             <section class="main-section section-home" style="padding: 10px;">
-                <h1 class="title"><img src="../../images/private/settings/friends.svg" alt="" style="height: 30px; margin-right: 10px;">Friend Activity</h1>
+                <h1 class="title"><img class="icon" src="../../images/private/settings/friends.svg" alt="" style="height: 30px; margin-right: 10px;">Friend Activity</h1>
                 <p style="text-align: center; padding-top: 10px;">See what your friends are doing</p>
                 <div class="content">
                     <table class="friends">

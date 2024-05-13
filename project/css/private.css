@@ -64,8 +64,13 @@ h4 {
     color: var(--main-text);
 }
 
+.icon {
+    filter: var(--icon-color);
+}
+
 #navbar {
-    transition: var(--transition-0-2s);
+    transition: 0.5s ease-in-out;
+    /* transition: var(--transition-0-5s); */
 }
 
 .navbar {
@@ -73,6 +78,7 @@ h4 {
     display: flex;
     justify-content: space-between;
     backdrop-filter: blur(2em);
+    -webkit-backdrop-filter: blur(2em);
     border: 2px solid var(--main-tertiary);
     border-top: none;
     box-shadow: 0 0 100px var(--main-tertiary);
@@ -84,7 +90,7 @@ h4 {
 
 .navbar a {
     display: flex;
-    color: var(--opposite-text);
+    color: var(--main-text);
     text-align: center;
     text-decoration: none;
     padding: 10px 20px;
@@ -99,7 +105,7 @@ h4 {
 }
 
 .navbar span {
-    color: var(--opposite-text);
+    color: var(--main-text);
 }
 
 .navbar a p {
@@ -115,7 +121,7 @@ h4 {
 .navbar li a {
     margin: 20px;
     text-decoration: none;
-    color: var(--opposite-text);
+    color: var(--main-text);
 }
 
 .navbar #options {
@@ -178,14 +184,15 @@ h1, thead, tbody {
 
 .title {
     padding: 20px;
-    background-color: var(--main-secondary);
+    background: var(--title-gradient);
+    background-clip: text;
+    color: transparent;
     border: 2px solid var(--main-tertiary);
     box-shadow: 0 0 15px var(--main-tertiary);
     border-radius: 10px;
     transition: var(--transition-0-5s);
     margin-left: 0px;
     padding-left: 10px;
-    color: var(--main-text);
     display: flex;
     justify-content: center;
     width: 100%;
@@ -241,12 +248,6 @@ button:hover {
     color: var(--main-text);
     font-weight: 300;
     font-size: 20px;
-}
-
-.container {
-    display: grid;
-    text-align: center;
-    transition: var(--transition-0-5s);
 }
 
 .content {
@@ -348,11 +349,6 @@ a {
     border-radius: 10px;
     border: 2px solid var(--main-tertiary);
     box-shadow: 0 0 30px var(--main-tertiary);
-    display: grid;
-}
-
-#profile-title {
-    display: grid;
 }
 
 #profile-title img {
@@ -362,6 +358,24 @@ a {
 .profile-sidebar {
     width: 100%;
     margin-top: 0;
+}
+
+.profile-sidebar .sidebar {
+    display: grid;
+    justify-content: center;
+}
+
+#profile-top-details .container  p {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#profile-top-details .container p:first-child {
+    font-size: 20px;
+    font-weight: 600;
+    background: var(--title-gradient);
+    background-clip: text;
+    color: transparent;
 }
 
 #profile-top-container {
@@ -399,12 +413,19 @@ a {
     transition: var(--transition-1s);
 }
 
+#profile-top-details img {
+    margin-right: 5px;
+}
+
+#profile-top-details p {
+    text-align: left;
+}
+
 #profile-top-details .container {
     margin: auto;
     text-align: left;
     margin-left: 10px;
     overflow: hidden;
-    display: grid;
     align-content: center;
     padding: 20px 0;
 }
@@ -426,6 +447,10 @@ a {
     border: 2px solid var(--sidebar-active-background);
     font-weight: 700;
     transition: var(--transition-0-5s);
+}
+
+#active img {
+    filter: var(--active-icon-color);
 }
 
 #active span {
@@ -648,6 +673,12 @@ a {
     display: grid;
     grid-template-columns: 40% 60%;
     margin: 20px 0;
+}
+
+.container-level button {
+    background: var(--level-background);
+    background-clip: text;
+    color: transparent;
 }
 
 .container-level img {
@@ -911,6 +942,16 @@ input {
     display: none;
 }
 
+.profile-sidebar #request-sent {
+    display: flex;
+    text-align: left;
+    justify-content: center;
+}
+
+.profile-sidebar #request-sent p {
+    margin: 0 5px;
+}
+
 
 /* PRIVACY */
 
@@ -1062,11 +1103,12 @@ label {
 }
 
 .container {
-    width: 100%;
     margin-top: 0;
     height: 100%;
     display: block;
     max-height: 500px;
+    transition: var(--transition-0-5s);
+    text-align: center;
 }
 
 .profile-section {
@@ -1125,10 +1167,15 @@ textarea {
 } 
 
 @media screen and (max-width: 1000px) {
+    .navbar { border: none; border-bottom: 2px solid var(--main-tertiary); }
     #reduced { display: inline; }
     #expanded { display: none; }
     #options { display: none; }
     .container-grid-split-middle { display: block; }
+    .profile-sidebar #request-sent { display: block; text-align: center; }
+    #profile-top-details img { width: 100px; height: 100px; }
+    #profile-top-details .container { height: max-content; }
+
 }
 
 @media screen and (min-width: 1000px) {
@@ -1141,6 +1188,7 @@ textarea {
     .levels .info { display: grid; }
     .people .info { display: grid; }
     .section-home .cards { display: block; }
+    .levels .container-level { display: block; }
 }
 
 /* NEW USER */
@@ -1186,13 +1234,18 @@ textarea {
     --transition-1-5s: 1.5s var(--transition-type-eio);
 
     --transition-type-eio: ease-in-out;
+
+    --level-background: linear-gradient(90deg, rgb(103, 42, 48) 0%, rgb(142, 25, 68) 38%, rgb(255, 128, 0) 100%);
 }
 
 :root[data-theme = "light"] {
 
     --background-main: linear-gradient(90deg, rgb(145, 145, 255) 0%, rgb(79, 179, 255) 38%, rgb(135, 119, 255) 100%);
-    --background-opposite:  linear-gradient(90deg, rgb(4, 0, 90) 0%, rgb(48, 48, 94) 38%, rgb(75, 56, 88)100%);
-    --navbar-background: linear-gradient(45deg, rgba(4,0,90,0.8) 0%, rgba(48,48,94,0.8) 38%, rgba(75,56,88,0.8) 100%);
+    --background-opposite: linear-gradient(90deg, rgb(4, 0, 90) 0%, rgb(48, 48, 94) 38%, rgb(75, 56, 88)100%);
+    --title-gradient: linear-gradient(to right, rgb(0, 39, 97) 0%, rgb(81, 0, 91) 38%, rgb(0, 184, 92)100%) 0 0 / 400% 100%;
+    --navbar-background: linear-gradient(45deg, rgba(145, 145, 255, 0.8) 0%, rgba(79, 179, 255, 0.8) 38%, rgba(135, 119, 255, 0.8) 100%);
+    --icon-color: grayscale(1);
+    --active-icon-color: grayscale(1) invert(1)
     
     /* Buttons */
     --button-accept-background: rgb(66, 195, 66);
@@ -1222,7 +1275,10 @@ textarea {
 
     --background-main:  linear-gradient(90deg, rgb(32, 26, 159) 0%, rgb(81, 13, 126)100%);
     --background-opposite: linear-gradient(90deg, rgb(145, 145, 255) 0%, rgb(79, 179, 255) 38%, rgb(135, 119, 255) 100%);
-    --navbar-background: linear-gradient(45deg, rgba(145, 145, 255, 0.2) 0%, rgba(79, 179, 255, 0.2) 38%, rgba(135, 119, 255, 0.2) 100%);
+    --title-gradient: linear-gradient(to right, rgb(136, 247, 255) 0%, rgb(99, 156, 255) 38%, rgb(141, 132, 255) 100%) 0 0 / 400% 100%;
+    --navbar-background: linear-gradient(45deg, rgba(4,0,90,0.8) 0%, rgba(48,48,94,0.8) 38%, rgba(75,56,88,0.8) 100%);
+    --icon-color: grayscale(1) invert(1);
+    --active-icon-color: grayscale(1) invert(1)
 
     /* Buttons */
     --button-accept-background: rgb(14 123 14);
