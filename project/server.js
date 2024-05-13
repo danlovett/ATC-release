@@ -7,7 +7,7 @@ const clientDB = new sqlite3.Database('./db/data.db', sqlite3.OPEN_READWRITE, er
 const gameDB = new sqlite3.Database('./db/game.db', sqlite3.OPEN_READWRITE, err => { if(err) throw err })
 const bcrypt = require('bcrypt')
 
-const fs = require('fs'); 
+const fs = require('fs');
 
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
@@ -16,7 +16,6 @@ const flash = require('express-flash')
 const session = require('express-session')
 
 const initPassport = require('./passport-config');
-const { localsName } = require('ejs');
 initPassport(passport, LocalStrategy, clientDB, bcrypt, fs)
 
 app.use(favicon('./images/icon.png'));
@@ -268,9 +267,9 @@ app.get('/home', checkAuthenticated, checkNewUser, (req, res) => { // to add che
             leaderboard.forEach(leaderboardEntry => {
                 if(leaderboardEntry.leaderboard == 'private') leaderboard.splice(leaderboard.indexOf(leaderboardEntry), 1)
             })
-            clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => { // change 30 to current user
+            clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.last_played FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => {
                 if(err) add_user_log('ACCESS', err)
-                res.render('private/home.ejs', { levels: levels, leaderboard: leaderboard, following: following });
+                res.render('private/home.ejs', { levels: levels, leaderboard: leaderboard, following: following, user_name: req.user.name });
             })
         })
     })
@@ -292,11 +291,11 @@ app.get('/settings/:page', checkAuthenticated, checkNewUser, (req, res) => {
             if(err) add_user_log('ACCESS', err)
             clientDB.all(`SELECT score, level, date FROM leaderboard WHERE lPersonID = ${req.user.id}`, [], (err, leaderboard) => {
                 if(err) add_user_log('ACCESS', err)
-                clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.id, users.username, users.name, users.pfp, users.cover_image FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, followers) => {
+                clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.id, users.username, users.name, users.pfp, users.cover_image FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, friends) => {
                     if(err) add_user_log('ACCESS', err)
                     clientDB.all(`SELECT * FROM history LEFT JOIN users ON history.hPersonID = users.id WHERE users.id = ${req.user.id} ORDER BY history.date DESC`, [], (err, history) => {
                         if(err) add_user_log('ACCESS', err)
-                        res.render('private/settings/profile', { user: user, history: history, leaderboard: leaderboard, followers: followers, current_user: req.user.id, is_admin: req.user.is_admin })
+                        res.render('private/settings/profile', { user: user, history: history, leaderboard: leaderboard, friends: friends, current_user: req.user.id, is_admin: req.user.is_admin })
                     })
                 })
             })
@@ -306,12 +305,8 @@ app.get('/settings/:page', checkAuthenticated, checkNewUser, (req, res) => {
             if(err) add_user_log('ACCESS', err)
             clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.cover_image, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Requested"], (err, follower_requests) => {
                 if(err) add_user_log('ACCESS', err)
-                clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.cover_image, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.passive_user WHERE friends.lead_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, following) => {
-                    if(err) add_user_log('ACCESS', err)
-                    clientDB.all(`SELECT users.id, users.name, users.username, users.pfp, users.cover_image, users.last_played, friends.creation_date FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, followers) => {
-                        if(err) add_user_log('ACCESS', err)
-                        res.render('private/settings/friends.ejs', { requested_followers: requested_followers, follower_requests: follower_requests, following: following, followers: followers, is_admin: req.user.is_admin })
-                    })
+                clientDB.all(`SELECT friends.lead_user, friends.status, friends.creation_date, users.id, users.username, users.name, users.pfp, users.cover_image FROM users LEFT JOIN friends ON users.id = friends.lead_user WHERE friends.passive_user = ? AND friends.status = ?`, [req.user.id, "Active"], (err, friends) => {
+                    res.render('private/settings/friends.ejs', { requested_followers: requested_followers, follower_requests: follower_requests, friends: friends, is_admin: req.user.is_admin })
                 })
             })
         })
@@ -367,6 +362,7 @@ app.post('/backend/update/details/:id', checkAuthenticated, (req, res) => {
                 <p class="fs15">Email</p>
                 <input type="email" name="email" value="${req.body.email}" class="field-entry" style="background-color: green;" required>
             </div>
+            <p class="tcenter m10">To reset your password, contact an admin.</p>
             <button type="submit">Apply changes</button>
         </form>
         <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -379,7 +375,7 @@ app.post('/backend/update/details/:id', checkAuthenticated, (req, res) => {
 })
 
 app.post('/backend/update/user/:option/:id', checkAuthenticated, (req, res) => {
-    if(req.params.option != 'privacy') {
+    if(req.params.option == 'profile-picture' || req.params.option == 'cover-picture') {
         if(isImage(req.body.url)) {
             if(req.params.option == 'profile-picture') {
                 clientDB.run(`UPDATE users SET pfp = '${req.body.url}' WHERE id = ${req.params.id}`, [], err => {})
@@ -409,6 +405,15 @@ app.post('/backend/update/user/:option/:id', checkAuthenticated, (req, res) => {
             `)
         }
     
+    } else if(req.params.option == 'password') {
+        const generatePassword = require('./private/src/passgen')
+        res.send(`
+            <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/user/password/${req.params.id}">
+                <h4 class="title">Reset Password</h4>
+                <p class="tcenter m10">${generatePassword}</p>
+                <button type="submit">Reset</button>
+            </form>
+        `)
     } else {
         let profile = req.body.privacy_setting_profile
         let leaderboard = req.body.privacy_setting_leaderboard
@@ -555,7 +560,13 @@ app.get('/profile/:id', checkAuthenticated, checkNewUser, (req, res) => {
                     clientDB.all(`SELECT * FROM history LEFT JOIN users ON history.hPersonID = users.id LEFT JOIN privacy ON history.hPersonID = privacy.pPersonID WHERE users.id = ${req.params.id} ORDER BY history.date DESC`, [], (err, history) => {
                         if(err) add_user_log('ACCESS', err)
                         followers.forEach(follower => {
-                            if(follower.lead_user == req.user.id) friend = {status: 'active', since: follower.creation_date}
+                            if(follower.lead_user == req.user.id) {
+                                friend = {status: 'active', since: follower.creation_date}
+                                follower.self = true
+                            } else {
+                                follower.self = false
+                            }
+
                         })
                     if(user.profile == 'private' || (user.profile == 'friends' && friend.status == false && user.id != req.user.id)) {
                         res.redirect('/error/privacy')

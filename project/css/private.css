@@ -64,37 +64,42 @@ h4 {
     color: var(--main-text);
 }
 
+#navbar {
+    transition: var(--transition-0-2s);
+}
+
 .navbar {
-    overflow: hidden;
-    background-color: var(--main-primary);
+    background: var(--navbar-background);
     display: flex;
     justify-content: space-between;
     backdrop-filter: blur(2em);
     border: 2px solid var(--main-tertiary);
+    border-top: none;
     box-shadow: 0 0 100px var(--main-tertiary);
-    border-radius: 25px;
-    margin: 15px;
-    position: fixed;
+    border-radius: 0 0 10px 10px;
+    position: sticky;
     top: 0;
-    width: 97%;
     z-index: 5;
 }
 
 .navbar a {
     display: flex;
-    color: var(--main-text);
+    color: var(--opposite-text);
     text-align: center;
     text-decoration: none;
     padding: 10px 20px;
     transition: var(--transition-0-5s);
     border-radius: 45px;
-    
 }
 
 .navbar a:hover {
     transition: var(--transition-0-5s);
     background-color: var(--main-secondary);
     color: var(--main-text);
+}
+
+.navbar span {
+    color: var(--opposite-text);
 }
 
 .navbar a p {
@@ -107,9 +112,29 @@ h4 {
     margin: 0px;
 }
 
-.navbar li {
+.navbar li a {
     margin: 20px;
     text-decoration: none;
+    color: var(--opposite-text);
+}
+
+.navbar #options {
+    position: fixed;
+    z-index: inherit;
+    top: 100px;
+    right: 0px;
+    background: var(--navbar-background);
+    backdrop-filter: blur(2em);
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+#navbar-expand {
+    all: unset; 
+    cursor: pointer; 
+    padding: 10px;
 }
 
 section {
@@ -126,22 +151,17 @@ section .detail {
     padding: 10px 0px;
 }
 
-section:not(:first-child) {
-    margin-top: 20px;
-}
-
 h1, thead, tbody {
     color: var(--main-text);
 }
 
 .main-section {
-    max-width: 70em;
-    min-width: 50em;
+    max-width: 80em;
+    min-width: 25em;
 }
 
 .page-title {
     text-align: center;
-    margin-bottom: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -166,12 +186,9 @@ h1, thead, tbody {
     margin-left: 0px;
     padding-left: 10px;
     color: var(--main-text);
-    display: grid;
+    display: flex;
     justify-content: center;
-}
-
-.section-home:hover .title img {
-    animation: pulse 1s infinite ease-in-out alternate;
+    width: 100%;
 }
 
 .title img {
@@ -243,6 +260,7 @@ button:hover {
 .content-settings {
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 }
 
 .main-section-settings {
@@ -251,10 +269,11 @@ button:hover {
 
 #sidebar-settings {
     width: 300px;
-    margin: 20px 20px;
+    margin: 0 20px;
     height: fit-content;
     position: sticky;
     top: 140px;
+    padding: 5px;
 }
 
 #sidebar-settings .sidebar-image {
@@ -267,20 +286,24 @@ button:hover {
     display: flex;
     align-items: center;
     margin-left: 5px;
+    width: 100%;
+}
+
+.sidebar-items {
+    width: 90%;
+    margin-left: 0;
 }
 
 #sidebar-settings a:not(#active) span {
     margin-left: -15px;
-    transition: var(--transition-0-5s);
+    transition: var(--transition-0-2s);
     color: var(--main-text);
-    font-weight: 400;
 }
 
 #sidebar-settings a:hover:not(#active) span {
     margin-left: 5px;
-    transition: var(--transition-0-5s);
+    transition: var(--transition-0-2s);
     color: var(--main-text);
-    font-weight: 600;
 }
 
 #sidebar-settings a:not(#active) img {
@@ -325,6 +348,7 @@ a {
     border-radius: 10px;
     border: 2px solid var(--main-tertiary);
     box-shadow: 0 0 30px var(--main-tertiary);
+    display: grid;
 }
 
 #profile-title {
@@ -397,8 +421,8 @@ a {
 #active{
     transform: scale(1.15);
     padding-left: 20px;
-    background-color: var(--main-tertiary);
-    color: var(--main-text);
+    background: var(--background-opposite);
+    color: var(--opposite-text);
     border: 2px solid var(--sidebar-active-background);
     font-weight: 700;
     transition: var(--transition-0-5s);
@@ -406,28 +430,26 @@ a {
 
 #active span {
     margin-left: 5px;
-    color: var(--main-text);
+    color: var(--opposite-text);
 }
 
 .sidebar a {
     padding: 20px 0 20px 10px;
-    margin: 10px 0;
+    margin: 15px 0;
     border: 2px solid var(--main-tertiary);
     border-radius: 10px;
-    font-weight: 500;
     display: block;
     width: inherit;
     background-color: var(--sidebar-item-background);
     color: var(--main-text);
-    transition: var(--transition-0-5s);
+    transition: var(--transition-0-2s);
 }
 
-.sidebar a:hover {
+.sidebar a:hover:not(#active) {
     padding-left: 20px;
-    background-color: var(--sidebar-hover-item-background);
+    background: var(--background-main);
     border: 2px solid black;
-    font-weight: 600;
-    transition: var(--transition-0-5s);
+    transition: var(--transition-0-2s);
 }
 
 .sidebar-title {
@@ -608,7 +630,6 @@ a {
 
 .container-levels {
     padding: 20px;
-    margin: 10px 0px;
 }
 
 .container-levels .title h2 {
@@ -616,7 +637,6 @@ a {
 }
 
 .container-levels .inner {
-    margin-top: 10px;
     padding: 20px;
     border-radius: 10px;
     transition: var(--transition-0-5s);
@@ -828,7 +848,6 @@ input {
 }
 
 .details section {
-    margin-bottom: 10px;
     margin-top: 0;
 }
 
@@ -854,6 +873,42 @@ input {
 
 #friend-details {
     margin-top: 0;
+}
+
+#friend-top-bar {
+    display: flex;
+    justify-content: space-around;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.friend-top-bar-item {
+    background-color: var(--main-secondary);
+    margin: auto;
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 0 10px;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    cursor: pointer;
+}
+
+.friend-top-bar-item-active {
+    background-color: var(--main-tertiary);
+    margin: auto;
+    width: 100%;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 0 10px;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    cursor: default;
+}
+
+.dynamic-section-friends {
+    display: none;
 }
 
 
@@ -982,8 +1037,8 @@ label {
     margin: 10px;
 }
 
-.pt15vh {
-    padding-top: 15vh;
+.pt10vh {
+    padding-top: 10vh;
 }
 
 .w100 {
@@ -999,6 +1054,11 @@ label {
     display: grid;
     grid-template-columns: 30% 70%;
     height: 100%;
+}
+
+.grid-gap-20 {
+    display: grid;
+    grid-gap: 20px;
 }
 
 .container {
@@ -1064,10 +1124,24 @@ textarea {
     100% { opacity: 0; transform: translateX(-80%); display: none;}
 } 
 
-@keyframes pulse {
-    from { opacity: 1; transform: scale(1);}
-    to { opacity: 0.8; transform: scale(1.5);}
-  }
+@media screen and (max-width: 1000px) {
+    #reduced { display: inline; }
+    #expanded { display: none; }
+    #options { display: none; }
+    .container-grid-split-middle { display: block; }
+}
+
+@media screen and (min-width: 1000px) {
+    #reduced { display: none; }
+    #expanded { display: flex; }
+    #options { display: none; }
+}
+
+@media screen and (max-width: 700px) {
+    .levels .info { display: grid; }
+    .people .info { display: grid; }
+    .section-home .cards { display: block; }
+}
 
 /* NEW USER */
 
@@ -1117,7 +1191,9 @@ textarea {
 :root[data-theme = "light"] {
 
     --background-main: linear-gradient(90deg, rgb(145, 145, 255) 0%, rgb(79, 179, 255) 38%, rgb(135, 119, 255) 100%);
-
+    --background-opposite:  linear-gradient(90deg, rgb(4, 0, 90) 0%, rgb(48, 48, 94) 38%, rgb(75, 56, 88)100%);
+    --navbar-background: linear-gradient(45deg, rgba(4,0,90,0.8) 0%, rgba(48,48,94,0.8) 38%, rgba(75,56,88,0.8) 100%);
+    
     /* Buttons */
     --button-accept-background: rgb(66, 195, 66);
     --button-reject-background: rgb(215, 59, 59);
@@ -1131,19 +1207,22 @@ textarea {
 
     /* transparent items */
 
-    --transparent-main: rgba(255, 255, 255, 0.3);
+    --transparent-main: rgba(255, 255, 255, 0.5);
 
     --main-primary: rgb(250, 250, 250);
     --main-secondary: rgb(200, 200, 200);
     --main-tertiary: rgb(150, 150, 150);
 
     --main-text: rgb(0, 0, 0);
+    --opposite-text: rgb(255,255,255);
 
 }
 
 :root[data-theme = "dark"] {
 
-    --background-main:  linear-gradient(90deg, rgb(4, 0, 90) 0%, rgb(48, 48, 94) 38%, rgb(75, 56, 88)100%);
+    --background-main:  linear-gradient(90deg, rgb(32, 26, 159) 0%, rgb(81, 13, 126)100%);
+    --background-opposite: linear-gradient(90deg, rgb(145, 145, 255) 0%, rgb(79, 179, 255) 38%, rgb(135, 119, 255) 100%);
+    --navbar-background: linear-gradient(45deg, rgba(145, 145, 255, 0.2) 0%, rgba(79, 179, 255, 0.2) 38%, rgba(135, 119, 255, 0.2) 100%);
 
     /* Buttons */
     --button-accept-background: rgb(14 123 14);
@@ -1158,11 +1237,12 @@ textarea {
 
     /* transparent items */
 
-    --transparent-main: rgba(0, 0, 0, 0.3);
+    --transparent-main: rgba(0, 0, 0, 0.5);
 
     --main-primary: rgb(20, 20, 20);
     --main-secondary: rgb(40, 40, 40);
     --main-tertiary: rgb(60, 60, 60);
 
     --main-text: rgb(255, 255, 255);
+    --opposite-text: rgb(0,0,0);
 }

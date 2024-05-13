@@ -54,6 +54,9 @@
                                 </div>
                                 <button type="submit">Apply changes</button>
                             </form>
+                            <form id="edit_details_form" hx-swap="outerHTML" hx-post="/backend/update/user/password/<%= user[0].id %>">
+                                <button type="submit">Reset Password</button>
+                            </form>
                             <form action="/reset_points/<%= user[0].id %>" method="POST" id="edit_details_form">
                                 <h4 class="title">Points</h4>
                                 <div class="field">

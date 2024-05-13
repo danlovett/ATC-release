@@ -7,17 +7,17 @@
 </head>
 <body>
     <%- include('navbar.ejs') -%>
-    <div class="sections">
+    <div class="sections pt10vh grid-gap-20">
         <div class="page-title" id="profile-title">
             <img src="../../images/private/settings/profile.svg" alt="">
             <h1><%= user.name %></h1>
         </div>
         <section class="grid-30-70 main-section">
-            <div class="profile-sidebar">
-                <div style="margin-bottom: 5px;">
+            <div class="profile-sidebar grid-gap-20">
+                <div style="width: inherit;">
                     <section class="profile-section" style="display: grid; grid-template-columns: 50% 50%; justify-content: space-between;">
                         <%_ if(followers != undefined) {%>                        
-                            <a href="/profile/<%= user.id %>/friends" style="color: white">Friends <br> <%= followers.length %></a>
+                            <p id="friends-header" class="friend-top-bar-item">Friends <br> <%= followers.length %></p>
                         <%_ } else { %>
                             <p>Friends <br> 0</p>
                         <%_ } %>
@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-                <div style="height: 70px; display: flex;">
+                <div style="height: 70px; display: flex; width: inherit;">
                     <%_ if(friend.status == 'active') { %>
                         <section style="background-color: rgb(71, 184, 71);">
                             <p class="tcenter">✔ Friends - since <%= friend.since.substr(0, 10) %></p>
@@ -53,9 +53,9 @@
                 </div>
             </div>
             <div class="content content-child">
-                <div class="details" id="friend-details">
+                <div class="details grid-gap-20" id="friend-details">
                     <%_ if(JSON.stringify(leaderboard) != '[]' && (privacy.leaderboard == 'global' || (privacy.leaderboard == 'friends' && friend.status == 'active'))) { %>
-                        <section class="profile-section">
+                        <section class="profile-section" style="height: 72px; display: grid; justify-content: center;">
                             <p class="tcenter">Leaderboard: <%= leaderboard[0].level %> with <%= leaderboard[0].score %> points %></p>
                         </section>
                     <%_ } else if(privacy.leaderboard != 'global') { %>
@@ -92,6 +92,9 @@
                     <%_ } else { %>
                         <p style="text-align: center; padding: 20px;">No History for <%= user.name.split(' ')[0] %></p>
                     <%_ } %>
+                </div>
+                <div id="friends-section" style="display: none;">
+                    <button onClick="window.location.reload();">Go back</button>
                     <%_ if(JSON.stringify(followers) != '[]' && (privacy.friends == 'global' || (privacy.friends == 'friends' && friend.status == 'active'))) { %>
                         <section class="profile-section">
                             <h1 class="title" style="margin-bottom: 10px;">Friends - <%= followers.length %></h1>
@@ -102,10 +105,10 @@
                                             <td style="position: relative; height: 300px;">
                                                 <a href="/profile/<%= followers[i].id %>">
                                                     <div id="profile-top-container">
-                                                        <img src="<%= followers[i].cover_image %>" alt=""class="profile-picture-large" style="height: 100%; left: 0; top: 0;">
+                                                        <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
                                                         <div id="profile-top-details">
-                                                            <img src="<%= followers[i].pfp %>" id="profile-picture" alt="" style="width: 40%;">
-                                                            <p class="name"><%= followers[i].name %></p>
+                                                            <img src="<%= followers[i].pfp %>" class="profile-picture-default" alt="">
+                                                            <p class="name"><%= followers[i].name %> <%_ if(followers[i].self == true) { %>  (You) <%_ } %></p>
                                                         </div>
                                                     </div>
                                                 </a>
@@ -115,13 +118,13 @@
                                 </tbody>
                             </table>
                         </section>
-                        <%_ } else if(privacy.friends == 'friends' && friend.status == 'active') { %>
-                            <p style="text-align: center; padding: 20px;">No friends for <%= user.name.split(' ')[0] %></p>
-                        <%_ } else if(privacy.friends != 'global') { %>
-                            <p style="text-align: center; padding: 20px;">Friends not shown due to privacy setting</p>
-                        <%_ } else { %>
-                            <p style="text-align: center; padding: 20px;">No friends for <%= user.name.split(' ')[0] %></p>
-                        <%_ } %>
+                    <%_ } else if(privacy.friends == 'friends' && friend.status == 'active') { %>
+                        <p style="text-align: center; padding: 20px;">No friends for <%= user.name.split(' ')[0] %></p>
+                    <%_ } else if(privacy.friends != 'global') { %>
+                        <p style="text-align: center; padding: 20px;">Friends not shown due to privacy setting</p>
+                    <%_ } else { %>
+                        <p style="text-align: center; padding: 20px;">No friends for <%= user.name.split(' ')[0] %></p>
+                    <%_ } %>
                 </div>
             </div>
         </section>
@@ -134,5 +137,13 @@
 
     document.documentElement.setAttribute('data-theme', themeToSet)
 
+</script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $('#friends-header').on('click', () => {
+        $('#friends-header').attr('class', 'friend-top-bar-item-active')
+        $('#friend-details').css('display', 'none')
+        $('#friends-section').css('display', 'block')
+    })
 </script>
 </html>

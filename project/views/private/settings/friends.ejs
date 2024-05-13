@@ -7,7 +7,7 @@
 </head>
 <body>
     <%- include('../navbar.ejs') -%>
-    <div class="sections">
+    <div class="pt10vh sections">
         <div class="page-title">
             <img src="../../../images/private/settings/AI-friends.png" alt="">
             <h1>Friends</h1>
@@ -15,13 +15,46 @@
         <p style="padding: 10px; text-align: center;">See all friend details here</p>
         <div class="content-settings">
             <%- include('sidebar.ejs') -%>
-            <section class="main-section main-section-settings">
+            <section class="main-section main-section-settings grid-gap-20">
                 <div class="content content-child">
-                        <%_ if(JSON.stringify(followers) == '[]' && JSON.stringify(following) == '[]' && JSON.stringify(follower_requests) == '[]' && JSON.stringify(requested_followers) == '[]') { %>
-                            <p style="text-align: center; margin-top: auto;">Nothing here. Either wait for requests or <a href="/search">search</a> for people.</p>
-                        <%_ } else { %>
+                    <div style="display: flex; margin-bottom: 20px;" id="friend-top-bar";>
+                        <div id="friends-header" class="friend-top-bar-item-active">
+                            <p class="tcenter"><%= friends.length %></p>
+                            <p class="tcenter">Friends</p>
+                        </div>
+                        <div id="incoming-request-header" class="friend-top-bar-item">
+                            <p class="tcenter"><%= follower_requests.length %></p>
+                            <p class="tcenter">Incoming Requests</p>
+                        </div>
+                        <div id="sent-request-header" class="friend-top-bar-item">
+                            <p class="tcenter"><%= requested_followers.length %></p>
+                            <p class="tcenter">Sent Requests</p>
+                        </div>
+                    </div>
+                    <%_ if(JSON.stringify(friends) == '[]' && JSON.stringify(follower_requests) == '[]' && JSON.stringify(requested_followers) == '[]') { %>
+                        <p style="text-align: center; margin-top: auto;">Nothing here. Either wait for requests or <a href="/search">search</a> for people.</p>
+                    <%_ } else { %>
+                        <%_ if(JSON.stringify(friends) != '[]') { %>
+                            <section id="friends-section">
+                                <h1 class="title" style="margin-bottom: 10px;">Friends</h1>
+                                    <%_ for(i in friends) { %>
+                                            <a href="/profile/<%= friends[i].id %>">
+                                                <div id="profile-top-container">
+                                                    <img src="<%= friends[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
+                                                    <div id="profile-top-details">
+                                                        <img src="<%= friends[i].pfp %>" class="profile-picture-default" alt="">
+                                                        <div class="container">
+                                                            <p class="tcenter"><%= friends[i].name %></p>
+                                                            <p class="tcenter"><%= friends[i].creation_date %></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                    <%_ } %>
+                            </section>
+                        <%_ } %>
                         <%_ if(JSON.stringify(follower_requests) != '[]') { %>
-                            <section>
+                            <section id="incoming-request-section" style="display: none;">
                                 <h1 class="title">Incoming requests</h1>
                                 <table>
                                     <tbody>
@@ -51,70 +84,8 @@
                                 </table>
                             </section>
                         <%_ } %>
-                        <%_ if(JSON.stringify(following) != '[]') { %>
-                            <section class="followers">
-                                <h1 class="title">Following</h1>
-                                <table>
-                                    <tbody>
-                                        <%_ for(i in following) { %>
-                                            <tr>
-                                                <td id="person">
-                                                    <div id="profile-top-container">
-                                                        <a href="/profile/<%= following[i].id %>">
-                                                            <img src="<%= following[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
-                                                            <div id="profile-top-details">
-                                                                <img src="<%= following[i].pfp %>" class="profile-picture-default" alt="">
-                                                                <div class="container">
-                                                                    <p><%= following[i].name %></p>
-                                                                    <p><%= following[i].username %></p>
-                                                                    <p>Since: <%= following[i].creation_date.substr(0, 10) %></p>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                <td id="friends">
-                                                    <p class="m10"><a href="/remove_following/<%= following[i].id %>" style="background-color: var(--button-reject-background); display: flex; justify-content: center; align-items: center;"><img src="../../../images/private/settings/remove_friend.png" style="height: 40px; margin: 0 10px;" alt="">Remove</a></p>
-                                                </td>
-                                            </tr>
-                                        <%_ } %>
-                                    </tbody>
-                                </table>
-                            </section>
-                        <%_ } %>
-                        <%_ if(JSON.stringify(followers) != '[]') { %>
-                            <section class="followers">
-                                <h1 class="title">Followers</h1>
-                                <table>
-                                    <tbody>
-                                        <%_ for(i in followers) { %>
-                                            <tr>
-                                                <td id="person">
-                                                    <div id="profile-top-container">
-                                                        <a href="/profile/<%= followers[i].id %>">
-                                                            <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0;">
-                                                            <div id="profile-top-details">
-                                                                <img src="<%= followers[i].pfp %>" class="profile-picture-default" alt="">
-                                                                <div class="container">
-                                                                    <p><%= followers[i].name %></p>
-                                                                    <p><%= followers[i].username %></p>
-                                                                    <p>Since <%= followers[i].creation_date.substr(0, 10) %></p>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                <td id="friends">
-                                                    <p class="m10"><a href="/remove_follower/<%= followers[i].id %>" style="background-color: var(--button-reject-background);">Remove</a></p>
-                                                </td>
-                                            </tr>
-                                        <%_ } %>
-                                    </tbody>
-                                </table>
-                            </section>
-                        <%_ } %>
                         <%_ if(JSON.stringify(requested_followers) != '[]') { %>
-                            <section class="followers">
+                            <section id="sent-request-section" style="display: none;">
                                 <h1 class="title">Sent Requests</h1>
                                 <table>
                                     <tbody>
@@ -149,6 +120,7 @@
         </div>
     </div>
 </body>
+
 <script>
     let localS = localStorage.getItem('theme'), themeToSet = localS
 
@@ -156,5 +128,33 @@
 
     document.documentElement.setAttribute('data-theme', themeToSet)
 
+</script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $('#friends-header').on('click', () => {
+        $('#friends-header').attr('class', 'friend-top-bar-item-active')
+        $('#sent-request-header').attr('class', 'friend-top-bar-item')
+        $('#incoming-request-header').attr('class', 'friend-top-bar-item')
+        $('#friends-section').css('display', 'block')
+        $('#incoming-request-section').css('display', 'none')
+        $('#sent-request-section').css('display', 'none')
+    })
+    $('#sent-request-header').on('click', () => {
+        $('#sent-request-header').attr('class', 'friend-top-bar-item-active')
+        $('#friends-header').attr('class', 'friend-top-bar-item')
+        $('#incoming-request-header').attr('class', 'friend-top-bar-item')
+        $('#sent-request-section').css('display', 'block')
+        $('#incoming-request-section').css('display', 'none')
+        $('#friends-section').css('display', 'none')
+    })
+    $('#incoming-request-header').on('click', () => {
+        $('#incoming-request-header').attr('class', 'friend-top-bar-item-active')
+        $('#friends-header').attr('class', 'friend-top-bar-item')
+        $('#sent-request-header').attr('class', 'friend-top-bar-item')
+        $('#incoming-request-section').css('display', 'block')
+        $('#sent-request-section').css('display', 'none')
+        $('#friends-section').css('display', 'none')
+    })
 </script>
 </html>

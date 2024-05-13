@@ -3,28 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[current_user]'s Homepage</title>
+    <title><%= user_name.split(' ')[0] %>'s Homepage</title>
 </head>
 <body>
     <%- include('navbar.ejs') -%>
-    <div class="pt15vh">
+    <div class="grid-gap-20 pt10vh">
         <h1 class="page-title">Homepage</h1>
         <section class="main-section section-home">
             <h1 class="title"><img src="../../images/icon.png" alt="" style="height: 30px; margin-right: 10px;">Landing</h1>
             <p style="text-align: center; padding-top: 10px;">Levels will play as soon as you press on them</p>
-            <div class="content">
-                <div class="cards">
-                    <%_ for(i in levels) { if(i <= 1) { %>
-                        <a href="/play/<%= levels[i].airport_icao %>">
-                            <div class="container">
-                                <img src="<%=levels[i].image_reference%>" alt="">
-                                <p><%= levels[i].airport_name %></p>
-                            </div>
-                        </a>
-                    <%_ } }%>
-                </div>
-                <button><a href="/levels">Show all levels</a></button>
+            <div class="cards m10">
+                <%_ for(i in levels) { if(i <= 1) { %>
+                    <a href="/play/<%= levels[i].airport_icao %>">
+                        <div class="container">
+                            <img src="<%=levels[i].image_reference%>" alt="">
+                            <p><%= levels[i].airport_name %></p>
+                        </div>
+                    </a>
+                <%_ } }%>
             </div>
+            <button><a href="/levels">Show all levels</a></button>
         </section>
         <%_ if(JSON.stringify(leaderboard) != '[]') { %>
             <section class="main-section section-home">

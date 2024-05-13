@@ -7,7 +7,7 @@
 </head>
 <body>
     <%- include('../navbar.ejs') -%>
-    <div class="sections">
+    <div class="sections pt10vh">
         <div>
             <div class="page-title">
                 <img src="../../../images/private/settings/profile.svg" alt="">
@@ -60,27 +60,6 @@
                         </section>
                     <%_ } else { %>
                         <p style="text-align: center; padding: 20px; cursor: pointer;">You have no history, <a href="/levels">play now</a>.</p>
-                    <%_ } %>
-                    <%_ if(JSON.stringify(followers) != '[]') { %>
-                        <section class="ransform-105">
-                            <h1 class="title" style="margin-bottom: 10px;">Friends</h1>
-                                <%_ for(i in followers) { %>
-                                        <a href="/profile/<%= followers[i].id %>">
-                                            <div id="profile-top-container">
-                                                <img src="<%= followers[i].cover_image %>" alt="" id="profile-top-img" style="height: 100%; left: 0; top: 0;">
-                                                <div id="profile-top-details">
-                                                    <img src="<%= followers[i].pfp %>" class="profile-picture-default" alt="">
-                                                    <div class="container">
-                                                        <p class="tcenter"><%= followers[i].name %></p>
-                                                        <p class="tcenter"><%= followers[i].creation_date %></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                <%_ } %>
-                        </section>
-                    <%_ } else { %>
-                        <p style="text-align: center; padding: 20px; cursor: pointer;">You have not added any friends, <a href="/search">add friends</a>!</p>
                     <%_ } %>
                 </div>
             </section>
