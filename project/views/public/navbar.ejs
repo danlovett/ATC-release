@@ -4,19 +4,47 @@
 
 <link rel="stylesheet" href="/css/public.css">
 <script src="https://kit.fontawesome.com/1b44e05b6f.js" crossorigin="anonymous"></script>
-<p style="background-color: white; width: fit-content; margin-left: 0; padding: 3px 10px;">v1.0.485</p>
-<section id="navbar" class="navbar sticky">
-    <div style="margin-left: 10px;">
-        <ul>
-            <a href="/" style="padding: 10px 20px; margin: 0px; " class="transform-120">
-                <img src="../images/icon.png" alt="Logo" style="height: 25px;">
-            </a>
-            <p id="logo_name" style="margin-left: 5px; margin-top: 12px;">Air Traffic City</p>
-        </ul>
-        
-    </div> 
-    <div style="margin-right: 10px;">
-        <ul>
+<section class="sticky">
+    <div id="page-options" class="hideOnNoFocus" style="display: none;">
+        <div class="light-options" style="width: 100%;">
+            <ul>
+                <li class="blue-red"></li>
+                <li class="orange-pink"></li>
+                <li class="yellow-green"></li>
+                <li id="color-picker">[color theme]</li>
+            </ul>
+        </div>
+        <div class="dark-options" style="width: 100%; display: none;">
+            <ul>
+                <li class="blue-red"></li>
+                <li class="orange-pink"></li>
+                <li class="yellow-green"></li>
+                <li id="color-picker">[color theme]</li>
+            </ul>
+        </div>
+    </div>
+    <div class="navbar">
+        <div style="margin-left: 10px;">
+            <ul>
+                <a href="/" style="padding: 10px 20px; margin: 0px; " class="transform-120">
+                    <img src="../images/icon.png" alt="Logo" style="height: 25px;">
+                </a>
+                <p id="logo_name" style="margin-left: 5px; margin-top: 12px;">Air Traffic City</p>
+            </ul>
+            
+        </div> 
+        <div style="margin-right: 10px;">
+            <ul id="expanded">
+                <li><a href="/" class="transform-120">Home</a></li>
+                <li><a href="https://github.com/danlovett/AirTraffic-City" class="transform-120">About</a></li>
+                <li><a href="/login" class="transform-120">Log in</a></li>
+                <li><a href="/signup" class="transform-120">Sign up</a></li>
+            </ul>
+            <ul id="reduced">
+                <button id="navbar-expand" onclick="showExpandedOptions()"><img class="icon" src="https://api.iconify.design/material-symbols:menu.svg" alt="" style="height: 25px;"></button>
+            </ul>
+        </div>
+        <ul id="options" style="display: none;">
             <li><a href="/" class="transform-120">Home</a></li>
             <li><a href="https://github.com/danlovett/AirTraffic-City" class="transform-120">About</a></li>
             <li><a href="/login" class="transform-120">Log in</a></li>
@@ -24,3 +52,48 @@
         </ul>
     </div>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+<script>
+    let localS = localStorage.getItem('theme'), themeToSet = localS
+
+    if(!localS) themeToSet = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+
+    document.documentElement.setAttribute('data-theme', themeToSet)
+
+    function switchTheme() {
+        console.log('switch')
+        const bodyElement = document.documentElement
+        let dataTheme = bodyElement.getAttribute('data-theme'), newTheme
+    
+        newTheme = dataTheme === 'dark' ? 'light' : 'dark'
+
+        bodyElement.setAttribute('data-theme', newTheme)
+
+        localStorage.setItem('theme', newTheme)
+    }
+
+    document.querySelector('#color-picker').addEventListener('click', switchTheme)
+
+    const navbar = document.getElementById("navbar")
+    const extendedOptions = document.getElementById("options")
+
+    function showExpandedOptions() {
+        if (extendedOptions.style.display === "flex") {
+            extendedOptions.style.display = "none";
+            navbar.style.borderRadius = "0 0 10px 10px";
+        } else {
+            extendedOptions.style.display = "flex";
+            navbar.style.borderRadius = "0";
+        }
+    }
+
+    // $("body").mousemove(function(e) {
+    //     if(e.clientY <= 40 && e.pageY < 50) {
+    //         $('#page-options').fadeIn()
+    //     } else {
+    //         $('#page-options').fadeOut()
+    //     }
+    // })
+</script>

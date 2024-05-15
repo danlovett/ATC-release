@@ -38,7 +38,7 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 
 app.get('/', checkNotAuthenticated, (req, res) => {
-    res.render('public/unavailable')
+    res.render('public/home')
 })
 
 app.get('/login', checkNotAuthenticated, (req, res, next) => {

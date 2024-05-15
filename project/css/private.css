@@ -655,6 +655,7 @@ a {
 
 .container-levels {
     padding: 20px;
+    scroll-snap-type: y mandatory;
 }
 
 .container-levels .title h2 {
@@ -1245,7 +1246,7 @@ textarea {
     --title-gradient: linear-gradient(to right, rgb(0, 39, 97) 0%, rgb(81, 0, 91) 38%, rgb(0, 184, 92)100%) 0 0 / 400% 100%;
     --navbar-background: linear-gradient(45deg, rgba(145, 145, 255, 0.8) 0%, rgba(79, 179, 255, 0.8) 38%, rgba(135, 119, 255, 0.8) 100%);
     --icon-color: grayscale(1);
-    --active-icon-color: grayscale(1) invert(1)
+    --active-icon-color: grayscale(1) invert(1);
     
     /* Buttons */
     --button-accept-background: rgb(66, 195, 66);

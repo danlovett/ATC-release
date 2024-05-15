@@ -1,23 +1,90 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Air Traffic City</title>
-    <link rel="stylesheet" href="css/home.css">
 </head>
-<body class="bg-green">
+<body>
     <%- include('navbar.ejs') -%>
-    <div class="sections section-home">
-        <section class="homepage">
-            <h1 class="title">Welcome to AirTraffic-City</h1>
+    <div id="homepage">
+        <div id="new_page" class="container">
+            <h1>New homepage!</h1>
+            <p id="close">x</p>
+        </div>
+        <section id="hero">
+            <div id="hero-images-backdrop">
+                <img id="1" class="background-hero" src="../../images/private/levels/easyjet.webp" alt="">
+                <img id="2" class="background-hero" src="../../images/private/levels/easyjet.webp" alt="" style="display: none;">
+            </div>
+            <div id="top">
+                <div id="title">
+                    <h1>Air Traffic City</h1>
+                </div>
+                <h2>[placeholder text] ... for now</h2>
+            </div>
+            <div class="wrapper">
+                <a href="https://github.com/danlovett/ATC-release" target="_blank">Find out more</a>
+                <a href="/signup">Register Today</a>
+            </div>
         </section>
-        <section class="homepage">
-            <h1 class="title">Welcome to AirTraffic-City</h1>
-        </section>
-        <section class="homepage">
-            <h1 class="title">Welcome to AirTraffic-City</h1>
+        <section id="features">
+            <div id="top">
+                <div id="title">
+                    <h1>Features</h1>
+                </div>
+            </div>
+            <div class="features">
+                <div class="child">
+                    <img src="../../images/icon.png" alt="">
+                    <div class="content">
+                        <h3>Play.</h3>
+                        <p>Complete a range of tasks for different airports against the clock! <br><br>Ensure aircraft meet their CTOTs; without doing so could lose you points! <br><br>At the end of the game, you'll recieve a breakdown of your performance</p>
+                    </div>
+                </div>
+                <div class="child">
+                    <img src="../../images/private/leaderboard.svg" alt="">
+                    <div class="content">
+                        <h3>Compete.</h3>
+                        <p>Try to gain the most points amongst all other players to gain the top spot on the leaderboard!<br><br>Check your profile or the leaderboard page to check if anyone has taken your spot!</p>
+                    </div>               
+                </div>
+                <div class="child">
+                    <img src="../../images/private/settings/AI-friends.png" alt="">
+                    <div class="content">
+                        <h3>Community.</h3>
+                        <p>Add friends, see their performance and history in the profile page. <br><br>You can find them in the search section. <br><br> <span style="font-weight: 700;">NOTE: </span>Future updates will include chat functionality!</p>
+                    </div>                
+                </div>
+                <div class="child">
+                    <img src="../../images/private/settings/version.svg" alt="">
+                    <div class="content">
+                        <h3>Stay updated.</h3>
+                        <p>Check the version history section to see whats new with Air Traffic City. <br><br>You can even check out the latest and code on Github!</p>
+                    </div>  
+                </div>
+                <div class="child">
+                    <img src="../../images/private/settings/admin.svg" alt="">
+                    <div class="content">
+                        <h3>Manage.</h3>
+                        <p>Change profile picture, cover image, account details and more through the settings section. <br><br>Reset leaderboard and history are subject to a few criteria, so if you are unable, contact an admin.</p>
+                    </div>  
+                </div>
+            </div>
         </section>
     </div>
 </body>
+<script>
+    document.getElementById('close').addEventListener('click' , () => {
+        document.getElementById('new_page').style.display = 'none'
+    })
+    // const hero_images = document.getElementById('hero-images-backdrop').childElementCount
+    // for(let i = 1; i <= hero_images; i++) {
+    //     setTimeout(() => {
+    //         document.getElementById(i - 1).style.display = 'none'
+    //         document.getElementById(i).style.display = 'block'
+    //     }, 5000);
+    //     if(i == hero_images) i = 1
+    // }
+</script>
 </html>
